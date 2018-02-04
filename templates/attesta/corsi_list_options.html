@@ -1,0 +1,4 @@
+<option value="">Scegli un corso</option>
+{% for corso in corsi %}
+  <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
+{% endfor %}

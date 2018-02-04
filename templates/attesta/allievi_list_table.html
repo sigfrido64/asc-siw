@@ -1,0 +1,12 @@
+{% for allievo in allievi %}
+  <tr>
+    <td></td>
+    <td>{{ allievo.cognome }}</td>
+    <td>{{ allievo.nome }}</td>
+    <td>
+      <a href="{% url 'attesta:stampa_iscrizione_mdl' allievo.corso allievo.matricola %}">
+      <span class="fa fa-download"></span>
+      </a>
+    </td>
+  </tr>
+{% endfor %}

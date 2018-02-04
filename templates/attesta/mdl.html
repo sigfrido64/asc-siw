@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Attestazioni / Dichiarazioni e Moduli MDL{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+  Anno Formativo : &nbsp;
+  <select id="anni_formativi" lista-corsi-url="{% url 'attesta:ajax_load_corsi' %}">
+  {% for anno in anni %}
+      <option value="{{ anno.anno }}">{{ anno.anno }}</option>
+  {% endfor %}
+  </select>
+
+  <br><br>
+
+
+  Corso : &nbsp;
+  <div class="ui-widget">
+    <select id="lista_corsi" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
+    <option value="">Scegli un corso</option>
+    {% for corso in corsi %}
+        <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
+    {% endfor %}
+    </select>
+  </div>
+
+  <br><br>
+  <table class="table table-sm">
+  <thead class="thead-default">
+    <tr>
+      <th>#</th>
+      <th>Cognome</th>
+      <th>Nome</th>
+      <th>Stampa</th>
+    </tr>
+  </thead>
+  <tbody id="lista_allievi">
+  {% for allievo in allievi %}
+        <tr>
+          <td></td>
+          <td>{{ allievo.cognome }}</td>
+          <td>{{ allievo.nome }}</td>
+          <td>
+            <a href="http://www.traileraddict.com/article/etiam-dictum-egestas/">
+            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+            </a>
+          </td>
+        </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    $("#anni_formativi").change(function () {
+      var url = $("#anni_formativi").attr("lista-corsi-url");  // recupera l'url della lista corsi
+      var anno = $(this).val();  // recupera l'anno formativo che ho scelto nel primo combo
+
+      $.ajax({                       // Inizializza la richiesta AJAX
+        url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        data: {
+          'anno': anno       // Aggiunge il parametro anno ai parametri di GET
+        },
+        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+          $("#lista_corsi").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                                          // arrivato dal server !
+          $("#lista_allievi").html('');
+        }
+      });
+    });
+
+    $("#lista_corsi").change(function () {
+      var url = $("#lista_corsi").attr("lista-allievi-url");  // recupera l'url della lista corsi
+      var corso = $(this).val();  // recupera l'anno formativo che ho scelto nel primo combo
+
+      $.ajax({                       // Inizializza la richiesta AJAX
+        url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        data: {
+          'corso': corso       // Aggiunge il parametro anno ai parametri di GET
+        },
+        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+          $("#lista_allievi").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                                          // arrivato dal server !
+        }
+      });
+    });
+  </script>
+{% endblock %}

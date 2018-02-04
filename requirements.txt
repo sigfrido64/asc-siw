@@ -1,0 +1,14 @@
+dj-database-url==0.4.2
+Django==2.0.1
+django-widget-tweaks==1.4.1
+docxtpl==0.4.6
+Jinja2==2.10
+lxml==4.1.1
+Markdown==2.6.11
+MarkupSafe==1.0
+pyodbc==4.0.21
+python-decouple==3.1
+python-docx==0.8.6
+pytz==2017.3
+six==1.11.0
+Unipath==1.1
