@@ -1,3 +1,17 @@
-.navbar-brand {
+.brand {
   font-family: 'Peralta', cursive;
+}
+
+body {
+  background-image: url(../img/shattered.png);
+  margin-left: 5px;
+}
+
+div.breadcrumbs {
+    background: #79aec8;
+    padding: 10px 40px;
+    border: none;
+    font-size: 14px;
+    color: #c4dce8;
+    text-align: left;
 }

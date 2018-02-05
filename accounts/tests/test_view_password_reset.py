@@ -142,7 +142,7 @@ class InvalidPasswordResetConfirmTests(TestCase):
 
     def test_html(self):
         password_reset_url = reverse('password_reset')
-        self.assertContains(self.response, 'invalid password reset link')
+        self.assertContains(self.response, 'Sembra che tu abbia cliccato un link che non è più valido.')
         self.assertContains(self.response, 'href="{0}"'.format(password_reset_url))
 
 

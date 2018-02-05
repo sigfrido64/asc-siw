@@ -3,21 +3,28 @@
 {% block title %}Registrazione su SI Scuola Camerana{% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10 col-sm-12">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">Registrazione dati utente</h3>
-          <form method="post" novalidate>
-            {% csrf_token %}
-            {% include 'includes/form.html' %}
-            <button type="submit" class="btn btn-primary btn-block">Crea un account</button>
-          </form>
+  <div id='jqxwindow'>
+    <div>Registrazione dati utente</div>
+    <div>
+      <h3>Registrazione dati utente</h3>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <div align="center"><br>
+          <button id="button" type="submit">Crea un Account</button>
         </div>
-        <div class="card-footer text-muted text-center">
-          Hai già un account? <a href="{% url 'login' %}">Entra</a>
-        </div>
-      </div>
+      </form>
+      <div><br>Hai già un account? <a href="{% url 'login' %}">Entra</a></div>
     </div>
-  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // Create jqxButton widgets.
+      $("#button").jqxButton({ template: "primary", width: '200' });
+      //
+      $("#jqxwindow ").jqxWindow({ height:'auto', width: 400, theme: 'orange', isModal: true, resizable: false, showCloseButton: false, draggable: false });
+    });
+  </script>
 {% endblock %}

@@ -1,19 +1,25 @@
 # encoding=utf-8
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from siw.sqlserverinterface import sqlserverinterface
 from django.http import HttpResponse
 from django.conf import settings
 from docxtpl import DocxTemplate
-from unipath import Path
 from os import path, stat
 import tempfile
+from accounts.models import Profile
+from accounts.models import SiwPermessi
+from siw.decorators import has_permission_decorator
+
+# Definisco le Classi che possono essere importare da questo modulo.
+__all__ = (
+    'mdl', 'ajax_load_allievi', 'ajax_load_corsi', 'stampa_mdl_iscrizione'
+)
 
 
 #
 # Sezioni comuni
 #
-def lista_corsi(anno):
+def __lista_corsi(anno):
     """
     Recupera la lista dei corsi MDL per un dato anno formativo.
     :param anno: Anno formativo
@@ -26,7 +32,7 @@ def lista_corsi(anno):
     return sqlserverinterface(query)
     
 
-def lista_allievi(corso):
+def __lista_allievi(corso):
     """
     Recupera la lista degli allievi di un dato corso.
     :param corso : Codice corso con edizione.
@@ -41,7 +47,7 @@ def lista_allievi(corso):
 
 
 # Pagina di attestazioni, dichiarazioni ed iscrizioni MDL
-@login_required()
+@has_permission_decorator(SiwPermessi.STAMPE_MDL)
 def mdl(request):
     # Compongo la lista degli anni formativi
     query = "SELECT [Anno Formativo] AS anno from [Assocam].[dbo].[Tabella Anni Formativi] " \
@@ -50,30 +56,30 @@ def mdl(request):
     
     # Prendo il primo anno per la query che segue.
     anno_default = anni[0].get('anno')
-    return render(request, 'attesta/mdl.html', {'anni': anni, 'corsi': lista_corsi(anno_default)})
+    return render(request, 'attesta/mdl.html', {'anni': anni, 'corsi': __lista_corsi(anno_default)})
 
 
 #
 # Sezione Ajax
 #
-def load_corsi(request):
+def ajax_load_corsi(request):
     """
     Rimanda in Ajax la lista dei corsi per un dato anno formativo.
     :param request: request handle.
     :return: render HTML per combo box.
     """
     anno = request.GET.get('anno')
-    return render(request, 'attesta/corsi_list_options.html', {'corsi': lista_corsi(anno)})
+    return render(request, 'attesta/corsi_list_options.html', {'corsi': __lista_corsi(anno)})
 
 
-def load_allievi(request):
+def ajax_load_allievi(request):
     """
     Rimanda in Ajax la lista degli allievi di un dato corso.
     :param request: request handle.
     :return: render HTML per tabella.
     """
     corso = request.GET.get('corso')
-    return render(request, 'attesta/allievi_list_table.html', {'allievi': lista_allievi(corso)})
+    return render(request, 'attesta/allievi_list_table.html', {'allievi': __lista_allievi(corso)})
 
 
 #

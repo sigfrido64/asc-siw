@@ -1,29 +1,47 @@
 {% extends 'accounts/base_accounts.html' %}
 
-{% block title %}Log in to Django Boards{% endblock %}
+{% block title %}Accesso ad SI{% endblock %}
 
 {% block content %}
-  <div class="row justify-content-center">
-    <div class="col-lg-4 col-md-6 col-sm-8">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">Entra</h3>
-          <form method="post" novalidate>
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}">
-            {% include 'includes/form.html' %}
-            <button type="submit" class="btn btn-primary btn-block">Entra</button>
-          </form>
+  <div id='content'>
+    <div align="justify">
+    Questo è il Sistema Informatico della Scuola Camerana.<br>
+    Se sei arrivato qui per caso sei pregato di abbandonare questo sito in quanto il collegamento è tracciato e la
+    tua potrebbe essere considerata un'intrusione e perseguita a termini di legge.
+    </div>
+
+    <div id='jqxwindow'>
+      <div>Log in</div>
+      <div>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+          {% include 'includes/form.html' %}
+        <div align="center"><br>
+          <button id="button_login" type="submit">Entra</button>
         </div>
-        <div class="card-footer text-muted text-center">
+        </form>
+        <div align="left"><br>
           Nuovo Utente ? <a href="{% url 'signup' %}">Registrati</a>
         </div>
-      </div>
-      <div class="text-center py-2">
-        <small>
-          <a href="{% url 'password_reset' %}" class="text-muted">Password dimenticata ?</a>
-        </small>
+        <div align="center"><br>
+          <small><em>
+            <a href="{% url 'password_reset' %}" class="text-muted">Password dimenticata ?</a>
+          </em></small>
+        </div>
       </div>
     </div>
   </div>
+{% endblock %}
+
+
+{% block javascript %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // Create jqxButton widgets.
+      $("#button_login").jqxButton({ template: "primary", width: '200' });
+      //
+      $("#jqxwindow ").jqxWindow({ height:'auto', width: 400, theme: 'orange', isModal: true, resizable: false, showCloseButton: false, draggable: false });
+    });
+  </script>
 {% endblock %}

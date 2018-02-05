@@ -16,20 +16,17 @@
 
   <br><br>
 
-
   Corso : &nbsp;
-  <div class="ui-widget">
     <select id="lista_corsi" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
     <option value="">Scegli un corso</option>
     {% for corso in corsi %}
         <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
     {% endfor %}
     </select>
-  </div>
 
   <br><br>
-  <table class="table table-sm">
-  <thead class="thead-default">
+  <table style="width:100%">
+  <thead>
     <tr>
       <th>#</th>
       <th>Cognome</th>
@@ -37,25 +34,8 @@
       <th>Stampa</th>
     </tr>
   </thead>
-  <tbody id="lista_allievi">
-  {% for allievo in allievi %}
-        <tr>
-          <td></td>
-          <td>{{ allievo.cognome }}</td>
-          <td>{{ allievo.nome }}</td>
-          <td>
-            <a href="http://www.traileraddict.com/article/etiam-dictum-egestas/">
-            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-            </a>
-          </td>
-        </tr>
-  {% endfor %}
-  </tbody>
+  <tbody id="lista_allievi"></tbody>
 </table>
-
-
-
-
 {% endblock %}
 
 {% block javascript %}

@@ -19,16 +19,18 @@ from django.urls import path, re_path, include
 from boards import views
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
+from accounts.forms import LoginForm, MyPasswordResetForm, MySetPasswordForm, MyPasswordChangeForm
+from .views import si_home
 
 
 urlpatterns = [
-    path('', views.BoardListView.as_view(), name='home'),
+    path('', si_home, name='home'),
     
     # Abilito il routing verso gli strumenti di amministrazione del sito.
     path('admin/', admin.site.urls),
     
     # Login e Logout, per semplicità li lascio sotto la home anche se sono gestiti in accounts.
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html', form_class=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     
     # Gestione degli accounts.
@@ -45,12 +47,12 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
          name='password_reset_complete'),
     re_path('^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'),
+            auth_views.PasswordResetConfirmView.as_view(
+                template_name='accounts/password_reset_confirm.html', form_class=MySetPasswordForm),
             name='password_reset_confirm'),
     path('reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html',
-                                                        email_template_name='accounts/password_reset_email.html',
-                                                        subject_template_name='accounts/password_reset_subject.txt'),
-         name='password_reset'),
+         form_class=MyPasswordResetForm, email_template_name='accounts/password_reset_email.html',
+         subject_template_name='accounts/password_reset_subject.txt'), name='password_reset'),
     
     # Registrazione dell'utente.
     path('signup/', accounts_views.signup, name='signup', ),
@@ -59,7 +61,8 @@ urlpatterns = [
     re_path(r'^settings/account/$', accounts_views.UserUpdateView.as_view(template_name='accounts/my_account.html'),
             name='my_account'),
     re_path(r'^settings/password/$',
-            auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html'),
+            auth_views.PasswordChangeView.as_view(template_name='accounts/password_change.html',
+                                                  form_class=MyPasswordChangeForm),
             name='password_change'),
     re_path(r'^settings/password/done/$',
             auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),
@@ -77,3 +80,6 @@ urlpatterns = [
     re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post')
 ]
+
+
+# path('', views.BoardListView.as_view(), name='home'),

@@ -1,0 +1,36 @@
+{% load si_template_tags %}
+
+<div id='main_menu'>
+  {% if user.is_authenticated %}
+    <ul>
+      {% if user|can:'stampe_mdl' %}
+      <li>Stampe
+        <ul>
+          <li><a href="{% url 'attesta:home' %}">MDL</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      <li>{{ user.username }}
+        <ul>
+          <li><a href="{% url 'my_account' %}">Il mio Account</a></li>
+          <li><a href="{% url 'password_change' %}">Cambio password</a></li>
+          <li type='separator'></li>
+          <li><a href="{% url 'logout' %}">Esci</a></li>
+        </ul>
+      </li>
+    </ul>
+  {% else %}
+    <ul>
+      <li><a href="{% url 'login' %}">Entra</a></li>
+      <li><a href="{% url 'signup' %}">Registrati</a></li>
+    </ul>
+  {% endif %}
+</div>
+
+cazzo : {{ siwperm.cazzo }}
+
+<script type="text/javascript">
+  $(function() {
+    $("#main_menu").jqxMenu({ height: 30 });
+  });
+</script>
