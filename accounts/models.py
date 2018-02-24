@@ -8,8 +8,17 @@ from django.dispatch import receiver
 class SiwPermessi(object):
     """
     Helper Class per la definizione dei Permessi in modo centrale ed univoco.
+    Ogni permesso DEVE iniziare con una maiuscola per essere poi compreso come tale.
     """
     STAMPE_MDL = 'stampe_mdl'
+    
+    @staticmethod
+    def as_dict():
+        const = dict()
+        for key, value in SiwPermessi.__dict__.items():
+            if key[0].isupper():
+                const[key] = value
+        return const
     
     
 class SiwRuoli(object):

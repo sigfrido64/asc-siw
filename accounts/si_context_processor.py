@@ -1,15 +1,17 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from .models import get_real_perms, SiwPermessi
-from django.http import HttpResponseRedirect
-import re
 
 
-
+def siwperms(request):
+    # Aggiunge la lista dei permessi al contesto di ogni template.
+    # ATTENZIONE che questo è un template context processor e non un middleware context processor
+    return {'siwperms': SiwPermessi.as_dict()}
 
 
 def si_middleware(get_response):
     # One-time configuration and initialization.
+    # Attenzione che questo è un middleware contect processor E NON un template context processor.
 
     def middleware(request):
         # Code to be executed for each request before
@@ -27,8 +29,7 @@ def si_middleware(get_response):
             request.user.si_perms = None
         else:
             request.user.si_perms = get_real_perms(request.user)
-        request.siwperm = {'cazzo': 'culo'}
-        
+
         # Spartiacque tra ciò che viene eseguito prima della vista e ciò che viene eseguito dopo.
         response = get_response(request)
         

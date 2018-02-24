@@ -3,7 +3,7 @@
 <div id='main_menu'>
   {% if user.is_authenticated %}
     <ul>
-      {% if user|can:'stampe_mdl' %}
+      {% if user|can:siwperms.STAMPE_MDL %}
       <li>Stampe
         <ul>
           <li><a href="{% url 'attesta:home' %}">MDL</a></li>
@@ -27,7 +27,7 @@
   {% endif %}
 </div>
 
-cazzo : {{ siwperm.cazzo }}
+cazzo : {{ siwperms.STAMPE_MDL }}
 
 <script type="text/javascript">
   $(function() {
