@@ -1,6 +1,6 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
-from .models import get_real_perms, SiwPermessi
+from accounts.models import get_real_perms, SiwPermessi
 
 
 def siwperms(request):

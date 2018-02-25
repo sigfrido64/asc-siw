@@ -1,0 +1,117 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head>
+    <title>Accesso ad SI</title>
+    <!-- Add Google Font Peralta -->
+    <link href="https://fonts.googleapis.com/css?family=Peralta" rel="stylesheet" />
+
+    <!-- La mia Favicon ! -->
+    <link rel="icon" type="image/png" href="/static/img/goby.png" />
+
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css" />
+
+    <!-- Add one of the jQWidgets styles : Darkblue Selected-->
+    <link rel="stylesheet" href="/static/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="/static/jqwidgets/styles/jqx.orange.css" type="text/css" />
+
+
+    <link rel="stylesheet" href="/static/css/app.css" />
+    
+  <link rel="stylesheet" href="/static/css/accounts.css" />
+
+    <!-- Fonts Awesome -->
+    <link rel="stylesheet" href="/static/fa470/css/font-awesome.min.css" />
+
+    <!-- add the jQuery script -->
+    <script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="/static/jqwidgets/jqxcore.js"></script>
+    <!-- add one or more widgets -->
+    <script type="text/javascript" src="/static/jqwidgets/jqx-all.js"></script>
+  </head>
+
+  <body>
+    
+  <div class="container">
+    <h1 class="text-center logo my-4">
+      <a href="/">SI Scuola Camerana</a>
+    </h1>
+    
+  <div id="content">
+    <div align="justify">
+    Questo è il Sistema Informatico della Scuola Camerana.<br />
+    Se sei arrivato qui per caso sei pregato di abbandonare questo sito in quanto il collegamento è tracciato e la
+    tua potrebbe essere considerata un'intrusione e perseguita a termini di legge.
+    </div>
+
+    
+  </div>
+
+  </div>
+
+    
+  <script type="text/javascript">
+    $(document).ready(function () {
+      // Create jqxButton widgets.
+      $("#button_login").jqxButton({ template: "primary", width: '200' });
+      //
+      $("#jqxwindow ").jqxWindow({ height:'auto', width: 400, theme: 'orange', isModal: true, resizable: false, showCloseButton: false, draggable: false });
+    });
+  </script>
+
+  
+
+<div id="jqxwindow" role="dialog" class="jqx-rc-all jqx-rc-all-orange jqx-window jqx-window-orange jqx-popup jqx-popup-orange jqx-widget jqx-widget-orange jqx-widget-content jqx-widget-content-orange" tabindex="0" hidefocus="true" style="outline: none; width: 400px; height: 281px; min-height: 50px; max-height: 1200px; min-width: 100px; max-width: 1200px; top: 212.5px; left: 316px; z-index: 1801;">
+      <div class="jqx-window-header jqx-window-header-orange jqx-widget-header jqx-widget-header-orange jqx-disableselect jqx-disableselect-orange jqx-rc-t jqx-rc-t-orange" tabindex="0" style="position: relative; width: 390px;"><div style="float: left; direction: ltr; margin-top: 0px;">Log in</div><div class="jqx-window-close-button-background jqx-window-close-button-background-orange" style="visibility: hidden; width: 350px; margin-right: 5px; margin-left: 0px; position: absolute; right: 0px;"><div class="jqx-window-close-button jqx-window-close-button-orange jqx-icon-close jqx-icon-close-orange" style="width: 100%; height: 100%;"></div></div><div class="jqx-window-collapse-button-background jqx-window-collapse-button-background-orange" style="visibility: hidden; width: 16px; height: 16px; margin-right: 5px; margin-left: 0px; position: absolute; right: 0px;"><div class="jqx-window-collapse-button jqx-window-collapse-button-orange jqx-icon-arrow-up jqx-icon-arrow-up-orange" style="width: 100%; height: 100%; top: 0px;"></div></div></div>
+      <div class="jqx-window-content jqx-window-content-orange jqx-widget-content jqx-widget-content-orange jqx-rc-b jqx-rc-b-orange" tabindex="0" style="width: 390px; height: 244px;">
+        <form method="post" novalidate="">
+          <input type="hidden" name="csrfmiddlewaretoken" value="lv550bUiWc6nL3TZ0zl1jE5epHMxnTOYSn0R0A7rCNzFpzkGWWvBZvNZEEAXbr3t" />
+          <input type="hidden" name="next" value="/" />
+          
+
+
+
+
+  <div class="form-group" align="center">
+    <label for="id_username">Nome utente:</label><br />
+    <script type="text/javascript">
+  $(document).ready(function () {
+    $("#id_username").jqxInput({placeHolder: 'username',  height:'30',  width:'350',  minLength:'1',  });
+    
+  });
+</script>
+<input type="text" name="username" class="form-control jqx-widget-content jqx-input-widget jqx-input jqx-widget jqx-rc-all" required="" id="id_username" role="textbox" aria-autocomplete="both" aria-disabled="false" aria-readonly="false" aria-multiline="false" placeholder="username" style="width: 350px; height: 30px;" />
+
+    
+    
+  </div>
+
+  <div class="form-group" align="center">
+    <label for="id_password">Password:</label><br />
+    <script type="text/javascript">
+  $(document).ready(function () {
+    $("#id_password").jqxPasswordInput({placeHolder: 'password',  height:'30',  width:'350',  minLength:'1',  });
+    
+  });
+</script>
+<input type="password" name="password" class="form-control jqx-widget jqx-widget-content jqx-input jqx-input-widget jqx-rc-all" required="" id="id_password" minlength="1" placeholder="password" style="direction: ltr; width: 350px; height: 30px;" /><span tabindex="-1" hasfocus="false" title="Show Password" class="jqx-passwordinput-password-icon" style="position: absolute; display: none; top: 312px; left: 676.5px;"></span>
+
+    
+    
+  </div>
+
+
+
+        <div align="center"><br />
+          <button id="button_login" type="submit" role="button" class="jqx-rc-all jqx-button jqx-widget jqx-fill-state-normal jqx-primary" aria-disabled="false" style="width: 200px;">Entra</button>
+        </div>
+        </form>
+        <div align="left"><br />
+          Nuovo Utente ? <a href="/signup/">Registrati</a>
+        </div>
+        <div align="center"><br />
+          <small><em>
+            <a href="/reset/" class="text-muted">Password dimenticata ?</a>
+          </em></small>
+        </div>
+      </div>
+    </div><div class="jqx-window-modal jqx-window-modal-orange" style="opacity: 0.3; position: absolute; top: 0px; left: 0px; z-index: 1800; display: block; width: 1034px; height: 708px;"></div></body></html>

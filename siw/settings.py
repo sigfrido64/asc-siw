@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'accounts.si_context_processor.si_middleware',
+    'siw.context_processor.si_middleware',
 ]
 
 ROOT_URLCONF = 'siw.urls'
@@ -79,7 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'accounts.si_context_processor.siwperms',
+                'siw.context_processor.siwperms',
             ],
         },
     },
