@@ -35,8 +35,21 @@ SCREEN_DUMP_LOCATION = os.path.join(
 
 
 class FunctionalTest(StaticLiveServerTestCase):
+    
+    @staticmethod
+    def __check_error(message):
+        # Se è un forbidden lo gestisco più ad alto livello.
+        if '403 (Forbidden)' in message:
+            return False
+        # Gli errori di favicon non li guardo perchè per Ajax non è previsto.
+        if 'favicon.ico - Failed to load resource:':
+            return False
+        return True
 
     def setUp(self):
+        # To be overriden
+        self.username = self.password = None
+        
         # Avvio il driver corrispondente al tipo di Browser che voglio usare.
         if CHROME:
             d = DesiredCapabilities.CHROME
@@ -50,6 +63,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             print("Stagin server !")
             self.live_server_url = 'http://' + self.staging_server
             # reset_database(self.staging_server)
+        self.browser.implicitly_wait(5)  # Max 10 Sec di attesa prima di un find_element
 
     def tearDown(self):
         if self._test_has_failed():
@@ -66,10 +80,13 @@ class FunctionalTest(StaticLiveServerTestCase):
             # Se ci sono errori (log level SEVERE) li stampo e segnalo il fail !
             errori = self.browser.get_log('browser')
             if errori:
+                trovati = False
                 for entry in errori:
-                    print("ERRORE : ", entry['message'])
-                    trovati = True
-                self.fail("Errori segnalati dal Browser !!! Leggi sopra !!!")
+                    if self.__check_error(entry['message']):
+                        print("ERRORE : ", entry['message'])
+                        trovati = True
+                if trovati:
+                    self.fail("Errori segnalati dal Browser !!! Leggi sopra !!!")
                 
         # Chiudo il Browser.
         if CHROME:
@@ -126,7 +143,6 @@ class FunctionalTest(StaticLiveServerTestCase):
         """
         return self.browser.find_element_by_id('id_text')
 
-
     def add_list_item(self, item_text):
         num_rows = len(self.browser.find_elements_by_css_selector('#id_list_table tr'))
         self.get_item_input_box().send_keys(item_text)
@@ -134,20 +150,31 @@ class FunctionalTest(StaticLiveServerTestCase):
         item_number = num_rows + 1
         self.wait_for_row_in_list_table(f'{item_number}: {item_text}')
 
-
     @wait
     def wait_to_be_logged_in(self, email):
         self.browser.find_element_by_link_text('Log out')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn(email, navbar.text)
 
-
     @wait
     def wait_to_be_logged_out(self, email):
         self.browser.find_element_by_name('email')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertNotIn(email, navbar.text)
-
+        
+    def siw_do_login(self):
+        # Esegue il login con le credenziali fornite.
+        # Parto dalla pagina iniziale TODO LOGIN PAGE !
+        self.browser.get(self.live_server_url)
+    
+        # Inserisce nome utente e password.
+        self.browser.find_element_by_name('username').send_keys(self.username)
+        self.browser.find_element_by_name('password').send_keys(self.password)
+        # Clicca su login
+        self.browser.find_element_by_id('button_login').send_keys(Keys.ENTER)
+    
+        # Controlla che il login sia andato a buon fine.
+        self.browser.find_element_by_id('id_logout')
 
     def create_pre_authenticated_session(self, email):
         if self.staging_server:
