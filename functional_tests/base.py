@@ -164,8 +164,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         
     def siw_do_login(self):
         # Esegue il login con le credenziali fornite.
-        # Parto dalla pagina iniziale TODO LOGIN PAGE !
-        self.browser.get(self.live_server_url)
+        # Parto dalla pagina di login
+        url = "%s/login/" % self.live_server_url
+        self.browser.get(url)
     
         # Inserisce nome utente e password.
         self.browser.find_element_by_name('username').send_keys(self.username)

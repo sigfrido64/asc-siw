@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
-from accounts.models import Profile, Ruoli
+from accounts.models import Profile, Ruoli, SiwRuoli
 
 
 class Command(BaseCommand):
@@ -28,7 +28,7 @@ class Command(BaseCommand):
         # Infine creo il ruolo
         ruolo = Ruoli()
         ruolo.ruolo = 'mdl'
-        ruolo.permessi = Profile.mdl
+        ruolo.permessi = SiwRuoli.MDL
         ruolo.save()
         
         self.stdout.write(self.style.SUCCESS('Database aggiornato'))

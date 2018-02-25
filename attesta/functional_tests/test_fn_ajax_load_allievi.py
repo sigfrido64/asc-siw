@@ -3,10 +3,9 @@ __author__ = "Pilone Ing. Sigfrido"
 from django.urls import reverse
 from accounts.models import User, SiwPermessi
 from functional_tests.base import FunctionalTest
-from unittest import skip
 
 
-class AjaxLoadCorsiTest(FunctionalTest):
+class AjaxLoadAllieviTest(FunctionalTest):
     # Crea l'utente per le prove.
     # La parte di SQL Server non va caricata perchè è esterna al mio DB.
     def setUp(self):
@@ -20,7 +19,7 @@ class AjaxLoadCorsiTest(FunctionalTest):
         # Dati dell'utente
         self.myuser = User.objects.get(username=self.username)
         # Link alla vista
-        self.url = "%s%s?anno=2016-2017" % (self.live_server_url, reverse('attesta:ajax_load_corsi'))
+        self.url = "%s%s?corso=AMUC31" % (self.live_server_url, reverse('attesta:ajax_load_allievi'))
         
     def test_guest_forbidden(self):
         # Utente non loggato -> Forbidden
@@ -46,4 +45,4 @@ class AjaxLoadCorsiTest(FunctionalTest):
 
         # A questo punto prova ad accedere al link dell'api Ajax e mi aspetto Forbidden !!
         self.browser.get(self.url)
-        self.assertIn('CADC18', self.browser.page_source)
+        self.assertIn('Zulianello', self.browser.page_source)
