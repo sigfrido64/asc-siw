@@ -26,3 +26,18 @@ def has_permission_decorator(permission_name, redirect_to_login=None):
                 raise PermissionDenied
         return wrapper
     return request_decorator
+
+
+def ajax_has_permission_decorator(permission_name):
+    def request_decorator(dispatch):
+        @wraps(dispatch)
+        def wrapper(request, *args, **kwargs):
+            user = request.user
+            if user.is_authenticated:
+                if has_permission(user, permission_name):
+                    return dispatch(request, *args, **kwargs)
+                else:
+                    raise PermissionDenied
+            raise PermissionDenied
+        return wrapper
+    return request_decorator
