@@ -3,15 +3,6 @@ import pyodbc
 from decouple import config
 
 conn = pyodbc.connect(config('MSSQL_CONNECT'))
-"""
-Questa era la vecchia stringa di connessione che adesso gestisco con Python Decouple
-    r'DRIVER={SQL Native Client};'
-    r'SERVER=HP-PRO3520\SQLEXPRESS_2012;'
-    r'DATABASE=Assocam;'
-    r'UID=Assocam;'
-    r'PWD=Assocam'
-
-"""
 
 
 def sqlserverinterface(query):

@@ -5,8 +5,9 @@ from . import views
 from . import ajax
 
 app_name = 'attesta'
+# Ricordati di mettere lo slash finale altrimenti puoi avere errori di risoluzione quando digiti l'url senza slash.
 urlpatterns = [
-    path('', views.mdl, name="home"),
+    path('mdl/', views.mdl, name="mdl"),
     
     # Sezione Ajax
     path('ajax/load-corsi/', ajax.ajax_load_corsi, name='ajax_load_corsi'),

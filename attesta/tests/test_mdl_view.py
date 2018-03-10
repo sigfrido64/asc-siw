@@ -8,10 +8,14 @@ from unittest import skip
 from accounts.models import SiwPermessi
 from ..views import mdl
 
+REVERSE_LINK = 'attesta:mdl'  # Questa è la stringa che uso per il reverse per vedere che link genera.
+LINK = '/attesta/mdl/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
+
 
 class MyAccountTestCase(TestCase):
     """
-    Qui metto le informazioni di base per i test successivi
+    Qui metto le informazioni di base per i test successivi.
+    Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
     def setUp(self):
         # Fake user
@@ -21,35 +25,41 @@ class MyAccountTestCase(TestCase):
         # Dati dell'utente
         self.myuser = User.objects.get(username=self.username)
         # Link alla vista
-        self.url = reverse('attesta:home')
+        self.url = reverse(REVERSE_LINK)
 
 
 class LoginRequiredTests(MyAccountTestCase):
-    # Un utente non loggato viene rediretto alla pagina di login.
+    # Test che faccio per un utente non loggato, un utente guest.
     def test_redirection(self):
+        # Un utente non loggato deve essere rediretto alla pagina di login.
         login_url = reverse('login')
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
 class PermissionRequiredTests(MyAccountTestCase):
-    # Utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione -> Denied !!
+    # Qui metto i test per un utente che si logga ma che non ha i permessi per accedere all'app.
     def test_no_perms_on_app(self):
+        # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
+        # come risposta 403 = Denied !
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
         self.assertEquals(self.response.status_code, 403)
         
-    # Utente che si logga senza permessi ed accede alla home. Non trova la voce di menù !
-    # Attezione che nel template che genera il menù non ho il riferimento alla classe !
     def test_no_menu_on_home(self):
+        # Un utente che si logga senza permessi ed accede alla home non deve trovare la voce di menù !
+        # Attezione che nel template che genera il menù non ho il riferimento alla classe !
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(reverse('home'))
         self.assertNotContains(self.response, self.url)
 
 
 class FormGeneralTests(MyAccountTestCase):
+    # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
+    # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
+    # garantire che non si acceda senza permessi.
     def setUp(self):
-        # Utente che si logga con permessi. Faccio gli altri test
+        # Seup della classe dando i permessi all'utente.
         super().setUp()
         self.myuser.profile.permessi = {SiwPermessi.STAMPE_MDL}
         self.myuser.save(force_update=True)
@@ -57,7 +67,9 @@ class FormGeneralTests(MyAccountTestCase):
         self.response = self.client.get(self.url)
 
     def test_menu_on_home(self):
-        # Quando accedo alla home devo trovare la voce di menù per ma mia app.
+        # Quando accedo alla home devo trovare la voce di menù per la mia app.
+        # Il test fallisce quando nel menù generale non trovo il link a questa vista.
+        # Il link viene messo nel template menu.html che trovi in templates/includes
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(reverse('home'))
         self.assertContains(self.response, self.url)
@@ -67,8 +79,9 @@ class FormGeneralTests(MyAccountTestCase):
         self.assertEquals(self.response.status_code, 200)
         
     def test_url_resolves_correct_view(self):
-        # La risoluzione dell'url mi manda alla vista corretta
-        view = resolve('/attesta/')
+        # La risoluzione dell'url mi manda alla vista corretta.
+        # Il test fallisce quando il link non mi porta alla vista e devi guardare negli urls dell'app.
+        view = resolve(LINK)
         self.assertEquals(view.func, mdl)
         
     @skip("In questa vista non sono presenti form per cui non c'è csrfmiddlewaretoken")

@@ -136,3 +136,6 @@ Thumbs.db
 
 # Ignoro i files relativi agli ambienti virtuali.
 venv/
+
+# Ignoro la cartella media perchè sono files legati all'installazione attuale.
+media/
