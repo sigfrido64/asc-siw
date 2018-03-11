@@ -33,7 +33,7 @@ class Profile(models.Model):
     Estende il modello dell'Utente di Sistema andando ad aggiungere i peressi ed i ruoli per la protezioe dei dati.
     ATTENZIONE : I permessi negati prevalgono su quelli concessi !
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # Legame al record dell'Utente
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Legame al record dell'Utente
     ruoli = models.TextField(default=False, help_text="Lista dei ruoli che spettano all'utente",
                              verbose_name="Ruoli assegnati all'utente")
     permessi = models.TextField(default=False, help_text="Lista dei permessi concessi all'utente",

@@ -7,22 +7,46 @@
 {% endblock %}
 
 {% block content %}
-  Anno Formativo : &nbsp;
-  <select id="anni_formativi" lista-corsi-url="{% url 'attesta:ajax_load_corsi' %}">
-  {% for anno in anni %}
-      <option value="{{ anno.anno }}">{{ anno.anno }}</option>
-  {% endfor %}
-  </select>
-
-  <br><br>
-
-  Corso : &nbsp;
-    <select id="lista_corsi" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
-    <option value="">Scegli un corso</option>
-    {% for corso in corsi %}
-        <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
-    {% endfor %}
-    </select>
+  <table style="width:100%">
+    <tbody>
+      <tr>
+        <td>
+          Anno Formativo : &nbsp;
+          <select id="anni_formativi" lista-corsi-url="{% url 'attesta:ajax_load_corsi' %}">
+          {% for anno in anni %}
+              <option value="{{ anno.anno }}">{{ anno.anno }}</option>
+          {% endfor %}
+          </select>
+        </td>
+        <td>
+          <label for="data_stampa">Data Stampa</label>
+          <input type="date" id="data_stampa"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Corso : &nbsp;
+          <select id="lista_corsi" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
+          <option value="">Scegli un corso</option>
+          {% for corso in corsi %}
+              <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
+          {% endfor %}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Lista Stampe : &nbsp;
+          <select id="lista_stampe" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
+          <option value="">Scegli il documento da stampare</option>
+          {% for corso in corsi %}
+              <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
+          {% endfor %}
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <br><br>
   <table style="width:100%">
@@ -72,5 +96,6 @@
         }
       });
     });
+    $("#data_stampa").jqxDateTimeInput({ width: '300px', height: '25px', culture: 'it-IT' });
   </script>
 {% endblock %}

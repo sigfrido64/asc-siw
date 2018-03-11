@@ -98,13 +98,14 @@ class FormGeneralTests(MyAccountTestCase):
     def test_form_inputs(self):
         """
         La vista deve contenere :
-        L'Anno Formativo, il Corso e la Tabella degli allievi
+        L'Anno Formativo, la data di stampa, la lista dei corsi, la lista delle stampe e la Tabella degli allievi.
         """
         self.assertContains(self.response, '<select id="anni_formativi"', 1)
+        self.assertContains(self.response, '<input type="date" id="data_stampa"/>', 1)
         self.assertContains(self.response, '<select id="lista_corsi"', 1)
+        self.assertContains(self.response, '<select id="lista_stampe"', 1)
         self.assertContains(self.response, '<tbody id="lista_allievi">', 1)
 
-        # Utente che si logga senza permessi ed accede alla home. Non trova la voce di menù !
 
     """
     Testing : Accesso e visibilità della vista in ogni suo aspetto.
