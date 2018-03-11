@@ -49,9 +49,14 @@ class Profile(models.Model):
     must_change_password = models.BooleanField(default=False, help_text="Se True l'utente deve cambiare la password "
                                                "al primo accesso")
 
+    # META CLASS
+    class Meta:
+        verbose_name = 'profilo'
+        verbose_name_plural = 'profili'
+        
     def __str__(self):
         return self.user.username
-    
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -74,6 +79,8 @@ def password_change_signal(sender, instance, **kwargs):
     except User.DoesNotExist:
         pass
 """
+
+
 class Ruoli(models.Model):
     """
     Definisco la tabella dei ruoli con la lista dei permessi concessi e negati.
@@ -83,6 +90,11 @@ class Ruoli(models.Model):
                                 verbose_name="Permessi Concessi", blank=True)
     negati = models.TextField(default=False, help_text="Lista dei permessi esplicitamente negati al ruolo",
                               verbose_name="Permessi Esplicitamente negati", blank=True)
+
+    # META CLASS
+    class Meta:
+        verbose_name = 'ruolo'
+        verbose_name_plural = 'ruoli'
 
     def __str__(self):
         return self.ruolo

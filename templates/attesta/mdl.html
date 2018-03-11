@@ -26,7 +26,7 @@
       <tr>
         <td>
           Corso : &nbsp;
-          <select id="lista_corsi" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
+          <select id="lista_corsi" lista-report-url="{% url 'attesta:ajax_load_reports' %}">
           <option value="">Scegli un corso</option>
           {% for corso in corsi %}
               <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>

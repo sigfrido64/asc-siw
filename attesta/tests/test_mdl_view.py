@@ -94,7 +94,12 @@ class FormGeneralTests(MyAccountTestCase):
         # Devo avere un oggetto di tipo form
         form = self.response.context['form']
         self.assertIsInstance(form, ModelForm)
-
+        
+    def test_use_template(self):
+        # Controllo che usi il template corretto.
+        self.assertTemplateUsed(self.response, 'attesta/mdl.html',
+                                "Non è stato usato il template corretto")
+        
     def test_form_inputs(self):
         """
         La vista deve contenere :

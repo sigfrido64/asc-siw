@@ -9,7 +9,9 @@ class Report(models.Model):
     """
     # DATABASE FIELDS
     nome = models.CharField(max_length=30, primary_key=True)
-    descrizione = models.CharField(max_length=80)
+    descrizione = models.CharField(max_length=80, blank=False)
+    nome_file = models.CharField(max_length=80, blank=False)
+    subfolder = models.CharField(max_length=80, blank=True, default='')
     note = models.TextField(blank=True)
     
     # META CLASS
@@ -32,8 +34,8 @@ class ReportAssociato(models.Model):
     
     # META CLASS
     class Meta:
-        verbose_name = 'report'
-        verbose_name_plural = 'reports'
+        verbose_name = 'report associato'
+        verbose_name_plural = 'report associati'
     
     # TO STRING METHOD
     def __str__(self):
