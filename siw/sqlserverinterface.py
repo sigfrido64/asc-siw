@@ -1,4 +1,4 @@
-# encoding = utf-8
+# coding=utf-8
 import pyodbc
 from decouple import config
 
@@ -14,7 +14,6 @@ def sqlserverinterface(query):
     for row in cursor.fetchall():
         result.append(dict(zip(columns, row)))
     return result
-
 
 
 """"

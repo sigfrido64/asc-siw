@@ -9,6 +9,8 @@ from .models import ReportAssociato, Report
 #
 # Sezione Ajax
 #
+
+
 @ajax_has_permission_decorator(SiwPermessi.STAMPE_MDL)
 def ajax_load_corsi(request):
     """
@@ -31,7 +33,7 @@ def ajax_load_allievi(request):
     return render(request, 'attesta/allievi_list_table.html', {'allievi': lista_allievi(corso)})
 
 
-@ajax_has_permission_decorator(SiwPermessi.STAMPE_MDL)
+# @ajax_has_permission_decorator(SiwPermessi.STAMPE_MDL)
 def ajax_load_reports(request):
     """
     Rimanda in Ajax la lista dei reports associati ad un dato corso.
@@ -43,13 +45,11 @@ def ajax_load_reports(request):
     corso = request.GET.get('corso')
     # Prendo la lista dei report associati al corso. In questo modo non ho eccezioni se non c'è.
     reports = ReportAssociato.objects.filter(corso=corso).first()
-    print("Finisci la procedura !")
-    raise SystemExit(0)
+    context_lista = []
     if reports:
         lista_reports = eval(reports.reports)
-        context_lista = dict()
         for report in lista_reports:
-            report = Report.objects.filter(nome=report).values('nome', 'descrizione')
+            report = list(Report.objects.filter(nome=report).values('nome', 'descrizione'))
             if report:
-                context_lista.append(report)
-    return render(request, 'attesta/allievi_list_table.html', {'allievi': lista_allievi(corso)})
+                context_lista += report
+    return render(request, 'attesta/reports_list_options.html', {'reports': context_lista})
