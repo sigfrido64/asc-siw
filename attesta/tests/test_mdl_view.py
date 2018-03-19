@@ -1,5 +1,4 @@
 # coding=utf-8
-__author__ = "Pilone Ing. Sigfrido"
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
@@ -7,9 +6,11 @@ from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
 from ..views import mdl
+__author__ = "Pilone Ing. Sigfrido"
 
-REVERSE_LINK = 'attesta:mdl'  # Questa è la stringa che uso per il reverse per vedere che link genera.
-LINK = '/attesta/mdl/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
+
+URL = '/attesta/mdl/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
+REVERSE_URL = 'attesta:mdl'  # Questa è la stringa che uso per il reverse per vedere che link genera.
 
 
 class MyAccountTestCase(TestCase):
@@ -25,7 +26,7 @@ class MyAccountTestCase(TestCase):
         # Dati dell'utente
         self.myuser = User.objects.get(username=self.username)
         # Link alla vista
-        self.url = reverse(REVERSE_LINK)
+        self.url = reverse(REVERSE_URL)
 
 
 class LoginRequiredTests(MyAccountTestCase):
@@ -81,7 +82,7 @@ class FormGeneralTests(MyAccountTestCase):
     def test_url_resolves_correct_view(self):
         # La risoluzione dell'url mi manda alla vista corretta.
         # Il test fallisce quando il link non mi porta alla vista e devi guardare negli urls dell'app.
-        view = resolve(LINK)
+        view = resolve(URL)
         self.assertEquals(view.func, mdl)
         
     @skip("In questa vista non sono presenti form per cui non c'è csrfmiddlewaretoken")
@@ -110,6 +111,12 @@ class FormGeneralTests(MyAccountTestCase):
         self.assertContains(self.response, '<select id="lista_corsi"', 1)
         self.assertContains(self.response, '<select id="lista_stampe"', 1)
         self.assertContains(self.response, '<tbody id="lista_allievi">', 1)
+
+        self.fail("""
+        Va a finire i test. Adesso devi completare la pagina con i rimandi del codice in Javascript e poi
+        andare a fare un test funzionale.
+        """)
+
 
 
     """

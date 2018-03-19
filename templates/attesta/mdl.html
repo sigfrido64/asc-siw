@@ -39,9 +39,6 @@
           Lista Stampe : &nbsp;
           <select id="lista_stampe" lista-allievi-url="{% url 'attesta:ajax_load_allievi' %}">
           <option value="">Scegli il documento da stampare</option>
-          {% for corso in corsi %}
-              <option value="{{ corso.corso }}">{{ corso.denominazione }}</option>
-          {% endfor %}
           </select>
         </td>
       </tr>
@@ -69,26 +66,48 @@
       var anno = $(this).val();  // recupera l'anno formativo che ho scelto nel primo combo
 
       $.ajax({                       // Inizializza la richiesta AJAX
-        url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        url: url,                    // Imposta l'url della richiesta
         data: {
-          'anno': anno       // Aggiunge il parametro anno ai parametri di GET
+          'anno': anno               // Mette l'anno nei parametri di GET
         },
         success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
           $("#lista_corsi").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
                                           // arrivato dal server !
           $("#lista_allievi").html('');
+          $("#lista_stampe").html('<option value="">Scegli il documento da stampare</option>');
         }
       });
     });
 
     $("#lista_corsi").change(function () {
-      var url = $("#lista_corsi").attr("lista-allievi-url");  // recupera l'url della lista corsi
-      var corso = $(this).val();  // recupera l'anno formativo che ho scelto nel primo combo
+      var url = $("#lista_corsi").attr("lista-report-url");  // recupera l'url della lista corsi
+      var corso = $(this).val();  // Recupera il corso che ho scelto
 
       $.ajax({                       // Inizializza la richiesta AJAX
         url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
         data: {
-          'corso': corso       // Aggiunge il parametro anno ai parametri di GET
+          'corso': corso             // Mette il corso nei parametri di GET
+        },
+        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+          $("#lista_stampe").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                                          // arrivato dal server !
+          $("#lista_allievi").html('');   // Pulisco la tabella degli allievi !
+        }
+      });
+    });
+
+    $("#lista_stampe").change(function () {
+      var url = $("#lista_stampe").attr("lista-allievi-url");  // recupera l'url della lista corsi
+      var report = $(this).val();           // Legge il report che voglio stampare
+      var corso = $("#lista_corsi").val();  // Legge il corso per cui voglio la stampa
+      var data_stampa = $("#data_stampa").val(); // Legge la data di stampa
+
+      $.ajax({                       // Inizializza la richiesta AJAX
+        url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        data: {                      // Aggiunge i parametri della chiamata di GET
+          'report': report,
+          'corso': corso,
+          'data': data_stampa
         },
         success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
           $("#lista_allievi").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
@@ -96,6 +115,26 @@
         }
       });
     });
-    $("#data_stampa").jqxDateTimeInput({ width: '300px', height: '25px', culture: 'it-IT' });
+
+    $("#data_stampa").jqxDateTimeInput({ width: '300px', height: '25px', culture: 'it-IT', formatString: "dd-MM-yyyy" });
+    $('#data_stampa').on('change', function (event) {
+      var url = $("#lista_stampe").attr("lista-allievi-url");  // recupera l'url della lista corsi
+      var report = $(this).val();           // Legge il report che voglio stampare
+      var corso = $("#lista_corsi").val();  // Legge il corso per cui voglio la stampa
+      var data_stampa = $("#data_stampa").val(); // Legge la data di stampa
+
+      $.ajax({                       // Inizializza la richiesta AJAX
+        url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        data: {                      // Aggiunge i parametri della chiamata di GET
+          'report': report,
+          'corso': corso,
+          'data': data_stampa
+        },
+        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+          $("#lista_allievi").html(data);  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                                          // arrivato dal server !
+        }
+      });
+    });
   </script>
 {% endblock %}

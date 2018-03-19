@@ -4,9 +4,11 @@
     <td>{{ allievo.cognome }}</td>
     <td>{{ allievo.nome }}</td>
     <td>
-      <a href="{% url 'attesta:stampa_iscrizione_mdl' allievo.corso allievo.matricola %}">
+      <a href="{% url 'attesta:stampa_mdl' report allievo.corso allievo.matricola data_stampa %}">
       <span class="fa fa-download"></span>
       </a>
     </td>
   </tr>
 {% endfor %}
+
+

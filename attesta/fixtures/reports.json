@@ -1,0 +1,31 @@
+[
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza al corso",
+    "nome_file": "frequenza_mdl_1",
+    "subfolder": "mdl",
+    "downloadfilename": "Dichiarazione_Frequenza",
+    "note": "Nessuna"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "iscrizione_mdl",
+  "fields": {
+    "descrizione": "Modulo per iscrizione mdl",
+    "nome_file": "test_report_zzz.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Iscrizione",
+    "note": "Prova di nota"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "PLCC19",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl'}"
+  }
+}
+]

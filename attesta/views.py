@@ -1,15 +1,20 @@
 # coding=utf-8
-__author__ = "Pilone Ing. Sigfrido"
 from django.shortcuts import render
 from siw.sqlserverinterface import sqlserverinterface
 from django.http import HttpResponse
 from django.conf import settings
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from docxtpl import DocxTemplate
 from os import path, stat
-import tempfile
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from .sqlserverdata import lista_corsi
+from .models import Report
+from unipath import Path
+import tempfile
+import datetime
+__author__ = "Pilone Ing. Sigfrido"
 
 
 # Pagina di attestazioni, dichiarazioni ed iscrizioni MDL
@@ -29,13 +34,26 @@ def mdl(request):
 # Sezione Stampe
 #
 @has_permission_decorator(SiwPermessi.STAMPE_MDL)
-def stampa_mdl_iscrizione(request, corso, matricola):
+def stampa_mdl(request, corso, matricola, reportname, data_stampa):
     """
     :param request: Handle della richiesta.
     :param corso: Corso.
     :param matricola: Matricola dell'allievo.
+    :param reportname: Nome del report, chiave primaria per il report stesso.
+    :param data_stampa: Data di stampa del report.
     :return: Scarica il file con la domanda di iscrizione compilata.
+
+    TODO La sottocartella del report deve arrivare dal report stesso
+    TODO Refactor delle funzioni javascript che ho nel template. Sono doppie tra scelta documento e cambio data
+    TODO Devo mettere il report giusto nella richiesta.
+    TODO L'errore dovrebbe essere segnalato alla funzione chiamante in qualche modo.
     """
+    # Controllo che la data di stampa sia corretta nel formato GG/MM/AAAA
+    try:
+        data_stampa = datetime.datetime.strptime(data_stampa, '%d-%m-%Y').strftime('%d/%m/%Y')
+    except ValueError:
+        raise Http404(f'Data di stampa = {data_stampa} invalida !.')
+
     # Compone la query per interrogare il database e la lancia.
     query = "SELECT t2.Cognome AS cognome, t2.Nome AS nome, t2.CF AS cf, t2.[Data Nascita] AS data_nascita, " \
             "t2.[Comune Nascita] AS comune_nascita, t2.[Provincia Nascita] AS p_na, " \
@@ -55,26 +73,33 @@ def stampa_mdl_iscrizione(request, corso, matricola):
             "ON t1.Corso = t4.[Codice Corso] " \
             "WHERE (t1.[Allievo] = " + str(matricola) + " AND t1.[Corso] = '" + corso + "')"
     dati = sqlserverinterface(query)
-    
+
+    # Se non trovo nulla segnalo Permission Denied in questa prima fase.
+    if not dati:
+        raise Http404(f'Nessun dato trovato con matricola = {matricola} e corso = {corso} !')
+
     # A seconda del sesso aggiunge 'Il sottoscritto' o 'La sottoscritta'
     dati[0]['sottoscritto'] = 'Il sottoscritto' if (dati[0]['sesso'] == 'M') else 'La sottoscritta'
-    
     # Cambia il valore di 'occupato' da booleano a stringa.
     dati[0]['occupato'] = 'SI' if dati[0]['occupato'] else 'NO'
-    
     # Converte la data di nascia nel formato standard GG/MM/YYYY
     dati[0]['data_nascita'] = dati[0]['data_nascita'].strftime('%d/%m/%Y')
-    
-    print(dati)
+    # Aggiunge la data di stampa
+    dati[0]['data_stampa'] = data_stampa
 
-    print(settings.WORD_TEMPLATES)
+    # Controllo che il report richiesto esista sia come record nel database che come file da compilare in stampa.
     # Crea il percorso completo al file di template.
-    template = path.join(settings.WORD_TEMPLATES, 'iscrizione_MDL.docx')
-    print(template)
+    report = get_object_or_404(Report, nome=reportname)
     
+    # template = path.join(settings.WORD_TEMPLATES, report.subfolder, report.nome_file)
+    template = Path(settings.WORD_TEMPLATES).child(report.subfolder).child(report.nome_file)
+    # Controlla che esista.
+    if not template.exists():
+        raise Http404(f'Non trovo il report : {report.nome} in {template}')
+
+    # A questo punto ho un record ed una data validi e posso comporre il report.
     # Crea un percorso completo per un file temporaneo in cui salvare il documento.
     risultato = tempfile.NamedTemporaryFile().name
-    print(risultato)
     
     # Fa il merge
     doc = DocxTemplate(template)
@@ -82,7 +107,7 @@ def stampa_mdl_iscrizione(request, corso, matricola):
     doc.save(risultato)
     
     # Crea il nome del file come iscrizione-corso-matricola.
-    nomefile = 'Iscrizione-' + corso + '-' + str(matricola) + '.docx'
+    nomefile = report.downloadfilename + '-' + corso + '-' + str(matricola) + '.docx'
     
     # Risponde con il download del file
     handle = open(risultato, 'rb')

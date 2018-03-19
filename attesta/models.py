@@ -12,6 +12,7 @@ class Report(models.Model):
     descrizione = models.CharField(max_length=80, blank=False)
     nome_file = models.CharField(max_length=80, blank=False)
     subfolder = models.CharField(max_length=80, blank=True, default='')
+    downloadfilename = models.CharField(max_length=80, blank=False)
     note = models.TextField(blank=True)
     
     # META CLASS
@@ -40,3 +41,15 @@ class ReportAssociato(models.Model):
     # TO STRING METHOD
     def __str__(self):
         return self.corso
+
+    @staticmethod
+    def lista_report_associati(corso):
+        reports = ReportAssociato.objects.filter(corso=corso).first()
+        lista = []
+        if reports:
+            lista_reports = eval(reports.reports)
+            for report in lista_reports:
+                report = list(Report.objects.filter(nome=report).values('nome', 'descrizione'))
+                if report:
+                    lista += report
+        return lista

@@ -5,8 +5,6 @@ La radice è /attesta/
 A scendere
     /attesta/mdl/ : Per i corsi MDL
     /attesta/fci/ : Per i corsi FCI
-    
-    
 
 
 """

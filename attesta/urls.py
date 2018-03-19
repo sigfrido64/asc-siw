@@ -15,6 +15,6 @@ urlpatterns = [
     path('ajax/load-reports/', ajax.ajax_load_reports, name='ajax_load_reports'),
     
     # Sezione Stampe
-    path('stampe/mdl/iscrizione/<str:corso>/<int:matricola>/', views.stampa_mdl_iscrizione,
-         name='stampa_iscrizione_mdl'),
+    path('stampe/mdl/<str:reportname>/<str:corso>/<int:matricola>/<str:data_stampa>/', views.stampa_mdl,
+         name='stampa_mdl'),
 ]
