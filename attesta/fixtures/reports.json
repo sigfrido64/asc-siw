@@ -15,7 +15,7 @@
   "pk": "iscrizione_mdl",
   "fields": {
     "descrizione": "Modulo per iscrizione mdl",
-    "nome_file": "test_report_zzz.docx",
+    "nome_file": "test_report_iscrizione_mdl_zzz.docx",
     "subfolder": "mdl",
     "downloadfilename": "Iscrizione",
     "note": "Prova di nota"

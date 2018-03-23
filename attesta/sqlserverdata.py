@@ -1,6 +1,7 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from django.shortcuts import render
+from django.http import Http404
 from siw.sqlserverinterface import sqlserverinterface
 
 
@@ -32,3 +33,49 @@ def lista_allievi(corso):
             "WHERE ([Iscrizione ai Corsi].Corso = '" + corso + "') " \
             "ORDER BY COGNOME"
     return sqlserverinterface(query)
+
+
+def iscrizione_mdl_fields(matricola, corso, data_stampa):
+    """
+    Recupera la lista dei campi per la stampa di un iscrizione mdl
+    
+    :param matricola: La matricola dell'allievo.
+    :param corso: Il corso cui è iscritto.
+    :return: Lista di dict con i campi che mi servono per la stampa unione.
+    """
+    # Compone la query per interrogare il database e la lancia.
+    query = "SELECT t2.Cognome AS cognome, t2.Nome AS nome, t2.CF AS cf, t2.[Data Nascita] AS data_nascita, " \
+            "t2.[Comune Nascita] AS comune_nascita, t2.[Provincia Nascita] AS p_na, " \
+            "t2.[Stato Nascita] AS stato_nascita, t2.Cittadinanza AS cittadinanza, " \
+            "t2.[Indirizzo Residenza] AS indirizzo_res, t2.[CAP Residenza] AS cap_res, " \
+            "t2.[Comune Residenza] AS comune_res, t2.[Provincia Residenza] AS p_res, " \
+            "t3.Titolo AS titolo_studio, " \
+            "t2.Tel1 AS telefono, t2.Mail1 AS mail, t2.Occupato AS occupato, " \
+            "t4.[Codice Corso] + ' - ' + t4.Denominazione AS corso, " \
+            "t2.Sesso AS sesso " \
+            "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
+            "INNER JOIN [Assocam].[dbo].[Anagrafica Persone] AS t2 " \
+            "ON t1.Allievo = t2.[Id Persona] " \
+            "INNER JOIN [Assocam].[dbo].[Titoli di Studio] AS t3 " \
+            "ON t2.[Titolo Studio] = t3.Codice " \
+            "INNER JOIN [Assocam].[dbo].[Corsi per Iscrizioni] AS t4 " \
+            "ON t1.Corso = t4.[Codice Corso] " \
+            "WHERE (t1.[Allievo] = " + str(matricola) + " AND t1.[Corso] = '" + corso + "')"
+    
+    # Interroga il Data base.
+    dati = sqlserverinterface(query)
+
+    # Se non trovo il recordo segnalo not found. E' un'errore perchè nella maschera la selezione è sempre coerente.
+    if not dati:
+        raise Http404(f'Nessun dato trovato con matricola = {matricola} e corso = {corso} !')
+    
+    # A seconda del sesso aggiunge 'Il sottoscritto' o 'La sottoscritta'
+    dati[0]['sottoscritto'] = 'Il sottoscritto' if (dati[0]['sesso'] == 'M') else 'La sottoscritta'
+    # Cambia il valore di 'occupato' da booleano a stringa.
+    dati[0]['occupato'] = 'SI' if dati[0]['occupato'] else 'NO'
+    # Converte la data di nascia nel formato standard GG/MM/YYYY
+    dati[0]['data_nascita'] = dati[0]['data_nascita'].strftime('%d/%m/%Y')
+    # Aggiunge la data di stampa
+    dati[0]['data_stampa'] = data_stampa
+
+    return dati

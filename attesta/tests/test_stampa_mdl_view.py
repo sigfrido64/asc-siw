@@ -18,9 +18,9 @@ REVERSE_URL = 'attesta:stampa_mdl'  # Questa è la stringa che uso per il revers
 #  path('stampe/mdl/<str:report>/<str:corso>/<int:matricola>/<str:data_stampa>', views.stampa_mdl, name='stampa_mdl'),
 
 # Percorso dove trovo il report di test.
-SOURCE = Path(__file__).parent.parent.child('fixtures').child('test_report_zzz.docx')
+SOURCE = Path(__file__).parent.parent.child('fixtures').child('test_report_iscrizione_mdl_zzz.docx')
 # Percorso dove devo mettere il report di test.
-DEST = Path(settings.WORD_TEMPLATES).child('mdl').child('test_report_zzz.docx')
+DEST = Path(settings.WORD_TEMPLATES).child('mdl').child('test_report_iscrizione_mdl_zzz.docx')
 
 
 class MyAccountTestCase(TestCase):
