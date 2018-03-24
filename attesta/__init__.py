@@ -10,8 +10,9 @@ A scendere
 Nomi dei files.
 Le dichiarazioni devono essere salvate con la seguente convenzione :
 
-- iscrizione_mdl : Dichiarazione di iscrizione mdl
-- frequenza_mdl : Dichirazione di frequenza mdl
+- iscrizione_mdl : Dichiarazione di iscrizione mdl.
+- frequenza_mdl : Dichirazione di frequenza mdl.
+- frequenza_mdl_gg : Dichiarazione di frequenza mdl con analitico delle presenze.
 
 
 Le eventuali diverse tipologie della stessa domanda vanno salvate differenziandole con un _t[0-9].

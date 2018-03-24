@@ -22,10 +22,21 @@
   }
 },
 {
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_gg",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza con dettaglio giorni",
+    "nome_file": "test_report_frequenza_mdl_gg_zzz.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza_Analitico",
+    "note": "Dichiarazione di frequenza con dettaglio dei giorni frequentati"
+  }
+},
+{
   "model": "attesta.reportassociato",
   "pk": "PLCC19",
   "fields": {
-    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1'}"
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg'}"
   }
 }
 ]

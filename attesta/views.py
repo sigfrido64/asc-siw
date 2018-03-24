@@ -9,7 +9,7 @@ from docxtpl import DocxTemplate
 from os import path, stat
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
-from .sqlserverdata import lista_corsi, iscrizione_mdl_fields, frequenza_mdl_fields
+from .sqlserverdata import lista_corsi, iscrizione_mdl_fields, frequenza_mdl_fields, frequenza_mdl_gg_fields
 from .models import Report
 from unipath import Path
 import tempfile
@@ -19,7 +19,8 @@ __author__ = "Pilone Ing. Sigfrido"
 
 # Definisco le funzioni per la raccolta dei dati.
 dispach_dati_func = {'iscrizione_mdl': iscrizione_mdl_fields,
-                     'frequenza_mdl': frequenza_mdl_fields
+                     'frequenza_mdl': frequenza_mdl_fields,
+                     'frequenza_mdl_gg': frequenza_mdl_gg_fields
                      }
 
 

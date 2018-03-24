@@ -119,11 +119,54 @@ def frequenza_mdl_fields(matricola, corso, data_stampa):
     # Inserisce il periodo andando a prendere il nome del mese.
     mese_inizio = datetime.datetime.strftime(dati[0]['data_inizio'], '%m', )
     mese_fine = datetime.datetime.strftime(dati[0]['data_fine'], '%m', )
-    dati[0]['perido'] = MESI[mese_inizio] + ' - ' + MESI[mese_fine]
+    dati[0]['periodo'] = MESI[mese_inizio] + ' - ' + MESI[mese_fine]
 
     # Compone le frasi al maschile o al femminile a seconda del sesso.
     dati[0]['signore'] = 'il signor' if (dati[0]['sesso'] == 'M') else 'la signora'
     dati[0]['iscritto'] = 'iscritto' if (dati[0]['sesso'] == 'M') else 'iscritta'
+    
+    # Aggiunge la data di stampa
+    dati[0]['data_stampa'] = data_stampa
+    
+    return dati
+
+
+def frequenza_mdl_gg_fields(matricola, corso, data_stampa):
+    """
+    Recupera la lista dei campi per la stampa di un iscrizione mdl
+
+    :param matricola: La matricola dell'allievo.
+    :param corso: Il corso cui è iscritto.
+    :param data_stampa : Data della stampa del report.
+    :return: Lista di dict con i campi che mi servono per la stampa unione.
+    """
+    # Compone la query per interrogare il database e la lancia.
+    query = "SELECT t2.Cognome AS cognome, t2.Nome AS nome, t2.CF AS cf, " \
+            "t4.[Codice Corso] AS cod_corso, t4.Denominazione AS corso, " \
+            "t4.[Anno Formativo] AS anno_formativo, " \
+            "t4.[Data Inizio Corso] AS data_inizio, t4.[Data Termine Corso] AS data_fine, " \
+            "t2.Sesso AS sesso " \
+            "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
+            "INNER JOIN [Assocam].[dbo].[Anagrafica Persone] AS t2 " \
+            "ON t1.Allievo = t2.[Id Persona] " \
+            "INNER JOIN [Assocam].[dbo].[Corsi per Iscrizioni] AS t4 " \
+            "ON t1.Corso = t4.[Codice Corso] " \
+            "WHERE (t1.[Allievo] = " + str(matricola) + " AND t1.[Corso] = '" + corso + "')"
+    
+    # Interroga il Data base.
+    dati = sqlserverinterface(query)
+    
+    # Se non trovo il recordo segnalo not found. E' un'errore perchè nella maschera la selezione è sempre coerente.
+    if not dati:
+        raise Http404(f'Nessun dato trovato con matricola = {matricola} e corso = {corso} !')
+    
+    # Inserisce il periodo andando a prendere il nome del mese.
+    mese_inizio = datetime.datetime.strftime(dati[0]['data_inizio'], '%m', )
+    mese_fine = datetime.datetime.strftime(dati[0]['data_fine'], '%m', )
+    dati[0]['periodo'] = MESI[mese_inizio] + ' - ' + MESI[mese_fine]
+    
+    # Compone le frasi al maschile o al femminile a seconda del sesso.
+    dati[0]['signore'] = 'il signor' if (dati[0]['sesso'] == 'M') else 'la signora'
     
     # Aggiunge la data di stampa
     dati[0]['data_stampa'] = data_stampa

@@ -215,3 +215,59 @@ class FrequenzaSpecificTests(TestCase):
                                            'data_stampa': '12-03-2018'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
+
+
+class FrequenzaGgSpecificTests(TestCase):
+    # Qui metto i test specifici della vista per il report della dichiarazione di frequenza.
+    # Non uso MyAccountTestCase in quanto le operazioni sono speciali e non serve copiare sempre anche il report
+    # di iscrizione.
+    fixtures = ['reports']  # Carico il database di esempio dei report.
+    
+    def setUp(self):
+        # Seup della classe dando i permessi all'utente.
+        self.username = 'john'
+        self.password = 'secret123'
+        self.user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
+        # Recupera i dati dell'utente e gli aggiunge i permessi specifici per la vista.
+        self.myuser = User.objects.get(username=self.username)
+        self.myuser.profile.permessi = {SiwPermessi.STAMPE_MDL}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.username, password=self.password)
+        # Infine copia il report di test
+        self.reportname = 'test_report_frequenza_mdl_gg_zzz.docx'
+        copyfile(self.reportname)
+    
+    def tearDown(self):
+        # Chiusura del test, cancello il report che ho copiato nella posizione di origine.
+        delete(self.reportname)
+    
+    def test_incorrect_date_fail(self):
+        # Se do una data non valida mi deve dare errore.
+        url = reverse(REVERSE_URL, kwargs={'reportname': 'frequenza_mdl_gg', 'corso': 'PLCC19', 'matricola': 926,
+                                           'data_stampa': '38-03-2018'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+    
+    def test_no_record_allievo_fail(self):
+        # Se cerco un record che non esiste mi deve dare errore.
+        url = reverse(REVERSE_URL, kwargs={'reportname': 'frequenza_mdl_gg', 'corso': 'PLCC00', 'matricola': 926,
+                                           'data_stampa': '12-03-2018'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+    
+    def test_no_file_for_report(self):
+        # Se cerco un report che non c'è mi deve dare errore.
+        url = reverse(REVERSE_URL, kwargs={'reportname': 'frequenza_mdl_gg', 'corso': 'PLCC19', 'matricola': 926,
+                                           'data_stampa': '12-03-2018'})
+        
+        # Per fare in modo che non ci sia un report valido lo cancello prima di chiamare la vista.
+        delete(self.reportname)
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+    
+    def test_report_ok(self):
+        # Se tutti i dati sono congruenti devo avere una risposta positiva.
+        url = reverse(REVERSE_URL, kwargs={'reportname': 'frequenza_mdl_gg', 'corso': 'PLCC19', 'matricola': 926,
+                                           'data_stampa': '12-03-2018'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
