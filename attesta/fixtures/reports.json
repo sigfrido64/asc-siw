@@ -1,10 +1,10 @@
 [
 {
   "model": "attesta.report",
-  "pk": "frequenza_mdl",
+  "pk": "frequenza_mdl_t1",
   "fields": {
     "descrizione": "Dichiarazione di Frequenza al corso",
-    "nome_file": "frequenza_mdl_1",
+    "nome_file": "test_report_frequenza_mdl_zzz.docx",
     "subfolder": "mdl",
     "downloadfilename": "Dichiarazione_Frequenza",
     "note": "Nessuna"
@@ -25,7 +25,7 @@
   "model": "attesta.reportassociato",
   "pk": "PLCC19",
   "fields": {
-    "reports": "{'iscrizione_mdl', 'frequenza_mdl'}"
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1'}"
   }
 }
 ]

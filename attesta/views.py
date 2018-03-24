@@ -9,12 +9,18 @@ from docxtpl import DocxTemplate
 from os import path, stat
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
-from .sqlserverdata import lista_corsi, iscrizione_mdl_fields
+from .sqlserverdata import lista_corsi, iscrizione_mdl_fields, frequenza_mdl_fields
 from .models import Report
 from unipath import Path
 import tempfile
 import datetime
+import re
 __author__ = "Pilone Ing. Sigfrido"
+
+# Definisco le funzioni per la raccolta dei dati.
+dispach_dati_func = {'iscrizione_mdl': iscrizione_mdl_fields,
+                     'frequenza_mdl': frequenza_mdl_fields
+                     }
 
 
 # Pagina di attestazioni, dichiarazioni ed iscrizioni MDL
@@ -50,8 +56,10 @@ def stampa_mdl(request, corso, matricola, reportname, data_stampa):
     # Controllo che la data di stampa sia corretta nel formato GG/MM/AAAA altrimenti segnalo not found.
     data_stampa = check_data_stampa(data_stampa)
    
-    # Recupera la lista dei campi che mi servono per la stampa unione.
-    dati = iscrizione_mdl_fields(matricola, corso, data_stampa)
+    # Recupera la lista dei campi che mi servono per la stampa unione usando il dispatch dinamico basato sul nome
+    # univoco del report.
+    recupera_dati_func = dispach_dati(reportname)
+    dati = recupera_dati_func(matricola, corso, data_stampa)
 
     # Recupera il report richiesto se esiste nel db altrimenti segnala not found !
     report = get_object_or_404(Report, nome=reportname)
@@ -62,7 +70,7 @@ def stampa_mdl(request, corso, matricola, reportname, data_stampa):
     if not template.exists():
         raise Http404(f'Non trovo il report : {report.nome} in {template}')
 
-    # Crea il nome del file proposto per lo scaricamento come iscrizione-corso-matricola.
+    # Crea il nome del file proposto per lo scaricamento come downloadfilename-corso-matricola.
     nomefileoutput = report.downloadfilename + '-' + corso + '-' + str(matricola) + '.docx'
 
     return stampa_unione(template, dati, nomefileoutput)
@@ -116,3 +124,23 @@ def check_data_stampa(data_stampa):
         data_stampa = datetime.datetime.strptime(data_stampa, '%d-%m-%Y').strftime('%d/%m/%Y')
     except ValueError:
         raise Http404(f'Data di stampa = {data_stampa} invalida !.')
+    return data_stampa
+
+
+def dispach_dati(reportname):
+    """
+    Dato un nome di report riporta la funzione che si occupa di recuperare i dati per la stampa unione.
+    
+    Il nome del report determina la funzione con cui recupero i dati considerando la peculiarità che se il
+    nome termina con _t[0-9] quella parte non viene considerata in quanto, per convezione, il report non cambia se
+    non per elementi testuali interni ma i dati sono gestiti allo stesso identico modo.
+    
+    :param reportname: Nome del report
+    :return: Funzione che recupera il suoi dati per la stampa unione.
+    """
+    # Come prima cosa elimino eventuali tipologie dal nome del report.
+    cleanreport = re.sub(r'_t[0-9]$', '', reportname)
+    
+    if cleanreport not in dispach_dati_func.keys():
+        raise Http404(f'Tipo di report non previsto. Report = {reportname}!.')
+    return dispach_dati_func[cleanreport]
