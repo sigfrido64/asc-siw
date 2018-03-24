@@ -48,11 +48,8 @@ def stampa_mdl(request, corso, matricola, reportname, data_stampa):
     TODO Refactor delle funzioni javascript che ho nel template. Sono doppie tra scelta documento e cambio data
     """
     # Controllo che la data di stampa sia corretta nel formato GG/MM/AAAA altrimenti segnalo not found.
-    try:
-        data_stampa = datetime.datetime.strptime(data_stampa, '%d-%m-%Y').strftime('%d/%m/%Y')
-    except ValueError:
-        raise Http404(f'Data di stampa = {data_stampa} invalida !.')
-
+    data_stampa = check_data_stampa(data_stampa)
+   
     # Recupera la lista dei campi che mi servono per la stampa unione.
     dati = iscrizione_mdl_fields(matricola, corso, data_stampa)
 
@@ -103,3 +100,19 @@ def stampa_unione(template, dati, file_out):
     
     return response
 
+
+def check_data_stampa(data_stampa):
+    """
+    Controlla che la data_stampa sia valida e la mette nel formato gg/mm/yyyy.
+    
+    Nel browser uso un controllo che mette la data nella forma gg-mm-yyyy in quanto gli slash andrebbero in
+    conflitto con la modalità con cui Django genera i path. Si confonderebbero con ulteriori percorsi.
+    Se la stringa non è valida solleva l'eccezione 404 (not found).
+    
+    :param data_stampa: Stringa che arriva dal browser e che contiene la data stampa nel formato gg-mm-yyyy
+    :return: La stessa data sotto forma di stringa nel formato gg/mm/yyyy.
+    """
+    try:
+        data_stampa = datetime.datetime.strptime(data_stampa, '%d-%m-%Y').strftime('%d/%m/%Y')
+    except ValueError:
+        raise Http404(f'Data di stampa = {data_stampa} invalida !.')
