@@ -70,4 +70,5 @@ class AjaxGeneralTests(MyAccountTestCase):
     def test_response(self):
         # Nella risposta devo avere la lista dei corsi. Controllo le due voci che dovrei trovare
         self.assertContains(self.response, '<option value="iscrizione_mdl">')
-        self.assertContains(self.response, '<option value="frequenza_mdl">')
+        self.assertContains(self.response, '<option value="frequenza_mdl_t1">')
+        self.assertContains(self.response, '<option value="frequenza_mdl_gg">')

@@ -112,12 +112,6 @@ class FormGeneralTests(MyAccountTestCase):
         self.assertContains(self.response, '<select id="lista_stampe"', 1)
         self.assertContains(self.response, '<tbody id="lista_allievi">', 1)
 
-        self.fail("""
-        Va a finire i test. Adesso devi completare la pagina con i rimandi del codice in Javascript e poi
-        andare a fare un test funzionale.
-        """)
-
-
 
     """
     Testing : Accesso e visibilità della vista in ogni suo aspetto.

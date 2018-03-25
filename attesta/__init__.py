@@ -7,4 +7,16 @@ A scendere
     /attesta/fci/ : Per i corsi FCI
 
 
+Nomi dei files.
+Le dichiarazioni devono essere salvate con la seguente convenzione :
+
+- iscrizione_mdl : Dichiarazione di iscrizione mdl.
+- frequenza_mdl : Dichirazione di frequenza mdl.
+- frequenza_mdl_gg : Dichiarazione di frequenza mdl con analitico delle presenze.
+
+
+Le eventuali diverse tipologie della stessa domanda vanno salvate differenziandole con un _t[0-9].
+Quindi tutte le dichiarazioni come iscrizione_mdl_t[0-9] saranno trattate allo stesso modo ma avranno un template
+diverso per quanto con gli stessi campi. E' il caso delle dichiarazioni di frequenza che usano un file diverso per
+gruppo di giorni di corso.
 """

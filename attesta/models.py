@@ -1,4 +1,7 @@
+# coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.db import models
+from operator import itemgetter
 
 # Create your models here.
 
@@ -44,12 +47,24 @@ class ReportAssociato(models.Model):
 
     @staticmethod
     def lista_report_associati(corso):
+        """
+        Riporta la lista dei report associati ad un dato corso per comporre l'option del select HTML.
+        
+        :param corso: Il corso di cui voglio la lista dei report associati.
+        :return: Lista dei report associati a quel corso con nome e descrizione da mostrare nelle option.
+        """
+        # Recupera la lista dei report associati ad un corso.
         reports = ReportAssociato.objects.filter(corso=corso).first()
         lista = []
+        # Itera su ogni report per prendere la descrizione dal record dei report.
         if reports:
             lista_reports = eval(reports.reports)
             for report in lista_reports:
+                # Per ogni elemento fa un dizionario con le chiavi 'nome' e 'descrizione'
                 report = list(Report.objects.filter(nome=report).values('nome', 'descrizione'))
                 if report:
+                    # Allunga la lista dei dizionari.
                     lista += report
+            # Adesso ordina la lista in base alla descrizione
+            lista.sort(key=itemgetter('descrizione'))
         return lista
