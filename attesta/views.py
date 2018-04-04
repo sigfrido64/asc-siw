@@ -6,10 +6,11 @@ from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from docxtpl import DocxTemplate
-from os import path, stat
+from os import stat
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from .sqlserverdata import lista_corsi, iscrizione_mdl_fields, frequenza_mdl_fields, frequenza_mdl_gg_fields
+from .sqlserverdata import esame_giorni_fields, finale_esame_fields
 from .models import Report
 from unipath import Path
 import tempfile
@@ -18,9 +19,15 @@ import re
 __author__ = "Pilone Ing. Sigfrido"
 
 # Definisco le funzioni per la raccolta dei dati.
+# TODO I report dei giorni d'esame sono sostanzialmente unificabili, prima tra qualifica e specializzazione e poi
+# TODO tra pre e post esame. Qualifica e specializzazione vengono direttamente dal db. Pre e post esame posso anche
+# TODO deciderlo in base alla data di stampa.
 dispach_dati_func = {'iscrizione_mdl': iscrizione_mdl_fields,
                      'frequenza_mdl': frequenza_mdl_fields,
-                     'frequenza_mdl_gg': frequenza_mdl_gg_fields
+                     'frequenza_mdl_gg': frequenza_mdl_gg_fields,
+                     'pre_esame_mdl': esame_giorni_fields,
+                     'post_esame_mdl': esame_giorni_fields,
+                     'finale_esame_mdl': finale_esame_fields
                      }
 
 
@@ -73,7 +80,7 @@ def stampa_mdl(request, corso, matricola, reportname, data_stampa):
 
     # Crea il nome del file proposto per lo scaricamento come downloadfilename-corso-matricola.
     nomefileoutput = report.downloadfilename + '-' + corso + '-' + str(matricola) + '.docx'
-
+  
     return stampa_unione(template, dati, nomefileoutput)
 
 

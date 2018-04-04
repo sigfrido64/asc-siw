@@ -31,10 +31,14 @@ class Report(models.Model):
 class ReportAssociato(models.Model):
     """
     Modello che definisce i report associati ad ogni specifico corso.
+    
+    giorni_esame : Ricordati che va in stampa unione in Word per cui se deve andare a capo devi usare <w:br/>
     """
     # DATABASE FIELDS
     corso = models.CharField(max_length=10, primary_key=True)
     reports = models.TextField('Lista dei report associati al corso', blank=True)
+    giorni_esame = models.CharField(max_length=300, blank=False, default="Non ancora assegnato")
+    tipo_attestato = models.CharField(max_length=80, blank=False, default="Frequenza e Profitto")
     
     # META CLASS
     class Meta:

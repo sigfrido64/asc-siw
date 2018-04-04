@@ -1,7 +1,9 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from siw.sqlserverinterface import sqlserverinterface
+from .models import ReportAssociato
 import datetime
 
 # Definizioni dei mesi.
@@ -38,6 +40,106 @@ def lista_allievi(corso):
             "WHERE ([Iscrizione ai Corsi].Corso = '" + corso + "') " \
             "ORDER BY COGNOME"
     return sqlserverinterface(query)
+
+
+def esame_giorni_fields(matricola, corso, data_stampa):
+    """
+    Recupera la lista dei campi per la stampa di un iscrizione mdl
+
+    :param matricola: La matricola dell'allievo.
+    :param corso: Il corso cui è iscritto.
+    :param data_stampa : Data della stampa del report.
+    :return: Lista di dict con i campi che mi servono per la stampa unione.
+    """
+    # Compone la query per interrogare il database e la lancia.
+    query = "SELECT t2.Cognome AS cognome, t2.Nome AS nome, t2.CF AS cf, " \
+            "t4.[Codice Corso] AS cod_corso, t4.Denominazione AS corso, " \
+            "t4.[Anno Formativo] AS anno_formativo, " \
+            "t2.Sesso AS sesso " \
+            "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
+            "INNER JOIN [Assocam].[dbo].[Anagrafica Persone] AS t2 " \
+            "ON t1.Allievo = t2.[Id Persona] " \
+            "INNER JOIN [Assocam].[dbo].[Corsi per Iscrizioni] AS t4 " \
+            "ON t1.Corso = t4.[Codice Corso] " \
+            "WHERE (t1.[Allievo] = " + str(matricola) + " AND t1.[Corso] = '" + corso + "')"
+    
+    # Interroga il Data base.
+    dati = sqlserverinterface(query)
+    
+    # Se non trovo il record segnalo not found. E' un'errore perchè nella maschera la selezione è sempre coerente.
+    if not dati:
+        raise Http404(f'Nessun dato trovato con matricola = {matricola} e corso = {corso} !')
+    
+    # Compone le frasi al maschile o al femminile a seconda del sesso.
+    dati[0]['signore'] = 'il signor' if (dati[0]['sesso'] == 'M') else 'la signora'
+    dati[0]['iscritto'] = 'iscritto' if (dati[0]['sesso'] == 'M') else 'iscritta'
+    
+    # Aggiunge la data di stampa
+    dati[0]['data_stampa'] = data_stampa
+    
+    # Recupera il calendario d'esame ed il tipo di corso dal campo del report associato al corso.
+    report_associato = get_object_or_404(ReportAssociato, corso=corso)
+    dati[0]['gg_esame'] = report_associato.giorni_esame
+    dati[0]['tipo_attestato'] = report_associato.tipo_attestato.lower()
+
+    return dati
+
+
+def finale_esame_fields(matricola, corso, data_stampa):
+    """
+    Recupera la lista dei campi per la stampa di un iscrizione mdl
+
+    :param matricola: La matricola dell'allievo.
+    :param corso: Il corso cui è iscritto.
+    :param data_stampa : Data della stampa del report.
+    :return: Lista di dict con i campi che mi servono per la stampa unione.
+    """
+    # Compone la query per interrogare il database e la lancia.
+    query = "SELECT t2.Cognome AS cognome, t2.Nome AS nome, t2.CF AS cf, " \
+            "t4.[Codice Corso] AS cod_corso, t4.Denominazione AS corso, " \
+            "t4.[Anno Formativo] AS anno_formativo, " \
+            "t2.Sesso AS sesso, " \
+            "t1.[Valutazione_Finale] AS valutazione_finale, " \
+            "t1.[Ore_Corso_Svolte] AS ore_corso_svolte, t1.[Ore_Di_Assenza] AS ore_assenza " \
+            "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
+            "INNER JOIN [Assocam].[dbo].[Anagrafica Persone] AS t2 " \
+            "ON t1.Allievo = t2.[Id Persona] " \
+            "INNER JOIN [Assocam].[dbo].[Corsi per Iscrizioni] AS t4 " \
+            "ON t1.Corso = t4.[Codice Corso] " \
+            "WHERE (t1.[Allievo] = " + str(matricola) + " AND t1.[Corso] = '" + corso + "')"
+    
+    # Interroga il Data base.
+    dati = sqlserverinterface(query)
+    
+    # Se non trovo il record segnalo not found. E' un'errore perchè nella maschera la selezione è sempre coerente.
+    if not dati:
+        raise Http404(f'Nessun dato trovato con matricola = {matricola} e corso = {corso} !')
+    
+    # Compone le frasi al maschile o al femminile a seconda del sesso.
+    dati[0]['signore'] = 'il signor' if (dati[0]['sesso'] == 'M') else 'la signora'
+    dati[0]['iscritto'] = 'iscritto' if (dati[0]['sesso'] == 'M') else 'iscritta'
+    
+    # Aggiunge la data di stampa
+    dati[0]['data_stampa'] = data_stampa
+    
+    # Recupera il calendario d'esame ed il tipo di corso dal campo del report associato al corso.
+    report_associato = get_object_or_404(ReportAssociato, corso=corso)
+    dati[0]['tipo_attestato'] = report_associato.tipo_attestato.lower()
+    
+    # Scrive il giudizio che è IDONEO se >= 60, NON IDONEO se < 60, ASSENTE ALL'ESAME se < 0
+    voto = float(dati[0]['valutazione_finale'])
+    if voto < 0:
+        dati[0]['giudizio_finale'] = "ASSENTE ALL'ESAME"
+    elif voto < 59:
+        dati[0]['giudizio_finale'] = "NON IDONEO"
+    else:
+        dati[0]['giudizio_finale'] = "IDONEO"
+        
+    # Calcola infine le ore corso sommando le ore di presenza e le ore di assenza.
+    ore_totali = float(dati[0]['ore_corso_svolte']) + float(dati[0]['ore_assenza'])
+    dati[0]['ore_totali'] = str(ore_totali)
+    
+    return dati
 
 
 def iscrizione_mdl_fields(matricola, corso, data_stampa):

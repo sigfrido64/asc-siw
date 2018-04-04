@@ -33,10 +33,34 @@
   }
 },
 {
+  "model": "attesta.report",
+  "pk": "pre_esame_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione Preventiva Calendario di Esame",
+    "nome_file": "test_report_pre_esame_mdl_zzz.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Calendario_Preventivo_Esame",
+    "note": "Dichiarazione del calendario di Esame preventivo"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "finale_esame_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione Finale voti di Esame",
+    "nome_file": "test_report_finale_esame_mdl_zzz.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Dichiarazione_Finale_Esame",
+    "note": "Dichiarazione finale d'Esame con voti e giudizio"
+  }
+},
+{
   "model": "attesta.reportassociato",
   "pk": "PLCC19",
   "fields": {
-    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg'}"
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "23/06/2018 dalle ore 18.00 alle ore 21.00",
+    "tipo_attestato": "specializzazione"
   }
 }
 ]
