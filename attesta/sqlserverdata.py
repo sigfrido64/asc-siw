@@ -160,7 +160,7 @@ def iscrizione_mdl_fields(matricola, corso, data_stampa):
             "t3.Titolo AS titolo_studio, " \
             "t2.Tel1 AS telefono, t2.Mail1 AS mail, t2.Occupato AS occupato, " \
             "t4.[Codice Corso] + ' - ' + t4.Denominazione AS corso, " \
-            "t2.Sesso AS sesso " \
+            "t2.Sesso AS sesso, t4.Cauzione as cauzione " \
             "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
             "INNER JOIN [Assocam].[dbo].[Anagrafica Persone] AS t2 " \
             "ON t1.Allievo = t2.[Id Persona] " \
@@ -185,6 +185,11 @@ def iscrizione_mdl_fields(matricola, corso, data_stampa):
     dati[0]['data_nascita'] = dati[0]['data_nascita'].strftime('%d/%m/%Y')
     # Aggiunge la data di stampa
     dati[0]['data_stampa'] = data_stampa
+    # Se è prevista una cauzione predispone il campo.
+    if int(dati[0]['cauzione']) > 0:
+        dati[0]['cauzione'] = 'Cauzione : {0:.2f} €'.format(dati[0]['cauzione'])
+    else:
+        dati[0]['cauzione'] = ''
 
     return dati
 
