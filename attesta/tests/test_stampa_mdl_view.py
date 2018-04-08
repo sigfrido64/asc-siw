@@ -5,10 +5,11 @@ from django.urls import reverse, resolve
 from django.conf import settings
 from accounts.models import SiwPermessi
 from ..views import stampa_mdl
+from ..sqlserverdata import iscrizione_mdl_fields
 from os import remove
 import shutil
 from unipath import Path
-
+import json
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -121,6 +122,33 @@ class IscrizioneSpecificTests(MyAccountTestCase):
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi e che i permessi risolvano la vista corretta ma nulla più.
     fixtures = ['reports']  # Carico il database di esempio dei report.
+    # Dati che mi aspetto in uscita dal controllo dei campi per la stampa unione e che ho generato così :
+    # file = open('sig.txt', 'w') | file.write(json.dumps(self.dati, sort_keys=True, indent=4)) | file.close()
+    dati_attesi_str = """[
+        {
+            "cap_res": "10141",
+            "cauzione": "Cauzione : 150.00 \u20ac",
+            "cf": "CMTNTN55B20H403L",
+            "cittadinanza": "Italia",
+            "cognome": "Comito",
+            "comune_nascita": "Rocca di Neto",
+            "comune_res": "Torino",
+            "corso": "PLCC19 - PROGETTISTA MECCATRONICO",
+            "data_nascita": "20/02/1955",
+            "data_stampa": "13/11/1964",
+            "indirizzo_res": "Via Tofane, 68",
+            "mail": null,
+            "nome": "Antonio",
+            "occupato": "SI",
+            "p_na": "KR",
+            "p_res": "TO",
+            "sesso": "M",
+            "sottoscritto": "Il sottoscritto",
+            "stato_nascita": "Italia",
+            "telefono": "3356631522",
+            "titolo_studio": "Qualifica Professionale Regionale"
+        }
+    ]"""
     
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
@@ -152,7 +180,14 @@ class IscrizioneSpecificTests(MyAccountTestCase):
         delete(self.reportname)
         response = self.client.get(url)
         self.assertEquals(response.status_code, 404)
-
+        
+    def test_correct_dict_for_report(self):
+        # Controlla che il dizionario che mi viene restituito per la stampa unione sia corretto e contenga tutti i
+        # campi che mi servono.
+        dati = iscrizione_mdl_fields(926, 'PLCC19', '13/11/1964')
+        datiattesi = json.loads(self.dati_attesi_str)
+        self.assertEqual(dati, datiattesi)
+        
     def test_report_ok(self):
         # Se tutti i dati sono congruenti devo avere una risposta positiva.
         url = reverse(REVERSE_URL, kwargs={'reportname': 'iscrizione_mdl', 'corso': 'PLCC19', 'matricola': 926,
