@@ -37,7 +37,7 @@
   "pk": "pre_esame_mdl",
   "fields": {
     "descrizione": "Dichiarazione Preventiva Calendario di Esame",
-    "nome_file": "test_report_pre_esame_mdl_zzz.docx",
+    "nome_file": "test_report_gg_esame_mdl_zzz.docx",
     "subfolder": "mdl",
     "downloadfilename": "Calendario_Preventivo_Esame",
     "note": "Dichiarazione del calendario di Esame preventivo"

@@ -82,6 +82,9 @@ def esame_giorni_fields(matricola, corso, data_stampa):
     dati[0]['gg_esame'] = report_associato.giorni_esame
     dati[0]['tipo_attestato'] = report_associato.tipo_attestato.lower()
 
+    # Elimino le chiavi che non servono alla stampa unione.
+    del dati[0]['sesso']
+    
     return dati
 
 
@@ -139,6 +142,14 @@ def finale_esame_fields(matricola, corso, data_stampa):
     ore_totali = float(dati[0]['ore_corso_svolte']) + float(dati[0]['ore_assenza'])
     dati[0]['ore_totali'] = str(ore_totali)
     
+    # Mette in formato stringa sia le ore corso svolte che la valutazione finale.
+    dati[0]['ore_corso_svolte'] = str(dati[0]['ore_corso_svolte'])
+    dati[0]['valutazione_finale'] = str(dati[0]['valutazione_finale'])
+    
+    # Elimino le chiavi che non servono alla stampa unione.
+    del dati[0]['sesso']
+    del dati[0]['ore_assenza']
+   
     return dati
 
 
@@ -158,7 +169,7 @@ def iscrizione_mdl_fields(matricola, corso, data_stampa):
             "t2.[Indirizzo Residenza] AS indirizzo_res, t2.[CAP Residenza] AS cap_res, " \
             "t2.[Comune Residenza] AS comune_res, t2.[Provincia Residenza] AS p_res, " \
             "t3.Titolo AS titolo_studio, " \
-            "t2.Tel1 AS telefono, t2.Mail1 AS mail, t2.Occupato AS occupato, " \
+            "t2.Tel1 AS telefono, t2.Occupato AS occupato, " \
             "t4.[Codice Corso] + ' - ' + t4.Denominazione AS corso, " \
             "t2.Sesso AS sesso, t4.Cauzione as cauzione " \
             "FROM [Assocam].[dbo].[Iscrizione ai Corsi] AS t1 " \
@@ -190,6 +201,9 @@ def iscrizione_mdl_fields(matricola, corso, data_stampa):
         dati[0]['cauzione'] = 'Cauzione : {0:.2f} €'.format(dati[0]['cauzione'])
     else:
         dati[0]['cauzione'] = ''
+
+    # Elimino le chiavi che non servono alla stampa unione.
+    del dati[0]['sesso']
 
     return dati
 
@@ -235,6 +249,11 @@ def frequenza_mdl_fields(matricola, corso, data_stampa):
     # Aggiunge la data di stampa
     dati[0]['data_stampa'] = data_stampa
     
+    # Elimino le chiavi che non servono alla stampa unione.
+    del dati[0]['data_inizio']
+    del dati[0]['data_fine']
+    del dati[0]['sesso']
+    
     return dati
 
 
@@ -277,6 +296,11 @@ def frequenza_mdl_gg_fields(matricola, corso, data_stampa):
     
     # Aggiunge la data di stampa
     dati[0]['data_stampa'] = data_stampa
+
+    # Elimino le chiavi che non servono alla stampa unione.
+    del dati[0]['data_inizio']
+    del dati[0]['data_fine']
+    del dati[0]['sesso']
     
     return dati
 
