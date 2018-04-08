@@ -1,0 +1,341 @@
+[
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_gg",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza con dettaglio giorni",
+    "nome_file": "frequenza_mdl_gg.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza_Analitico",
+    "note": "Dichiarazione di frequenza con dettaglio dei giorni frequentati"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t1",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t1.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t2",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t2.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t3",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t3.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t4",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t4.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t5",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t1.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t6",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t6.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "frequenza_mdl_t7",
+  "fields": {
+    "descrizione": "Dichiarazione di Frequenza",
+    "nome_file": "frequenza_mdl_t7.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Frequenza",
+    "note": "Dichiarazione di frequenza diversa per tipo di corso"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "iscrizione_mdl",
+  "fields": {
+    "descrizione": "Domanda Iscrizione Corsi MDL",
+    "nome_file": "iscrizione_MDL.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Iscrizione",
+    "note": "La domanda \u00e8 la stessa per tutti i tipi di corsi MDL"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "pre_esame_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione Preventiva Calendario di Esame",
+    "nome_file": "gg_esame_preventivo_mdl.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Calendario_Preventivo_Esame",
+    "note": "Dichiarazione del calendario Preventivo d'Esame"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "post_esame_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione Consuntiva Calendario di Esame",
+    "nome_file": "gg_esame_consuntivo_mdl.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Calendario_Consuntivo_Esame",
+    "note": "Dichiarazione del calendario d'Esame con effettiva presenza"
+  }
+},
+{
+  "model": "attesta.report",
+  "pk": "finale_esame_mdl",
+  "fields": {
+    "descrizione": "Dichiarazione Finale voti di Esame",
+    "nome_file": "dich_finale_mdl.docx",
+    "subfolder": "mdl",
+    "downloadfilename": "Dichiarazione_Finale_Esame",
+    "note": "Dichiarazione finale d'Esame con voti e giudizio"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "ACNC03",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t6', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "ALBC19",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "AMUC32",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "CADC19",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "CEIC03",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "CNCC21",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "CNCC22",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t4', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "COBC14",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t6', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "COMC13",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t7', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "CPNC03",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t7', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "IDSC06",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t2', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "OCMC14",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t3', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "OCNC14",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "PLCC19",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "SACC03",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "SALC19",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TDPC09",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TGRC15",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t3', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TIRC12",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t2', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TMDC03",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t6', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TMSC05",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t5', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TPMC15",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t6', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+},
+{
+  "model": "attesta.reportassociato",
+  "pk": "TPRC13",
+  "fields": {
+    "reports": "{'iscrizione_mdl', 'frequenza_mdl_t1', 'frequenza_mdl_gg', 'pre_esame_mdl', 'post_esame_mdl', 'finale_esame_mdl'}",
+    "giorni_esame": "Non ancora assegnato",
+    "tipo_attestato": "XX da definire XX"
+  }
+}
+]

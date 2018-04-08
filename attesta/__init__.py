@@ -13,10 +13,9 @@ Le dichiarazioni devono essere salvate con la seguente convenzione :
 - iscrizione_mdl : Dichiarazione di iscrizione mdl.
 - frequenza_mdl : Dichirazione di frequenza mdl.
 - frequenza_mdl_gg : Dichiarazione di frequenza mdl con analitico delle presenze.
-- esame_pre_qualifica : Dichiarazione dei giorni di esame previsti per esame di qualifica.
-- esame_post_qualifica : Dichiarazione dei giorni di esame effettivi dopo esame di qualifica.
-- esame_pre_special : Dichiarazione dei giorni di esame previsti per esame di specializzazione.
-- esame_post_special : Dichiarazione dei giorni di esame effettivi dopo esame di specializzazione.
+- pre_esame_mdl : Dichiarazione dei giorni di esame previsti.
+- post_esame_mdl : Dichiarazione dei giorni di esame di effettiva presenza.
+- finale_esame_mdl : Dichiarazione finale d'esame con valutazione e giudizio.
 
 TIP) Le eventuali diverse tipologie della stessa domanda vanno salvate differenziandole con un _t[0-9].
 Quindi tutte le dichiarazioni come iscrizione_mdl_t[0-9] saranno trattate allo stesso modo ma avranno un template

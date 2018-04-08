@@ -1,0 +1,14 @@
+[
+    {
+        "anno_formativo": "2017-2018",
+        "cf": "CMTNTN55B20H403L",
+        "cod_corso": "PLCC19",
+        "cognome": "Comito",
+        "corso": "PROGETTISTA MECCATRONICO",
+        "data_stampa": "13/11/1964",
+        "iscritto": "iscritto",
+        "nome": "Antonio",
+        "periodo": "ottobre - luglio",
+        "signore": "il signor"
+    }
+]
