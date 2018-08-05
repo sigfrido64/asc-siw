@@ -8,12 +8,17 @@ Ruoli canonici :
 =======
 
 mdl : {'stampa_attestati'}
+amm : {'menu_amm'
 
 
 Permessi :
 ==========
 
 stampa_attestati : Abilita la stampa degli attestati.
+
+MENU : l'ostacolo è sapere quali voci di menù posso mostrare o meno a seconda dei permessi che ho.
+
+se creo un permesso ad hoc risolvo il problema e posso separare le due cose anche se questo vuol dire che per
 
 
 """

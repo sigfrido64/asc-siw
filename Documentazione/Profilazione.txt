@@ -1,0 +1,5 @@
+Uso il profiler django_cprofile_middleware.middleware.ProfilerMiddleware che è installato in settings.py
+
+Per attivare la profilazione su una vista basta mettere dopo l'url ?prof come nell'esempio che segue :
+
+http://localhost:8000/foo/?prof

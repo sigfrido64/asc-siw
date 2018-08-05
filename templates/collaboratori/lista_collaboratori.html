@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Collaboratori{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+<table>
+  <thead>
+    <tr>
+      <th>Cognome</th>
+      <th>Nome</th>
+      <th>Dettagli</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Pippo</td>
+      <td>Pluto</td>
+      <td>Paperino</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+    Iniziative <br>
+  {% for iniziativa in iniziative %}
+    -){{ iniziativa.nome }} - {{ iniziativa.descrizione }} <br>
+        {% for progetto in progetti %}
+            {% if progetto.iniziativa == iniziativa %}
+                    &nbsp;&nbsp;+--> {{ progetto.nome }} - {{ progetto.descrizione }}<br>
+                    {% for sottoprogetto in sottoprogetti %}
+                        {% if sottoprogetto.progetto == progetto %}
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            +----> {{ sottoprogetto.nome }} - {{ sottoprogetto.descrizione }}<br>
+                        {% endif %}
+                    {% endfor %}
+            {% endif %}
+        {% endfor %}
+  {% endfor %}
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

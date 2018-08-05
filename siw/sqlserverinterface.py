@@ -5,6 +5,25 @@ from decouple import config
 conn = pyodbc.connect(config('MSSQL_CONNECT'))
 
 
+"""
+PER ELIMINARE GLI ERRORI TRANSITORI CHE OGNI TANTO ESCONO SU ATTESTA.
+
+import time
+
+retry_flag = True
+retry_count = 0
+while retry_flag and retry_count < 5:
+  try:
+    cursor.execute(query, [args['type'], args['id']])
+    retry_flag = False
+  except:
+    print "Retry after 1 sec"
+    retry_count = retry_count + 1
+    time.sleep(1)
+
+"""
+
+
 def sqlserverinterface(query):
     cursor = conn.cursor()
     cursor.execute(query)

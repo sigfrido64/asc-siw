@@ -6,9 +6,13 @@
         "cognome": "Comito",
         "corso": "PROGETTISTA MECCATRONICO",
         "data_stampa": "13/11/1964",
+        "giudizio_finale": "NON IDONEO",
         "iscritto": "iscritto",
         "nome": "Antonio",
-        "periodo": "ottobre - luglio",
-        "signore": "il signor"
+        "ore_corso_svolte": "0.0",
+        "ore_totali": "0.0",
+        "signore": "il signor",
+        "tipo_attestato": "specializzazione",
+        "valutazione_finale": "0.0"
     }
 ]
