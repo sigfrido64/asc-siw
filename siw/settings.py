@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',  # <- here
     'widget_tweaks',
     'import_export',
-    'boards',
+    # 'boards',
     'accounts',
     'attesta',
     'amm',

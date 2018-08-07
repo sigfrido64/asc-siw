@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from boards import views
+# from boards import views
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
 from accounts.forms import LoginForm, MyPasswordResetForm, MySetPasswordForm, MyPasswordChangeForm
@@ -84,16 +84,20 @@ urlpatterns = [
     path('amm/', include('amm.urls', 'amm')),
     path('anagrafe/', include('anagrafe.urls', 'anagrafe')),
     path('collaboratori/', include('collaboratori.urls', 'collaboratori')),
-
-    #
-    # TODO : Vecchi path che probabilmente posso eliminare !
-    #
-    re_path(r'^boards/(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
-    re_path(r'^boards/(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
-        views.PostUpdateView.as_view(), name='edit_post')
 ]
 
+"""
 # path('', views.BoardListView.as_view(), name='home'),
+
+
+#
+# TODO : Vecchi path che probabilmente posso eliminare !
+#
+re_path(r'^boards/(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
+re_path(r'^boards/(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
+        views.PostUpdateView.as_view(), name='edit_post')
+
+"""
