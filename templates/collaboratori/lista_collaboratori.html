@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<table>
+<table style="width:100%">
   <thead>
     <tr>
       <th>Cognome</th>
@@ -16,11 +16,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Pippo</td>
-      <td>Pluto</td>
-      <td>Paperino</td>
+  {% for collaboratore in collaboratori %}
+  <tr>
+      <td>{{ collaboratore.persona.cognome }}</td>
+      <td>{{ collaboratore.persona.nome }}</td>
+      <td>Dettagli</td>
     </tr>
+  {% endfor %}
   </tbody>
 </table>
 

@@ -60,6 +60,8 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
+    fixtures = ['collaboratori.json']
+
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
@@ -81,39 +83,12 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertInHTML(table_head, self.response.content.decode('utf8'))
 
     def test_page_contain_known_collaborator(self):
-        self.assertInHTML('Pace - Gaspare', self.response.content.decode('utf8'))
+        # TODO WIP !
+        utf8_content = self.response.content.decode('utf8')
+        self.assertInHTML('Pace', utf8_content)
+        self.assertInHTML('Gaspare', utf8_content)
 
     def test_todo(self):
         self.fail("Va a finire i test !")
-        # TODO Devo controllare che ci sia almeno un docente andando a definire delle Fixtures !
-
-    @skip("In questa vista non sono presenti form per cui non c'è csrfmiddlewaretoken")
-    def test_csrf(self):
-        # Il crfmiddlewaretoken ci deve essere
-        self.assertContains(self.response, 'csrfmiddlewaretoken')
-
-    @skip("In questa vista non sono presenti form per cui non c'è un form")
-    def test_contains_form(self):
-        # Devo avere un oggetto di tipo form
-        form = self.response.context['form']
-        self.assertIsInstance(form, ModelForm)
-
-    @skip
-    def test_use_template(self):
-        # Controllo che usi il template corretto.
-        self.assertTemplateUsed(self.response, 'attesta/mdl.html',
-                                "Non è stato usato il template corretto")
-
-    @skip
-    def test_form_inputs(self):
-        """
-        La vista deve contenere :
-        L'Anno Formativo, la data di stampa, la lista dei corsi, la lista delle stampe e la Tabella degli allievi.
-        """
-        self.assertContains(self.response, '<select id="anni_formativi"', 1)
-        self.assertContains(self.response, '<input type="date" id="data_stampa"/>', 1)
-        self.assertContains(self.response, '<select id="lista_corsi"', 1)
-        self.assertContains(self.response, '<select id="lista_stampe"', 1)
-        self.assertContains(self.response, '<tbody id="lista_allievi">', 1)
-
-
+        # TODO il test sopra lo finisco DOPO aver definito la pagina dei dettagli altrimenti non ho i link per
+        # operare !

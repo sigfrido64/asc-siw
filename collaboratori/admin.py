@@ -14,3 +14,6 @@ class CollaboratoreAdmin(ImportExportModelAdmin):
     # read only che mi garantisce anche che non possano essere modificate.
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione')
     exclude = None
+
+    def get_sortable_by(self, request):
+        pass
