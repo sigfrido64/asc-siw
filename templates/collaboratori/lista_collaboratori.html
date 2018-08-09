@@ -6,6 +6,12 @@
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
 {% endblock %}
 
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
 {% block content %}
 <table style="width:100%">
   <thead>
@@ -17,32 +23,22 @@
   </thead>
   <tbody>
   {% for collaboratore in collaboratori %}
-  <tr>
+    <tr>
       <td>{{ collaboratore.persona.cognome }}</td>
       <td>{{ collaboratore.persona.nome }}</td>
-      <td>Dettagli</td>
+      <td>
+        {% if user|can:siwperms.COLLABORATORE_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
+          <a href="{% url 'collaboratori:mostra_collaboratore' collaboratore.pk %}">
+            <span class="fa fa-id-card" aria-hidden="true"></span>
+          </a>
+        {% else %}
+          <i class="fa fa-id-card" aria-hidden="true"></i>
+        {% endif %}
+      </td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
-
-
-
-    Iniziative <br>
-  {% for iniziativa in iniziative %}
-    -){{ iniziativa.nome }} - {{ iniziativa.descrizione }} <br>
-        {% for progetto in progetti %}
-            {% if progetto.iniziativa == iniziativa %}
-                    &nbsp;&nbsp;+--> {{ progetto.nome }} - {{ progetto.descrizione }}<br>
-                    {% for sottoprogetto in sottoprogetti %}
-                        {% if sottoprogetto.progetto == progetto %}
-                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            +----> {{ sottoprogetto.nome }} - {{ sottoprogetto.descrizione }}<br>
-                        {% endif %}
-                    {% endfor %}
-            {% endif %}
-        {% endfor %}
-  {% endfor %}
 
 {% endblock %}
 

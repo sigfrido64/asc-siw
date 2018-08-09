@@ -56,7 +56,7 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
-class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
+class FormGeneralTestsForLoggedInUsersWithPermissionsJustForList(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
@@ -82,13 +82,27 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         table_head = "<thead><tr><th>Cognome</th><th>Nome</th><th>Dettagli</th></tr></thead>"
         self.assertInHTML(table_head, self.response.content.decode('utf8'))
 
-    def test_page_contain_known_collaborator(self):
-        # TODO WIP !
+    def test_page_contain_known_collaborator_but_no_details_because_lack_permission(self):
         utf8_content = self.response.content.decode('utf8')
         self.assertInHTML('Pace', utf8_content)
         self.assertInHTML('Gaspare', utf8_content)
+        self.assertInHTML('<i class="fa fa-id-card" aria-hidden="true"></i>', utf8_content)
 
-    def test_todo(self):
-        self.fail("Va a finire i test !")
-        # TODO il test sopra lo finisco DOPO aver definito la pagina dei dettagli altrimenti non ho i link per
-        # operare !
+
+class FormTestsForLoggedInUsersWithPermissionsForListAndDetails(MyAccountTestCase):
+    fixtures = ['collaboratori.json']
+
+    def setUp(self):
+        # Chiamo il setup della classe madre così evito duplicazioni di codice.
+        super().setUp()
+        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_MOSTRA}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+        self.response = self.client.get(URL)
+
+    def test_page_contain_known_collaborator_and_details_icon(self):
+        utf8_content = self.response.content.decode('utf8')
+        self.assertInHTML('Pace', utf8_content)
+        self.assertInHTML('Gaspare', utf8_content)
+        self.assertInHTML('<a href = "/collaboratori/anagrafica/dettaglio/mostra/1/">'
+                          '<span class="fa fa-id-card" aria-hidden="true"></span ></a>', utf8_content)
