@@ -1,6 +1,6 @@
 # encoding=utf-8
 from django.urls import path
-from .views import lista_collaboratori_view
+from .views import lista_collaboratori_view, mostra_collaboratori_view
 
 app_name = 'collaboratori'
 
@@ -11,4 +11,5 @@ app_name = 'collaboratori'
 """
 urlpatterns = [
     path('anagrafica/lista/', lista_collaboratori_view, name="lista_collaboratori"),
+    path('anagrafica/dettaglio/mostra/<int:id>/', mostra_collaboratori_view, name='mostra_collaboratore'),
 ]

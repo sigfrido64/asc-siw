@@ -16,3 +16,7 @@ def lista_collaboratori_view(request):
     # Devo prendere la lista con cognome, nome e poi mettere un link per i dettagli.
     collaboratori = Collaboratore.objects.all()
     return render(request, 'collaboratori/lista_collaboratori.html', {'collaboratori': collaboratori})
+
+
+def mostra_collaboratori_view(request):
+    pass

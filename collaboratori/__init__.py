@@ -10,7 +10,7 @@ Nella quale avrò una tabella con elenco dei collaboratori per Cognome, Nome e l
 
 3) Voglio una pagina di dettaglio del collaboratore con :
 
-\collaboratori\anagrafica\dettaglio\'id'\
+\collaboratori\anagrafica\dettaglio\mostra\'id'\
 
 Che si limiti a mostrare il dettaglio del collaboratore senza fare altro.
 
