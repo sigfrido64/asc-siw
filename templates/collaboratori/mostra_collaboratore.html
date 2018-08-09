@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Mostra Collaboratore{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+Cognome : {{ collaboratore.persona.cognome }}<br>
+Nome : {{ collaboratore.persona.nome }}<br>
+
+--------------------------<br>
+Recapiti Telefonici <br><br>
+{{ collaboratore.doc_tel1 }} : {{ collaboratore.tel1 }} <br>
+{{ collaboratore.doc_tel2 }} : {{ collaboratore.tel2 }} <br>
+{{ collaboratore.doc_tel3 }} : {{ collaboratore.tel3 }} <br>
+{{ collaboratore.doc_tel4 }} : {{ collaboratore.tel4 }} <br>
+
+--------------------------- <br>
+E-Mail <br><br>
+
+{{ collaboratore.doc_mail1 }} : {{ collaboratore.mail1 }} <br>
+{{ collaboratore.doc_mail2 }} : {{ collaboratore.mail2 }} <br>
+
+--------------------------- <br>
+Note <br><br>
+
+{{ collaboratore.note }}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

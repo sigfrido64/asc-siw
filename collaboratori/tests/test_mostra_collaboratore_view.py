@@ -13,7 +13,7 @@ __author__ = "Pilone Ing. Sigfrido"
 
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-ID = 52639
+ID = 1
 URL = f"/collaboratori/anagrafica/dettaglio/mostra/{ID}/"
 REVERSE_URL = 'collaboratori:mostra_collaboratore'
 
@@ -50,7 +50,6 @@ class LoginRequiredTests(MyAccountTestCase):
         self.assertRedirects(response, f'{login_url}?next={URL}')
 
 
-@skip
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
@@ -58,7 +57,6 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
-@skip
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
@@ -68,7 +66,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORI_LISTA_READ}
+        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_MOSTRA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
         self.response = self.client.get(URL)
@@ -77,21 +75,10 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
     def test_render_with_all_needed_and_correct_templates(self):
-        self.assertTemplateUsed(self.response, 'collaboratori/lista_collaboratori.html')
+        self.assertTemplateUsed(self.response, 'collaboratori/mostra_collaboratore.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
 
-    def test_page_contain_correct_table_head(self):
-        table_head = "<thead><tr><th>Cognome</th><th>Nome</th><th>Dettagli</th></tr></thead>"
-        self.assertInHTML(table_head, self.response.content.decode('utf8'))
-
     def test_page_contain_known_collaborator(self):
-        # TODO WIP !
-        utf8_content = self.response.content.decode('utf8')
-        self.assertInHTML('Pace', utf8_content)
-        self.assertInHTML('Gaspare', utf8_content)
-
-    def test_todo(self):
-        self.fail("Va a finire i test !")
-        # TODO il test sopra lo finisco DOPO aver definito la pagina dei dettagli altrimenti non ho i link per
-        # operare !
+        self.assertContains(self.response, 'Pace')
+        self.assertContains(self.response, 'Gaspare')

@@ -1,7 +1,7 @@
 # coding=utf-8
 import time
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import Persona
 from siw.sqlserverinterface import sqlserverinterface
@@ -20,4 +20,5 @@ def lista_collaboratori_view(request):
 
 @has_permission_decorator(SiwPermessi.COLLABORATORE_MOSTRA)
 def mostra_collaboratori_view(request, id):
-    return HttpResponse("Ciao")
+    collaboratore = get_object_or_404(Collaboratore, pk=id)
+    return render(request, 'collaboratori/mostra_collaboratore.html', {'collaboratore': collaboratore})
