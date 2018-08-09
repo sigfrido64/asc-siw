@@ -8,7 +8,7 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from siw.sig_debug import response_debug
 
-from ..views import lista_collaboratori_view
+from ..views import mostra_collaboratori_view
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -23,10 +23,9 @@ class GeneralTests(TestCase):
         url = reverse(REVERSE_URL, kwargs={'id': ID})
         self.assertEquals(url, URL)
 
-    @skip
-    def test_lista_collaboratori_url_resolves_lista_collaboratori_view(self):
+    def test_mostra_collaboratore_url_resolves_mostra_collaboratore_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, lista_collaboratori_view)
+        self.assertEquals(view.func, mostra_collaboratori_view)
 
 
 class MyAccountTestCase(TestCase):
