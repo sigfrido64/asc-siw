@@ -10,22 +10,22 @@
       {% comment %}
       In questa sezione mostro i menù relativi alle stampe.
       {% endcomment %}
-      {% if user|can:siwperms.STAMPE_MDL %}     {# Vedi nota sopra per spiegazione #}
-      <li>Stampe
-        <ul>
-          <li><a href="{% url 'attesta:mdl' %}">MDL</a></li>
-        </ul>
-      </li>
-      {% endif %}
-      {% comment %}
-      In questa sezione mostro i menù relativi alle stampe.
-      {% endcomment %}
       {% if user|can:siwperms.MENU_AMM %}     {# Vedi nota sopra per spiegazione #}
       <li>Amministrazione
         <ul>
           {% if user|can:siwperms.MENU_AMM_CDC %}
           <li><a href="{% url 'amm:cdc_home' %}">Centri di Costo</a></li>
           {% endif %}
+        </ul>
+      </li>
+      {% endif %}
+      {% comment %}
+      In questa sezione mostro i menù relativi alle stampe.
+      {% endcomment %}
+      {% if user|can:siwperms.STAMPE_MDL %}     {# Vedi nota sopra per spiegazione #}
+      <li>Stampe
+        <ul>
+          <li><a href="{% url 'attesta:mdl' %}">MDL</a></li>
         </ul>
       </li>
       {% endif %}
