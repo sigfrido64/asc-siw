@@ -18,5 +18,6 @@ def lista_collaboratori_view(request):
     return render(request, 'collaboratori/lista_collaboratori.html', {'collaboratori': collaboratori})
 
 
-def mostra_collaboratori_view(request):
-    pass
+@has_permission_decorator(SiwPermessi.COLLABORATORE_MOSTRA)
+def mostra_collaboratori_view(request, id):
+    return HttpResponse("Ciao")
