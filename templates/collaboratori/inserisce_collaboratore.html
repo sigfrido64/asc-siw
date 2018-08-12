@@ -18,16 +18,28 @@
 
 {% block javascript %}
 <script type="text/javascript">
+ function formatDate(date) {
+     var d = new Date(date),
+         month = '' + (d.getMonth() + 1),
+         day = '' + d.getDate(),
+         year = d.getFullYear();
+
+     if (month.length < 2) month = '0' + month;
+     if (day.length < 2) day = '0' + day;
+
+     return [day, month, year].join('-');
+ }
+
    let source = {
      datatype: "json",
      datafields: [
-         {name: 'persona'},
-         {name: 'pk'}
-     ],
+         {name: 'cognome'},
+         {name: 'nome'},
+         {name: 'data_nascita'},
+         {name: 'pk'} ],
      url: "{% url 'collaboratori:ajax_load_tutte_persone' %}",
      data: {
-         maxRows: 100
-     }
+         maxRows: 100 }
    };
    let dataAdapter = new $.jqx.dataAdapter(source, {
      formatData: function (data) {
@@ -46,8 +58,24 @@
      autoDropDownHeight: true,
      selectedIndex: 0,
      minLength:2,
-     displayMember: "persona",
+     displayMember: "cognome",
      valueMember: "pk",
+     renderer: function (index, label, value) {
+         var item = dataAdapter.records[index];
+         if (item != null) {
+             var label = item.cognome + " - " + item.nome + " - " + formatDate(item.data_nascita);
+             return label;
+         }
+         return "";
+     },
+     renderSelectedItem: function (index, item) {
+         var item = dataAdapter.records[index];
+         if (item != null) {
+             var label = item.cognome + " - " + item.nome + " - " + formatDate(item.data_nascita);
+             return label;
+         }
+         return "";
+     },
      search: function (searchString) {
          dataAdapter.dataBind();
      }

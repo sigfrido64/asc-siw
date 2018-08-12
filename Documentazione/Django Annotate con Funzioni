@@ -1,0 +1,8 @@
+from django.db.models import Value
+from django.db.models.functions import Concat, ExtractDay, ExtractMonth, ExtractYear
+
+
+queryset = Item.objects.annotate(search_name=Concat('series', Value(' '), 'number'))
+then you can filter:
+
+queryset.filter(search_name__icontains='whatever text')
