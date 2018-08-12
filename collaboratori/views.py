@@ -19,10 +19,11 @@ def lista_collaboratori_view(request):
 
 
 @has_permission_decorator(SiwPermessi.COLLABORATORE_MOSTRA)
-def mostra_collaboratore_view(request, id):
-    collaboratore = get_object_or_404(Collaboratore, pk=id)
+def mostra_collaboratore_view(request, pk):
+    collaboratore = get_object_or_404(Collaboratore, pk=pk)
     return render(request, 'collaboratori/mostra_collaboratore.html', {'collaboratore': collaboratore})
 
 
+@has_permission_decorator(SiwPermessi.COLLABORARORE_INSERISCE)
 def inserisce_collaboratore_view(request):
-    pass
+    return render(request, 'collaboratori/inserisce_collaboratore.html')

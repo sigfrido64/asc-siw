@@ -20,7 +20,7 @@ REVERSE_URL = 'collaboratori:mostra_collaboratore'
 
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
-        url = reverse(REVERSE_URL, kwargs={'id': ID})
+        url = reverse(REVERSE_URL, kwargs={'pk': ID})
         self.assertEquals(url, URL)
 
     def test_mostra_collaboratore_url_resolves_mostra_collaboratore_view(self):

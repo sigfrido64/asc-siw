@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Inserisce Collaboratore{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div id='jqxComboBoxPersone'></div>
+
+    <br><br>
+    Combo box con selezione in runtime !
+    E poi tutto il resto !
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+   let source = {
+     datatype: "json",
+     datafields: [
+         {name: 'persona'},
+         {name: 'pk'}
+     ],
+     url: "{% url 'collaboratori:ajax_load_tutte_persone' %}",
+     data: {
+         maxRows: 100
+     }
+   };
+   let dataAdapter = new $.jqx.dataAdapter(source, {
+     formatData: function (data) {
+         if ($("#jqxComboBoxPersone").jqxComboBox('searchString') != undefined) {
+             data.name_starts_with = $("#jqxComboBoxPersone").jqxComboBox('searchString');
+             return data;
+         }
+     }
+   });
+
+ $("#jqxComboBoxPersone").jqxComboBox({
+     width: 250,
+     height: 25,
+     source: dataAdapter,
+     remoteAutoComplete: true,
+     autoDropDownHeight: true,
+     selectedIndex: 0,
+     minLength:2,
+     displayMember: "persona",
+     valueMember: "pk",
+     search: function (searchString) {
+         dataAdapter.dataBind();
+     }
+ });
+</script>
+
+{% endblock %}
+
+
