@@ -50,4 +50,3 @@ def ajax_check_persona_for_possible_collaborator(request):
 def collaboratore_gia_presente(pk_persona):
     return False
     # collaboratore = Collaboratore.objects.get(persona=pk_persona)
-    

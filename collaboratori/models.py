@@ -12,7 +12,7 @@ class Collaboratore(models.Model):
 
     Qui vado a memorizzare solo i dati che posso usare per contattarli quando sono collaboratori della Scuola.
     """
-    persona = models.ForeignKey(Persona, on_delete=models.PROTECT)
+    persona = models.OneToOneField(Persona, on_delete=models.PROTECT)
 
     # Recapiti telefonici
     tel1 = models.CharField(max_length=30, blank=True)
