@@ -8,8 +8,16 @@
 
 {% block content %}
 
+    <p>
+    <strong>N.B.</strong><br>
+    Il collaboratore viene inserito partendo dall'anagrafica delle persone. Pertanto possono essere selezionate solo
+    persone già anagrafate.<br>
+    Per ricercare la persona da anagrafare come collaboratore iniziare a digitare le prime due lettere del cognome.
+    </p>
     <div id='jqxComboBoxPersone'></div>
 
+    <br>
+    <div id="messaggio_persona">Segnaposto</div>
     <br><br>
     Combo box con selezione in runtime !
     E poi tutto il resto !
@@ -27,9 +35,10 @@
      if (month.length < 2) month = '0' + month;
      if (day.length < 2) day = '0' + day;
 
-     return [day, month, year].join('-');
+     return [day, month, year].join('/');
  }
 
+   let comboBoxPersone = $("#jqxComboBoxPersone");
    let source = {
      datatype: "json",
      datafields: [
@@ -43,15 +52,15 @@
    };
    let dataAdapter = new $.jqx.dataAdapter(source, {
      formatData: function (data) {
-         if ($("#jqxComboBoxPersone").jqxComboBox('searchString') != undefined) {
-             data.name_starts_with = $("#jqxComboBoxPersone").jqxComboBox('searchString');
+         if (comboBoxPersone.jqxComboBox('searchString') !== undefined) {
+             data.name_starts_with = comboBoxPersone.jqxComboBox('searchString');
              return data;
          }
      }
    });
 
- $("#jqxComboBoxPersone").jqxComboBox({
-     width: 250,
+    comboBoxPersone.jqxComboBox({
+     width: 500,
      height: 25,
      source: dataAdapter,
      remoteAutoComplete: true,
@@ -79,6 +88,30 @@
      search: function (searchString) {
          dataAdapter.dataBind();
      }
+ });
+
+ comboBoxPersone.on('change', function (event)
+ {
+    var args = event.args;
+    if (args) {
+    // index represents the item's index.
+    var index = args.index;
+    var item = args.item;
+    // get item's label and value.
+    var label = item.label;
+    var value = item.value;
+    var type = args.type; // keyboard, mouse or null depending on how the item was selected.
+
+    $.ajax({                       // Inizializza la richiesta AJAX
+        url: "{% url 'collaboratori:ajax_check_persona_for_possible_collaborator' %}",                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+        data: {
+          'pk_persona': value             // Mette il corso nei parametri di GET
+        },
+        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+          $("#messaggio_persona").html(data);
+        }
+    });
+ }
  });
 </script>
 

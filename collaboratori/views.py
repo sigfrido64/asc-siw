@@ -24,6 +24,6 @@ def mostra_collaboratore_view(request, pk):
     return render(request, 'collaboratori/mostra_collaboratore.html', {'collaboratore': collaboratore})
 
 
-@has_permission_decorator(SiwPermessi.COLLABORARORE_INSERISCE)
+@has_permission_decorator(SiwPermessi.COLLABORATORE_INSERISCE)
 def inserisce_collaboratore_view(request):
     return render(request, 'collaboratori/inserisce_collaboratore.html')

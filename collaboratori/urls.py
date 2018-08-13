@@ -12,6 +12,8 @@ app_name = 'collaboratori'
 """
 urlpatterns = [
     path('ajax/load-persone/', ajax.ajax_load_tutte_persone, name='ajax_load_tutte_persone'),
+    path('ajax/check-persona-for-possibile-collaborator/',
+         ajax.ajax_check_persona_for_possible_collaborator, name='ajax_check_persona_for_possible_collaborator'),
 
     path('anagrafica/lista/', lista_collaboratori_view, name="lista_collaboratori"),
     path('anagrafica/dettaglio/mostra/<int:pk>/', mostra_collaboratore_view, name='mostra_collaboratore'),

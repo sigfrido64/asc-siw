@@ -63,7 +63,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.COLLABORARORE_INSERISCE}
+        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
         self.response = self.client.get(URL)

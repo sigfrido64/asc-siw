@@ -23,7 +23,7 @@ class SiwPermessi(object):
     """
     COLLABORATORI_LISTA_READ = 'coll_lista_view'
     COLLABORATORE_MOSTRA = 'coll_mostra_view'
-    COLLABORARORE_INSERISCE = 'coll_inserisce_view'
+    COLLABORATORE_INSERISCE = 'coll_inserisce_view'
 
     """
     Sezione Menù. Al momento uso un permesso per mostrare o meno le voci di menù così che sia possibile avere
@@ -52,7 +52,7 @@ class SiwRuoli(object):
     MDL = {SiwPermessi.STAMPE_MDL}
     AMM = {SiwPermessi.AMM_CDC_READ, SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_CDC}
     COLL = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_MOSTRA,
-            SiwPermessi.COLLABORARORE_INSERISCE}
+            SiwPermessi.COLLABORATORE_INSERISCE}
     
 
 class Profile(models.Model):
