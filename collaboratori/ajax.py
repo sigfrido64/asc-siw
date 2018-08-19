@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Collaboratore
+from collaboratori.models import Collaboratore
 from anagrafe.models import Persona
 from siw.decorators import ajax_has_permission_decorator
 from accounts.models import SiwPermessi
