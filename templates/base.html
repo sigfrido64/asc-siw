@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="it">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SI Scuola Camerana{% endblock %}</title>
     <!-- Add Google Font Peralta -->
     <link href="https://fonts.googleapis.com/css?family=Peralta" rel="stylesheet">
@@ -10,11 +12,11 @@
     <link rel="icon" type="image/png" href="{% static 'img/goby.png' %}" />
 
     <!-- Add Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'bootstrap-4/css/bootstrap.css' %}" type="text/css" />
 
-    <!-- Add one of the jQWidgets styles : Darkblue Selected-->
+    <!-- Add one of the jQWidgets styles : Bottostrap Selected-->
     <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.base.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.orange.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.bootstrap.css' %}" type="text/css" />
 
 
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
@@ -24,6 +26,8 @@
 
     <!-- add the jQuery script -->
     <script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+    <!-- add the Bootstrap javascript -->
+    <script type="text/javascript" src="{% static 'bootstrap-4/js/bootstrap.js' %}"></script>
     <!-- add the jQWidgets framework -->
     <script type="text/javascript" src="{% static 'jqwidgets/jqxcore.js' %}"></script>
     <!-- add one or more widgets -->
@@ -32,12 +36,11 @@
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.js' %}"></script>
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.culture.it-IT.js' %}"></script>
   </head>
-
   <body>
     {% block body %}
       {# Setta il tema di JQWidgets a livello globale #}
       <script type="text/javascript">
-        $(function() { $.jqx.theme = 'orange'; });
+        $(function() { $.jqx.theme = 'bootstrap'; });
       </script>
 
       <a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a>
@@ -47,7 +50,9 @@
 
       {% block breadcrumb %} {% endblock breadcrumb %}
 
-      {% block content %}{% endblock %}
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
 
     {% endblock body %}
     {% block javascript %}{% endblock %}
