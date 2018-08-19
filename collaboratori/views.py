@@ -8,6 +8,8 @@ from siw.sqlserverinterface import sqlserverinterface
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Collaboratore
+from django.views.generic import CreateView
+from .forms import CollaboratoreForm
 
 
 # Create your views here.
@@ -27,3 +29,8 @@ def mostra_collaboratore_view(request, pk):
 @has_permission_decorator(SiwPermessi.COLLABORATORE_INSERISCE)
 def inserisce_collaboratore_view(request):
     return render(request, 'collaboratori/inserisce_collaboratore.html')
+
+
+class CollaboratoreCreateView(CreateView):
+    form_class = CollaboratoreForm
+    template_name = 'collaboratori/collaboratore_form.html'

@@ -1,6 +1,6 @@
 # encoding=utf-8
 from django.urls import path
-from .views import lista_collaboratori_view, mostra_collaboratore_view, inserisce_collaboratore_view
+from .views import lista_collaboratori_view, mostra_collaboratore_view, inserisce_collaboratore_view, CollaboratoreCreateView
 from . import ajax
 
 app_name = 'collaboratori'
@@ -18,4 +18,5 @@ urlpatterns = [
     path('anagrafica/lista/', lista_collaboratori_view, name="lista_collaboratori"),
     path('anagrafica/dettaglio/mostra/<int:pk>/', mostra_collaboratore_view, name='mostra_collaboratore'),
     path('anagrafica/inserisce-nuovo/', inserisce_collaboratore_view, name='inserisce_nuovo'),
+    path('cacca/', CollaboratoreCreateView.as_view(), name='cacca'),
 ]

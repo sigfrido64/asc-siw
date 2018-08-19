@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'amm',
     'anagrafe',
     'collaboratori',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -212,3 +213,8 @@ LOGIN_URL = 'login'
 # Settaggi specifici per Django import-export che garantiscono l'incapsulamento delle operazioni.
 #
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+#
+# Dico a crispy forms di usate bootstrap come theme.
+#
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
