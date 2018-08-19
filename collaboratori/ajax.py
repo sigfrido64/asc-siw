@@ -25,6 +25,7 @@ def ajax_load_tutte_persone(request):
     return JsonResponse(persone_list, safe=False)
 
 
+@ajax_has_permission_decorator(SiwPermessi.COLLABORATORE_INSERISCE)
 def ajax_check_persona_for_possible_collaborator(request):
     pk_persona = request.GET.get('pk_persona', 0)
 

@@ -4,12 +4,12 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
-from ..ajax import ajax_load_tutte_persone
+from ..ajax import ajax_check_persona_for_possible_collaborator
 
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/collaboratori/ajax/load-persone/"
-REVERSE_URL = 'collaboratori:ajax_load_tutte_persone'
+URL = f"/collaboratori/ajax/check-persona-for-possibile-collaborator/"
+REVERSE_URL = 'collaboratori:ajax_check_persona_for_possible_collaborator'
 
 
 class GeneralTests(TestCase):
@@ -19,7 +19,7 @@ class GeneralTests(TestCase):
 
     def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, ajax_load_tutte_persone)
+        self.assertEquals(view.func, ajax_check_persona_for_possible_collaborator)
 
 
 class MyAccountTestCase(TestCase):
@@ -39,14 +39,14 @@ class MyAccountTestCase(TestCase):
 
 class LoginRequiredTests(MyAccountTestCase):
     def test_forbidden_for_not_logged_in_user(self):
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
+        self.response = self.client.get(URL, {'pk_persona': 52639})
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
+        self.response = self.client.get(URL, {'pk_persona': 52639})
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
@@ -62,11 +62,15 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
 
     def test_server_serve_page_without_errors(self):
+        self.response = self.client.get(URL, {'pk_persona': 52639})
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_lista_persone_note(self):
-        self.assertContains(self.response, 'Pace')
-        self.assertContains(self.response, 'Gaspare')
+    def test_template_for_new_possible_collaborator(self):
+        self.response = self.client.get(URL, {'pk_persona': 52640})
+        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_nuovo_collaboratore.html')
+
+    def test_template_for_already_inserted_collaborator(self):
+        self.response = self.client.get(URL, {'pk_persona': 52639})
+        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_collaboratore_gia_presente.html')
