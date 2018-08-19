@@ -35,6 +35,6 @@ def ajax_check_persona_for_possible_collaborator(request):
         risposta = render_to_string("collaboratori/includes/risponde_nuovo_collaboratore.html",
                                     {'persona': persona})
         return JsonResponse({'html': risposta}, safe=False)
-    risposta = render_to_string("collaboratori/includes/risponde_gia_presente_collaboratore.html",
+    risposta = render_to_string("collaboratori/includes/risponde_collaboratore_gia_presente.html",
                                 {'collaboratore': collaboratore})
     return JsonResponse({'html': risposta}, safe=False)

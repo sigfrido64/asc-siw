@@ -4,14 +4,11 @@ Per procedere all'inserimento dei dati premere il pulsante qui sotto
 <br><br>
 
 <div align="center">
-<button id='nuovo_collaboratore'>Inserisci Collaboratore</button>
 <br>
 <form method="post" novalidate>
-Vado ad inserire la persona con id : {{ persona.pk }} come collaboratore.
-
 {% csrf_token %}
 <input type="hidden" value="{{ persona.pk }}" name="id_persona">
-<button type="submit" class="btn btn-sm btn-success">Inserisci Collaboratore</button>
+<button type="submit" id="nuovo_collaboratore">Inserisci Collaboratore</button>
 </form>
 
 </div>
@@ -19,7 +16,8 @@ Vado ad inserire la persona con id : {{ persona.pk }} come collaboratore.
 <script type="text/javascript">
 
   $("#nuovo_collaboratore").jqxButton({ template: "success" });
-$("#nuovo_collaboratore").on('click', function () {
+
+  $("#nuovo_collaboratore").on('click1', function () {
                     window.location = "http://www.google.it";
-});
+  });
 </script>
