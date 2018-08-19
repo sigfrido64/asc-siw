@@ -1,0 +1,16 @@
+<strong>{{ persona.cognome }} {{ persona.nome }}</strong> può essere inserito come collaboratore.
+<br><br>
+Per procedere all'inserimento dei dati premere il pulsante qui sotto
+<br><br>
+
+<div align="center">
+<button id='nuovo_collaboratore'>Inserisci Collaboratore</button>
+</div>
+
+<script type="text/javascript">
+
+  $("#nuovo_collaboratore").jqxButton({ template: "success" });
+$("#nuovo_collaboratore").on('click', function () {
+                    window.location = "http://www.google.it";
+});
+</script>

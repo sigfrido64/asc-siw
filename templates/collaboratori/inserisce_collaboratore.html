@@ -10,18 +10,15 @@
 
     <p>
     <strong>N.B.</strong><br>
-    Il collaboratore viene inserito partendo dall'anagrafica delle persone. Pertanto possono essere selezionate solo
-    persone già anagrafate.<br>
+    Il collaboratore viene inserito partendo dall'anagrafica delle persone. Pertanto possono essere selezionate <u>solo
+      persone già anagrafate.</u><br>
     Per ricercare la persona da anagrafare come collaboratore iniziare a digitare le prime due lettere del cognome.
     </p>
     <div id='jqxComboBoxPersone'></div>
 
     <br>
-    <div id="messaggio_persona">Segnaposto</div>
+    <div id="messaggio_persona"></div>
     <br><br>
-    Combo box con selezione in runtime !
-    E poi tutto il resto !
-
 {% endblock %}
 
 {% block javascript %}
@@ -107,8 +104,8 @@
         data: {
           'pk_persona': value             // Mette il corso nei parametri di GET
         },
-        success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
-          $("#messaggio_persona").html(data);
+        success: function (data) {
+          $("#messaggio_persona").html(data.html);
         }
     });
  }

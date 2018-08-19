@@ -1,6 +1,7 @@
 # coding=utf-8
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Collaboratore
 from anagrafe.models import Persona
@@ -30,9 +31,10 @@ def ajax_check_persona_for_possible_collaborator(request):
     try:
         collaboratore = Collaboratore.objects.get(persona__pk=pk_persona)
     except ObjectDoesNotExist:
-        return HttpResponse("Non c'è ancora")
-
-    return HttpResponse("Questo c'è già ")
-
-    # return render(request, 'collaboratori/includes/corsi_list_options.html', {'corsi': lista_corsi(anno)})
-    
+        persona = Persona.objects.get(pk=pk_persona)
+        risposta = render_to_string("collaboratori/includes/risponde_nuovo_collaboratore.html",
+                                    {'persona': persona})
+        return JsonResponse({'html': risposta}, safe=False)
+    risposta = render_to_string("collaboratori/includes/risponde_gia_presente_collaboratore.html",
+                                {'collaboratore': collaboratore})
+    return JsonResponse({'html': risposta}, safe=False)

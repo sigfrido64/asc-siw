@@ -24,6 +24,7 @@ django-markdown : Serve ? Al momento non sembra perchè usato solo in boards
 pyodbc : Collegamento a quella merda di SQL Server !
 docxtpl : Per la stampa unione con i documenti word.
 django-cprofile-middleware : Middleware per il profiling delle viste
+selenium : Per la parte dei test funzionali.
 
 
 Dopo aver creato il venv installo i pacchetti con 'pip install -r requirements.txt'
