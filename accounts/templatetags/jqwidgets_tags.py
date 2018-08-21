@@ -15,9 +15,9 @@ def jqxattrs(jqxattrs):
     risultato = ''
     for key, value in jqxattrs.items():
         if isinstance(value, int) or isinstance(value, float):
-            risultato += f", '{key}' : {value}"
+            risultato += f", {key} : {value}"
         elif isinstance(value, str):
-            risultato += f", '{key}' : '{value}'"
+            risultato += f", {key} : '{value}'"
 
     print(risultato)
     return mark_safe(risultato)

@@ -2,9 +2,9 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}', {% include "includes/jq/jsattrs.html" %} });
+    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|jqxattrs }} });
     {% if widget.value != None %} $("#{{ widget.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
   });
-    {{ widget.jqxattrs|jqxattrs }}
+
 </script>
 <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "includes/jq/attrs.html" %} />
