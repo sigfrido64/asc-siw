@@ -17,5 +17,6 @@ urlpatterns = [
 
     path('anagrafica/lista/', lista_collaboratori_view, name="lista_collaboratori"),
     path('anagrafica/dettaglio/mostra/<int:pk>/', mostra_collaboratore_view, name='mostra_collaboratore'),
-    path('anagrafica/inserisce-nuovo/', propone_inserimento_collaboratore_view, name='inserisce_nuovo'),
+    path('anagrafica/propone-inserimento-collaboratore/', propone_inserimento_collaboratore_view,
+         name='propone-inserimento-collaboratore'),
 ]

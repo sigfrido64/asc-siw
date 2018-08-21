@@ -6,9 +6,10 @@ Per procedere all'inserimento dei dati premere il pulsante qui sotto
 <div align="center">
 <br>
 <form method="post" novalidate>
-{% csrf_token %}
+
 <input type="hidden" value="{{ persona.pk }}" name="id_persona">
 <button type="submit" id="nuovo_collaboratore">Inserisci Collaboratore</button>
+
 </form>
 
 </div>

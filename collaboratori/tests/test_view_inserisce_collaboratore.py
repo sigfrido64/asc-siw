@@ -2,16 +2,17 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
-from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
-from ..ajax import ajax_check_persona_for_possible_collaborator
+from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
+from ..views import propone_inserimento_collaboratore_view
 
+from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/collaboratori/ajax/check-persona-for-possibile-collaborator/"
-REVERSE_URL = 'collaboratori:ajax_check_persona_for_possible_collaborator'
+URL = f"/collaboratori/anagrafica/inserisce-nuovo/"
+REVERSE_URL = 'collaboratori:inserisce_nuovo'
 
-
+@skip
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
         url = reverse(REVERSE_URL)
@@ -19,7 +20,7 @@ class GeneralTests(TestCase):
 
     def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, ajax_check_persona_for_possible_collaborator)
+        self.assertEquals(view.func, propone_inserimento_collaboratore_view)
 
 
 class MyAccountTestCase(TestCase):
@@ -36,20 +37,21 @@ class MyAccountTestCase(TestCase):
         # Recupero tutti i Dati dell'utente, serve dopo per aggiungere i permessi.
         self.myuser = User.objects.get(username=self.fake_user_username)
 
-
+@skip
 class LoginRequiredTests(MyAccountTestCase):
-    def test_forbidden_for_not_logged_in_user(self):
-        self.response = self.client.get(URL, {'pk_persona': 52639})
-        self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
+    def test_redirection_to_login_for_not_logged_in_user(self):
+        login_url = reverse('login')
+        response = self.client.get(URL)
+        self.assertRedirects(response, f'{login_url}?next={URL}')
 
-
+@skip
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'pk_persona': 52639})
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
-
+@skip
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
@@ -62,15 +64,12 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+        self.response = self.client.get(URL)
 
     def test_server_serve_page_without_errors(self):
-        self.response = self.client.get(URL, {'pk_persona': 52639})
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_template_for_new_possible_collaborator(self):
-        self.response = self.client.get(URL, {'pk_persona': 52640})
-        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_collaboratore_inseribile.html')
-
-    def test_template_for_already_inserted_collaborator(self):
-        self.response = self.client.get(URL, {'pk_persona': 52639})
-        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_collaboratore_gia_presente.html')
+    def test_render_with_all_needed_and_correct_templates(self):
+        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
+        self.assertTemplateUsed(self.response, 'base.html')
+        self.assertTemplateUsed(self.response, 'includes/menu.html')

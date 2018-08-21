@@ -9,8 +9,8 @@ from ..views import propone_inserimento_collaboratore_view
 
 # TODO : Bisogna fare test funzionali per vedere se il combo box si popola correttamente.
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/collaboratori/anagrafica/inserisce-nuovo/"
-REVERSE_URL = 'collaboratori:inserisce_nuovo'
+URL = f"/collaboratori/anagrafica/propone-inserimento-collaboratore/"
+REVERSE_URL = 'collaboratori:propone-inserimento-collaboratore'
 
 
 class GeneralTests(TestCase):
