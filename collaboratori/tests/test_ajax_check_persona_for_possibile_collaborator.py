@@ -69,8 +69,8 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
     def test_template_for_new_possible_collaborator(self):
         self.response = self.client.get(URL, {'pk_persona': 52640})
-        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_collaboratore_inseribile.html')
+        self.assertTemplateUsed(self.response, 'collaboratori/includes/informa_collaboratore_inseribile.html')
 
     def test_template_for_already_inserted_collaborator(self):
         self.response = self.client.get(URL, {'pk_persona': 52639})
-        self.assertTemplateUsed(self.response, 'collaboratori/includes/risponde_collaboratore_gia_presente.html')
+        self.assertTemplateUsed(self.response, 'collaboratori/includes/errore_collaboratore_gia_presente.html')

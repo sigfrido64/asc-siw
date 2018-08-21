@@ -9,18 +9,20 @@ from ..views import inserisce_nuovo_collaboratore_view
 from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-ID = 52640
-URL = f"/collaboratori/anagrafica/inserisce-nuovo/{ID}/"
+ID_PRESENTE = 52639
+ID_NUOVO = 52639
+URL_PRESENTE = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_PRESENTE}/"
+URL_NUOVO = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_NUOVO}/"
 REVERSE_URL = 'collaboratori:inserisce_nuovo'
 
 
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
-        url = reverse(REVERSE_URL, kwargs={'pk_persona': ID})
-        self.assertEquals(url, URL)
+        url = reverse(REVERSE_URL, kwargs={'pk_persona': ID_PRESENTE})
+        self.assertEquals(url, URL_PRESENTE)
 
     def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
-        view = resolve(URL)
+        view = resolve(URL_PRESENTE)
         self.assertEquals(view.func, inserisce_nuovo_collaboratore_view)
 
 
@@ -42,14 +44,14 @@ class MyAccountTestCase(TestCase):
 class LoginRequiredTests(MyAccountTestCase):
     def test_redirection_to_login_for_not_logged_in_user(self):
         login_url = reverse('login')
-        response = self.client.get(URL)
-        self.assertRedirects(response, f'{login_url}?next={URL}')
+        response = self.client.get(URL_PRESENTE)
+        self.assertRedirects(response, f'{login_url}?next={URL_PRESENTE}')
 
 
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL)
+        self.response = self.client.get(URL_PRESENTE)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
@@ -65,12 +67,19 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL)
 
     def test_server_serve_page_without_errors(self):
+        self.response = self.client.get(URL_PRESENTE)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_render_with_all_needed_and_correct_templates(self):
-        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
+    def test_render_error_collaborator_already_present_with_error_templates(self):
+        self.response = self.client.get(URL_PRESENTE)
+        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
+        self.assertTemplateUsed(self.response, 'base.html')
+        self.assertTemplateUsed(self.response, 'includes/menu.html')
+
+    def test_render_new_collaborator_with_correct_templates(self):
+        self.response = self.client.get(URL_NUOVO)
+        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')

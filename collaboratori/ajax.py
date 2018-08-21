@@ -33,9 +33,9 @@ def ajax_check_persona_for_possible_collaborator(request):
         collaboratore = Collaboratore.objects.get(persona__pk=pk_persona)
     except ObjectDoesNotExist:
         persona = Persona.objects.get(pk=pk_persona)
-        risposta = render_to_string("collaboratori/includes/risponde_collaboratore_inseribile.html",
+        risposta = render_to_string("collaboratori/includes/informa_collaboratore_inseribile.html",
                                     {'persona': persona})
         return JsonResponse({'html': risposta}, safe=False)
-    risposta = render_to_string("collaboratori/includes/risponde_collaboratore_gia_presente.html",
+    risposta = render_to_string("collaboratori/includes/errore_collaboratore_gia_presente.html",
                                 {'collaboratore': collaboratore})
     return JsonResponse({'html': risposta}, safe=False)

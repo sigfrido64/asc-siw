@@ -70,6 +70,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
     def test_render_with_all_needed_and_correct_templates(self):
-        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
+        self.assertTemplateUsed(self.response, 'collaboratori/propone_inserimento_collaboratore.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
