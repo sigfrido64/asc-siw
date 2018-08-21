@@ -18,17 +18,13 @@ class JqxInput(Widget):
     
     # Salva i jqxattrs e chiama l'init della classe base.
     def __init__(self, attrs=None, jqxattrs=None):
-        if jqxattrs is not None:
-            self.jqxattrs = jqxattrs.copy()
-        else:
-            self.jqxattrs = dict()
-        self.jqxattrs = jqxattrs
-        
+        self.jqxattrs = {} if jqxattrs is None else jqxattrs.copy()
+
         if attrs is not None:
             attrs = attrs.copy()
             self.input_type = attrs.pop('type', self.input_type)
         super().__init__(attrs)
-        
+
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
         context['widget']['type'] = self.input_type
@@ -48,17 +44,19 @@ class JqxInput(Widget):
 
 
 class JqxPasswordInput(JqxInput):
-    
     template_name = 'includes/jq/jqxpassword.html'
     input_type = 'password'
 
 
 class JqxEmailInput(JqxInput):
-    
     template_name = 'includes/jq/jqxemail.html'
     input_type = 'email'
 
 
 class JqxTextInput(JqxInput):
-    
     input_type = 'text'
+
+
+class JqxComboInput(JqxInput):
+    template_name = 'includes/jq/jqxcombobox.html'
+    input_type = 'combo-box'

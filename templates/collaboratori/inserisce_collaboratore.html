@@ -57,9 +57,11 @@
             var dataAdapter = new $.jqx.dataAdapter(source);
 
     $('#combobox').jqxComboBox({ placeHolder: "Tipo Telefono",  source: dataAdapter, displayMember: 'tipo',
-        valueMember: "nome", height: 30, width: 270});
+        valueMember: "tipo", height: 30, width: 270});
 });
     </script>
 {% endblock %}
 
+
+jqxComboBox({placeHolder: 'doc_tel1',  height:'30',  width:'350',  minLength:'1',  });
 
