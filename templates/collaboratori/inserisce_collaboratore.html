@@ -8,109 +8,29 @@
 
 {% block content %}
 
-    <p>
-    <strong>N.B.</strong><br>
-    Il collaboratore viene inserito partendo dall'anagrafica delle persone. Pertanto possono essere selezionate <u>solo
-      persone già anagrafate.</u><br>
-    Per ricercare la persona da anagrafare come collaboratore iniziare a digitare le prime due lettere del cognome.
-    </p>
-    <div id='jqxComboBoxPersone'></div>
+<form method="post" novalidate>
+  {% csrf_token %}
 
-    <br>
-    <div id="messaggio_persona"></div>
-    <br><br>
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  {{ form.as_p }}
+
+</form>
+
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript">
- function formatDate(date) {
-     var d = new Date(date),
-         month = '' + (d.getMonth() + 1),
-         day = '' + d.getDate(),
-         year = d.getFullYear();
-
-     if (month.length < 2) month = '0' + month;
-     if (day.length < 2) day = '0' + day;
-
-     return [day, month, year].join('/');
- }
-
-   let comboBoxPersone = $("#jqxComboBoxPersone");
-   let source = {
-     datatype: "json",
-     datafields: [
-         {name: 'cognome'},
-         {name: 'nome'},
-         {name: 'data_nascita'},
-         {name: 'pk'} ],
-     url: "{% url 'collaboratori:ajax_load_tutte_persone' %}",
-     data: {
-         maxRows: 100 }
-   };
-   let dataAdapter = new $.jqx.dataAdapter(source, {
-     formatData: function (data) {
-         if (comboBoxPersone.jqxComboBox('searchString') !== undefined) {
-             data.name_starts_with = comboBoxPersone.jqxComboBox('searchString');
-             return data;
-         }
-     }
-   });
-
-    comboBoxPersone.jqxComboBox({
-     width: '80%',
-     height: 25,
-     source: dataAdapter,
-     remoteAutoComplete: true,
-     autoDropDownHeight: true,
-     selectedIndex: 0,
-     minLength:2,
-     displayMember: "cognome",
-     valueMember: "pk",
-     renderer: function (index, label, value) {
-         var item = dataAdapter.records[index];
-         if (item != null) {
-             var label = item.cognome + " - " + item.nome + " - " + formatDate(item.data_nascita);
-             return label;
-         }
-         return "";
-     },
-     renderSelectedItem: function (index, item) {
-         var item = dataAdapter.records[index];
-         if (item != null) {
-             var label = item.cognome + " - " + item.nome + " - " + formatDate(item.data_nascita);
-             return label;
-         }
-         return "";
-     },
-     search: function (searchString) {
-         dataAdapter.dataBind();
-     }
- });
-
- comboBoxPersone.on('change', function (event)
- {
-    var args = event.args;
-    if (args) {
-    // index represents the item's index.
-    var index = args.index;
-    var item = args.item;
-    // get item's label and value.
-    var label = item.label;
-    var value = item.value;
-    var type = args.type; // keyboard, mouse or null depending on how the item was selected.
-
-    $.ajax({                       // Inizializza la richiesta AJAX
-        url: "{% url 'collaboratori:ajax_check_persona_for_possible_collaborator' %}",                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
-        data: {
-          'pk_persona': value             // Mette il corso nei parametri di GET
-        },
-        success: function (data) {
-          $("#messaggio_persona").html(data.html);
-        }
-    });
- }
- });
-</script>
 
 {% endblock %}
 
