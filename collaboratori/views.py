@@ -28,3 +28,7 @@ def mostra_collaboratore_view(request, pk):
 def propone_inserimento_collaboratore_view(request):
     return render(request, 'collaboratori/inserisce_collaboratore.html')
 
+
+@has_permission_decorator(SiwPermessi.COLLABORATORE_INSERISCE)
+def inserisce_nuovo_collaboratore_view(request, pk_persona):
+    return HttpResponse("Ciao")

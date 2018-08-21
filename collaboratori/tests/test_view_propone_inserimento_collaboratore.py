@@ -18,7 +18,7 @@ class GeneralTests(TestCase):
         url = reverse(REVERSE_URL)
         self.assertEquals(url, URL)
 
-    def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
+    def test_propone_inserimento_collaboratore_url_resolves_propone_inserimento_collaboratore_view(self):
         view = resolve(URL)
         self.assertEquals(view.func, propone_inserimento_collaboratore_view)
 
