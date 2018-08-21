@@ -24,14 +24,42 @@
   {% endif %}
 
 
+<br><br>
+<div id="combobox"></div>
+
   {{ form.as_p }}
 
 </form>
 
+
+
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript">
+        $(document).ready(function () {
+            // prepare the data
+            var data = new Array();
+            var valori = ["Abitazione", "Cellulare", "Lavoro", "Altro"];
 
+            var valoriLength = valori.length;
+            for (var i = 0; i < valoriLength; i++) {
+                var row = {};
+                row["tipo"] = valori[i];
+                data.push(row);
+            }
+
+            var source =
+            {
+                localdata: data,
+                datatype: "array"
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+    $('#combobox').jqxComboBox({ placeHolder: "Tipo Telefono",  source: dataAdapter, displayMember: 'tipo',
+        valueMember: "nome", height: 30, width: 270});
+});
+    </script>
 {% endblock %}
 
 
