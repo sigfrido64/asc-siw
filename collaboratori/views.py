@@ -1,8 +1,5 @@
 # coding=utf-8
-import time
-import datetime
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
@@ -30,7 +27,7 @@ def propone_inserimento_collaboratore_view(request):
 
 @has_permission_decorator(SiwPermessi.COLLABORATORE_INSERISCE)
 def inserisce_nuovo_collaboratore_view(request, pk_persona):
-    pk_persona_deve_essere_valido = get_object_or_404(Persona, pk=pk_persona)
+    persona_se_valido_pk_persona = get_object_or_404(Persona, pk=pk_persona)
     # Se il collaboratore è già anagrafato segnala l'errore e non prosegue.
     try:
         collaboratore = Collaboratore.objects.get(persona__pk=pk_persona)
@@ -39,4 +36,4 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
     else:
         return render(request, 'collaboratori/errore_collaboratore_gia_presente.html', {'collaboratore': collaboratore})
     # Mostra il template in cui si vede il tutto e gestisce eventuale inserimento.
-    return HttpResponse("Ciao")
+    return render(request, 'collaboratori/inserisce_collaboratore.html', {'persona': persona_se_valido_pk_persona})

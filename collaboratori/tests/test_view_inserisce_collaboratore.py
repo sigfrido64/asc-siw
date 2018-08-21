@@ -10,7 +10,7 @@ from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_PRESENTE = 52639
-ID_NUOVO = 52639
+ID_NUOVO = 52640
 URL_PRESENTE = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_PRESENTE}/"
 URL_NUOVO = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_NUOVO}/"
 REVERSE_URL = 'collaboratori:inserisce_nuovo'
@@ -80,6 +80,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
     def test_render_new_collaborator_with_correct_templates(self):
         self.response = self.client.get(URL_NUOVO)
-        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
+        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
