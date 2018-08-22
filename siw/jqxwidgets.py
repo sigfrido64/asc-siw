@@ -60,3 +60,8 @@ class JqxTextInput(JqxInput):
 class JqxComboInput(JqxInput):
     template_name = 'includes/jq/jqxcombobox.html'
     input_type = 'combo-box'
+
+
+class JqxDataAdapter(JqxInput):
+    template_name = 'includes/jq/jqxcombobox.html'
+    input_type = 'data_adapter'

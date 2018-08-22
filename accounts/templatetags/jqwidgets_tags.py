@@ -14,6 +14,8 @@ def jqxattrs(jqxattrs):
     print('jqxattrs : ', jqxattrs)
     risultato = ''
     for key, value in jqxattrs.items():
+        if key == 'source':
+            pass
         if isinstance(value, int) or isinstance(value, float):
             risultato += f", {key} : {value}"
         elif isinstance(value, str):

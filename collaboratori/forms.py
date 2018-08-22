@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import forms
 from .models import Collaboratore
-from siw.jqxwidgets import JqxPasswordInput, JqxTextInput, JqxEmailInput, JqxComboInput
+from siw.jqxwidgets import JqxPasswordInput, JqxTextInput, JqxEmailInput, JqxComboInput, JqxDataAdapter
 
 
 class NewCollaboratoreForm(forms.ModelForm):
@@ -12,6 +12,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         max_length=4000,
         help_text='The max length of the text is 4000.'
     )
+    doc_tel_data_adapter = forms.CharField(widget=JqxDataAdapter(jqxattrs={}))
 
     tel1 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 350, 'minLength': 1}))
     tel2 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 350, 'minLength': 1}))
