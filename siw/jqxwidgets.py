@@ -65,3 +65,8 @@ class JqxComboInput(JqxInput):
 class JqxDataAdapter(JqxInput):
     template_name = 'includes/jq/jqxcombobox.html'
     input_type = 'data_adapter'
+
+    def __init__(self, attrs=None, jqxattrs=None):
+        jqxattrs['datatype'] = 'json'
+        super().__init__(attrs, jqxattrs)
+        print(self.jqxattrs)

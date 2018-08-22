@@ -56,8 +56,17 @@
             };
             var dataAdapter = new $.jqx.dataAdapter(source);
 
-    $('#combobox').jqxComboBox({ placeHolder: "Tipo Telefono",  source: dataAdapter, displayMember: 'tipo',
-        valueMember: "tipo", height: 30, width: 270});
+            var source = {
+                datatype: "json",
+                datafields: [
+                    {name: 'descrizione_telefono'},
+                    {name: 'pk'} ],
+                url: "{% url 'collaboratori:ajax_lista_tipo_telefoni_persona' %}"
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+    $('#combobox').jqxComboBox({ placeHolder: "Tipo Telefono",  source: dataAdapter, displayMember: 'descrizione_telefono',
+        valueMember: "descrizione_telefono", height: 30, width: 270});
 });
     </script>
 {% endblock %}

@@ -112,3 +112,17 @@ class Persona(models.Model):
     def save(self, *args, **kwargs):
         self.last_user = get_current_username()
         super().save(*args, **kwargs)  # Call the "real" save() method.
+
+
+class TipoTelefonoPersone(models.Model):
+    descrizione_telefono = models.CharField(max_length=20)
+
+    # META Class.
+    class Meta:
+        verbose_name = "Tipo Telefono"
+        verbose_name_plural = "Tipi Telefono"
+
+    # To String.
+    def __str__(self):
+        return self.descrizione_telefono
+

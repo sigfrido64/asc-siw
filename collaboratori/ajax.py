@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from collaboratori.models import Collaboratore
-from anagrafe.models import Persona
+from anagrafe.models import Persona, TipoTelefonoPersone
 from siw.decorators import ajax_has_permission_decorator
 from accounts.models import SiwPermessi
 
@@ -39,3 +39,11 @@ def ajax_check_persona_for_possible_collaborator(request):
     risposta = render_to_string("collaboratori/includes/errore_collaboratore_gia_presente.html",
                                 {'collaboratore': collaboratore})
     return JsonResponse({'html': risposta}, safe=False)
+
+
+def ajax_tipi_telefono_persone(request):
+    tipo_telefono = TipoTelefonoPersone.objects.all()
+    tipo_telefono = tipo_telefono.values('descrizione_telefono', 'pk')
+    # Per convertire in Json devo prima convertire in lista.
+    tipo_telefono_list = list(tipo_telefono)
+    return JsonResponse(tipo_telefono_list, safe=False)
