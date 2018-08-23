@@ -7,6 +7,9 @@ __all__ = (
     'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput'
 )
 
+# TODO Devo vedere se mi basta una sola funzione di rendering per tutta la classe !
+# nel combo box ho solo una riga in più che può essere eliminata !
+
 
 class JqxInput(Widget):
     """
@@ -62,7 +65,7 @@ class JqxComboInput(JqxInput):
     input_type = 'combo-box'
 
     def __init__(self, attrs=None, jqxattrs=None):
-        self.data_adapter_url = jqxattrs.pop('url')
+        self.data_adapter_url = jqxattrs.pop('data_adapter_url')
         super().__init__(attrs, jqxattrs)
 
     def render(self, name, value, attrs=None, **kwargs):

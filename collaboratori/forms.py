@@ -25,28 +25,28 @@ class NewCollaboratoreForm(forms.ModelForm):
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'url': url}))
+                      'data_adapter_url': url}))
 
     doc_tel2 = forms.ComboField(
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'url': url}))
+                      'data_adapter_url': url}))
 
     doc_tel3 = forms.ComboField(
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'url': url}))
+                      'data_adapter_url': url}))
 
     doc_tel4 = forms.ComboField(
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'url': url}))
+                      'data_adapter_url': url}))
 
     field_order = ['doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4', 'message']
 
