@@ -28,10 +28,32 @@ class NewCollaboratoreForm(forms.ModelForm):
     doc_tel1 = forms.ComboField(
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 350, 'minLength': 1, 'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'source': 'doc_tel1_data_adapter'}))
+            jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
+                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
+                      'url': url}))
 
-    field_order = ['doc_tel1', 'message']
+    doc_tel2 = forms.ComboField(
+        fields=[forms.CharField(), ],
+        widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
+                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
+                      'url': url}))
+
+    doc_tel3 = forms.ComboField(
+        fields=[forms.CharField(), ],
+        widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
+                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
+                      'url': url}))
+
+    doc_tel4 = forms.ComboField(
+        fields=[forms.CharField(), ],
+        widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 350, 'minLength': 1,
+                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
+                      'url': url}))
+
+    field_order = ['doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4', 'message']
 
     class Meta:
         model = Collaboratore
