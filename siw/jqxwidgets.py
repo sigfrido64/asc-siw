@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 # Definisco le Classi che possono essere importare da questo modulo.
 __all__ = (
-    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput',
+    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput'
 )
 
 
@@ -77,14 +77,3 @@ class JqxComboInput(JqxInput):
         context['widget']['data_adapter_url'] = self.data_adapter_url
 
         return render_to_string(self.template_name, context)
-
-
-class JqxDataAdapter(JqxInput):
-    template_name = 'includes/jq/jqxdataadapter.html'
-    input_type = 'data_adapter'
-
-    def __init__(self, attrs=None, jqxattrs=None):
-        jqxattrs['datatype'] = 'json'
-
-        super().__init__(attrs, jqxattrs)
-        print(self.jqxattrs)
