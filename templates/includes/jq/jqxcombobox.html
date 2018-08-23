@@ -8,7 +8,7 @@
                 datafields: [
                     {name: 'descrizione_telefono'},
                     {name: 'pk'} ],
-                url: "{% url 'collaboratori:ajax_lista_tipo_telefoni_persona' %}"
+                url: "{% url widget.data_adapter_url %}"
             };
       var {{ widget.name }}_data_adapter = new $.jqx.dataAdapter({{ widget.name }}_source);
 

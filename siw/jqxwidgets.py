@@ -63,12 +63,27 @@ class JqxComboInput(JqxInput):
 
     def __init__(self, attrs=None, jqxattrs=None):
         print("Prima di fare il controllo trovo : ", jqxattrs)
+        self.data_adapter_url = jqxattrs.pop('url')
+        print("DOpo la pulizia : ", jqxattrs)
         if 'source' in jqxattrs:
             print("il nome è : ", jqxattrs['source'])
 
         super().__init__(attrs, jqxattrs)
         print(self.jqxattrs)
         print(self.attrs)
+
+    def render(self, name, value, attrs=None, **kwargs):
+        # Make final attrs.
+        final_attrs = self.build_attrs(self.attrs, attrs)
+
+        # Crea il context come nella classe base.
+        context = self.get_context(name, value, final_attrs)
+
+        # Aggiunge jqxattrs
+        context['widget']['jqxattrs'] = self.jqxattrs
+        context['widget']['data_adapter_url'] = self.data_adapter_url
+
+        return render_to_string(self.template_name, context)
 
 
 class JqxDataAdapter(JqxInput):
