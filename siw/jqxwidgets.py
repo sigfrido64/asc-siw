@@ -39,7 +39,7 @@ class JqxInput(Widget):
         
         # Aggiunge jqxattrs
         context['widget']['jqxattrs'] = self.jqxattrs
-        
+
         return render_to_string(self.template_name, context)
 
 
@@ -61,12 +61,22 @@ class JqxComboInput(JqxInput):
     template_name = 'includes/jq/jqxcombobox.html'
     input_type = 'combo-box'
 
+    def __init__(self, attrs=None, jqxattrs=None):
+        print("Prima di fare il controllo trovo : ", jqxattrs)
+        if 'source' in jqxattrs:
+            print("il nome è : ", jqxattrs['source'])
+
+        super().__init__(attrs, jqxattrs)
+        print(self.jqxattrs)
+        print(self.attrs)
+
 
 class JqxDataAdapter(JqxInput):
-    template_name = 'includes/jq/jqxcombobox.html'
+    template_name = 'includes/jq/jqxdataadapter.html'
     input_type = 'data_adapter'
 
     def __init__(self, attrs=None, jqxattrs=None):
         jqxattrs['datatype'] = 'json'
+
         super().__init__(attrs, jqxattrs)
         print(self.jqxattrs)

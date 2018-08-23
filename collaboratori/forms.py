@@ -14,8 +14,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         help_text='The max length of the text is 4000.'
     )
 
-    # url = reverse('collaboratori:ajax_lista_tipo_telefoni_persona')
-    url = ''
+    url = 'collaboratori:ajax_lista_tipo_telefoni_persona'
     doc_tel_data_adapter = forms.CharField(
         widget=JqxDataAdapter(
             jqxattrs={'datafields': ('descrizione_telefono', 'pk'),
@@ -30,7 +29,9 @@ class NewCollaboratoreForm(forms.ModelForm):
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 350, 'minLength': 1, 'displayMember': 'tipo', 'valueMember': "tipo",
-                      'source': doc_tel_data_adapter}))
+                      'source': 'doc_tel_data_adapter'}))
+
+    field_order = ['doc_tel1', 'message']
 
     class Meta:
         model = Collaboratore

@@ -10,16 +10,28 @@ def afield_type(bound_field):
 
 
 @register.filter
-def jqxattrs(jqxattrs):
-    print('jqxattrs : ', jqxattrs)
+def generic_jqxattrs(jqxattrs):
     risultato = ''
     for key, value in jqxattrs.items():
-        if key == 'source':
-            pass
         if isinstance(value, int) or isinstance(value, float):
             risultato += f", {key} : {value}"
         elif isinstance(value, str):
             risultato += f", {key} : '{value}'"
 
-    print(risultato)
+    print('generic jpqx_attrs: ', risultato)
+    return mark_safe(risultato)
+
+
+@register.filter
+def combo_jqxattrs(jqxattrs):
+    print('combo jqxattrs : ', jqxattrs)
+    risultato = ''
+    for key, value in jqxattrs.items():
+        # Source fa riferimento ad una variabile JavaScript per cui senza apici ''.
+        if isinstance(value, int) or isinstance(value, float) or key == 'source':
+            risultato += f", {key} : {value}"
+        elif isinstance(value, str):
+            risultato += f", {key} : '{value}'"
+
+    print('combo jpqx_attrs: ', risultato)
     return mark_safe(risultato)

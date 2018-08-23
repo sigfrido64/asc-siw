@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|jqxattrs }} });
+    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|combo_jqxattrs }} });
     {% if widget.value != None %} $("#{{ widget.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
   });
 
