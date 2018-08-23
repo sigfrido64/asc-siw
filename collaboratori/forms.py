@@ -28,8 +28,8 @@ class NewCollaboratoreForm(forms.ModelForm):
     doc_tel1 = forms.ComboField(
         fields=[forms.CharField(), ],
         widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 350, 'minLength': 1, 'displayMember': 'tipo', 'valueMember': "tipo",
-                      'source': 'doc_tel_data_adapter'}))
+            jqxattrs={'height': 30, 'width': 350, 'minLength': 1, 'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
+                      'source': 'doc_tel1_data_adapter'}))
 
     field_order = ['doc_tel1', 'message']
 

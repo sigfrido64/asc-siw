@@ -1,10 +1,21 @@
 {% load jqwidgets_tags %}
 
 <script type="text/javascript">
+
   $(document).ready(function () {
+      var {{ widget.name }}_source = {
+                datatype: "json",
+                datafields: [
+                    {name: 'descrizione_telefono'},
+                    {name: 'pk'} ],
+                url: "{% url 'collaboratori:ajax_lista_tipo_telefoni_persona' %}"
+            };
+      var {{ widget.name }}_data_adapter = new $.jqx.dataAdapter({{ widget.name }}_source);
+
+
     $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|combo_jqxattrs }} });
     {% if widget.value != None %} $("#{{ widget.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
   });
 
 </script>
-<input type="{{ widget.type }}" name="{{ widget.name }}" {% include "includes/jq/attrs.html" %} />
+<div name="{{ widget.name }}" {% include "includes/jq/attrs.html" %}></div>
