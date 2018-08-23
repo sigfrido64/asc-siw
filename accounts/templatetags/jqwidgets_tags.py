@@ -35,3 +35,23 @@ def combo_jqxattrs(jqxattrs):
 
     print('combo jpqx_attrs: ', risultato)
     return mark_safe(risultato)
+
+
+@register.filter
+def jqxattrs_data_adapter_fields(jqxattrs):
+    # Creo l'insieme dei campi dati che mi servono per il data adapter usando tutti quelli che mi viene richiesto
+    # di mostrare.
+    campi_dati = set()
+    campi_dati.update([jqxattrs['displayMember']])
+    campi_dati.update([jqxattrs['valueMember']])
+
+    risultato = '['
+    primo = True
+    for key in campi_dati:
+        if primo:
+            risultato += f"{{name : '{key}'}}"
+            primo = False
+        else:
+            risultato += f", {{name : '{key}'}}"
+    risultato += ']'
+    return mark_safe(risultato)

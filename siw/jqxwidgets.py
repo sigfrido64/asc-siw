@@ -62,15 +62,8 @@ class JqxComboInput(JqxInput):
     input_type = 'combo-box'
 
     def __init__(self, attrs=None, jqxattrs=None):
-        print("Prima di fare il controllo trovo : ", jqxattrs)
         self.data_adapter_url = jqxattrs.pop('url')
-        print("DOpo la pulizia : ", jqxattrs)
-        if 'source' in jqxattrs:
-            print("il nome è : ", jqxattrs['source'])
-
         super().__init__(attrs, jqxattrs)
-        print(self.jqxattrs)
-        print(self.attrs)
 
     def render(self, name, value, attrs=None, **kwargs):
         # Make final attrs.
@@ -79,7 +72,7 @@ class JqxComboInput(JqxInput):
         # Crea il context come nella classe base.
         context = self.get_context(name, value, final_attrs)
 
-        # Aggiunge jqxattrs
+        # Aggiunge jqxattrs e self.data_adapter_url ! forse in quello generico !
         context['widget']['jqxattrs'] = self.jqxattrs
         context['widget']['data_adapter_url'] = self.data_adapter_url
 
