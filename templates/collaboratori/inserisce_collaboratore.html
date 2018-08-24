@@ -8,7 +8,14 @@
 
 {% block content %}
 
+Si sta procedendo ad anagrafare <strong>{{ persona.cognome }} {{ persona.nome }}</strong> come collaboratore.
+    <br><br>
+Inserire i dati che saranno utilizzati per contattare il collaboratore quando necessario:
+    <br>
+
+
 <form method="post" novalidate>
+
   {% csrf_token %}
 
   {% for hidden_field in form.hidden_fields %}
@@ -23,54 +30,33 @@
     </div>
   {% endif %}
 
+  <table width="100%" border="1">
+      <tr>
+          <td><strong>Recapiti Telefonici :</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{{ form.doc_tel1 }} : {{ form.tel1 }}</div></td>
+          <td width="50%"><div>{{ form.doc_tel2 }} : {{ form.tel2 }}</div></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{{ form.doc_tel3 }} : {{ form.tel3 }}</div></td>
+          <td width="50%"><div>{{ form.doc_tel4 }} : {{ form.tel4 }}</div></td>
+      </tr>
+      <tr>
+          <td><strong>Indirizzi e-mail :</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{{ form.doc_mail1 }} : {{ form.mail1 }}</div></td>
+          <td width="50%"><div>{{ form.doc_mail2 }} : {{ form.mail2 }}</div></td>
+      </tr>
+  </table>
 
-<br><br>
-<div id="combobox"></div>
-
-  {{ form.as_p }}
+<button type="submit" class="btn btn-primary">Submit</button>
 
 </form>
-
-
-
 {% endblock %}
 
 {% block javascript %}
-<script type="text/javascript">
-        $(document).ready(function () {
-            // prepare the data
-            var data = new Array();
-            var valori = ["Abitazione", "Cellulare", "Lavoro", "Altro"];
-
-            var valoriLength = valori.length;
-            for (var i = 0; i < valoriLength; i++) {
-                var row = {};
-                row["tipo"] = valori[i];
-                data.push(row);
-            }
-
-            var source =
-            {
-                localdata: data,
-                datatype: "array"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            var source = {
-                datatype: "json",
-                datafields: [
-                    {name: 'descrizione_telefono'},
-                    {name: 'pk'} ],
-                url: "{% url 'collaboratori:ajax_lista_tipo_telefoni_persona' %}"
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-    $('#combobox').jqxComboBox({ placeHolder: "Tipo Telefono",  source: dataAdapter, displayMember: 'descrizione_telefono',
-        valueMember: "descrizione_telefono", height: 30, width: 270});
-});
-    </script>
 {% endblock %}
-
-
-jqxComboBox({placeHolder: 'doc_tel1',  height:'30',  width:'350',  minLength:'1',  });
-

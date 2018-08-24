@@ -17,8 +17,6 @@ def generic_jqxattrs(jqxattrs):
             risultato += f", {key} : {value}"
         elif isinstance(value, str):
             risultato += f", {key} : '{value}'"
-
-    print('generic jpqx_attrs: ', risultato)
     return mark_safe(risultato)
 
 
@@ -32,8 +30,6 @@ def combo_jqxattrs(jqxattrs):
             risultato += f", {key} : {value}"
         elif isinstance(value, str):
             risultato += f", {key} : '{value}'"
-
-    print('combo jpqx_attrs: ', risultato)
     return mark_safe(risultato)
 
 

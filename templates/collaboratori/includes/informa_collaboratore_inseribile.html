@@ -5,20 +5,14 @@ Per procedere all'inserimento dei dati premere il pulsante qui sotto
 
 <div align="center">
 <br>
-<form method="post" novalidate>
 
-<input type="hidden" value="{{ persona.pk }}" name="id_persona">
-<button type="submit" id="nuovo_collaboratore">Inserisci Collaboratore</button>
-
-</form>
-
+    <a href={% url 'collaboratori:inserisce_nuovo' persona.pk %} id='nuovo_collaboratore'>Inserisci Collaboratore</a>
 </div>
 
 <script type="text/javascript">
-
-  $("#nuovo_collaboratore").jqxButton({ template: "success" });
-
-  $("#nuovo_collaboratore").on('click1', function () {
-                    window.location = "http://www.google.it";
-  });
+    $(document).ready(function () {
+        // Create a jqxLinkButton widget.
+        $("#nuovo_collaboratore").jqxLinkButton({ width: '200', height: '30'});
+    });
 </script>
+
