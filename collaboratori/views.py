@@ -38,12 +38,17 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
         return render(request, 'collaboratori/errore_collaboratore_gia_presente.html', {'collaboratore': collaboratore})
     # Altrimenti lavoro normalmente come inserimento.
     if request.method == 'POST':
+        print("Form con dati")
         form = NewCollaboratoreForm(request.POST)
         if form.is_valid():
+            print("Form valido !")
             collaboratore = form.save(commit=False)
             collaboratore.persona = persona
             collaboratore.save()
             return redirect('board_topics', pk=board.pk)  # TODO: redirect to lista collaboratori
+        else:
+            print(form.errors)
     else:
+        print("Form senza dati")
         form = NewCollaboratoreForm()
     return render(request, 'collaboratori/inserisce_collaboratore.html', {'persona': persona, 'form': form})

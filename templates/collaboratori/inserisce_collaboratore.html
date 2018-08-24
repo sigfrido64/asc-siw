@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load jqwidgets_tags %}
 
 {% block title %}Inserisce Collaboratore{% endblock %}
 
@@ -36,20 +37,20 @@ Inserire i dati che saranno utilizzati per contattare il collaboratore quando ne
           <td></td>
       </tr>
       <tr>
-          <td width="50%"><div>{{ form.doc_tel1 }} : {{ form.tel1 }}</div></td>
-          <td width="50%"><div>{{ form.doc_tel2 }} : {{ form.tel2 }}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel1 %} : {% siw_field form.tel1 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel2 %} : {% siw_field form.tel2 %}</div></td>
       </tr>
       <tr>
-          <td width="50%"><div>{{ form.doc_tel3 }} : {{ form.tel3 }}</div></td>
-          <td width="50%"><div>{{ form.doc_tel4 }} : {{ form.tel4 }}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel3 %} : {% siw_field form.tel3 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel4 %} : {% siw_field form.tel4 %}</div></td>
       </tr>
       <tr>
           <td><strong>Indirizzi e-mail :</strong></td>
           <td></td>
       </tr>
       <tr>
-          <td width="50%"><div>{{ form.doc_mail1 }} : {{ form.mail1 }}</div></td>
-          <td width="50%"><div>{{ form.doc_mail2 }} : {{ form.mail2 }}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_mail1 %} : {% siw_field form.mail1 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_mail2 %} : {% siw_field form.mail2 %}</div></td>
       </tr>
   </table>
 
