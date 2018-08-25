@@ -18,18 +18,7 @@ Inserire i dati che saranno utilizzati per contattare il collaboratore quando ne
 <form method="post" novalidate>
 
   {% csrf_token %}
-
-  {% for hidden_field in form.hidden_fields %}
-    {{ hidden_field }}
-  {% endfor %}
-
-  {% if form.non_field_errors %}
-    <div class="siw-alert siw-alert-danger">
-      {% for error in form.non_field_errors %}
-        {{ error }}
-      {% endfor %}
-    </div>
-  {% endif %}
+  {% include "includes/form_head.html" %}
 
   <table width="100%" border="1">
       <tr>
