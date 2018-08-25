@@ -16,7 +16,7 @@
 
     <!-- Add one of the jQWidgets styles : Bottostrap Selected-->
     <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.base.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.bootstrap.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'jqwidgets/styles/jqx.orange.css' %}" type="text/css" />
 
 
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
@@ -40,7 +40,7 @@
     {% block body %}
       {# Setta il tema di JQWidgets a livello globale #}
       <script type="text/javascript">
-        $(function() { $.jqx.theme = 'bootstrap'; });
+        $(function() { $.jqx.theme = 'orange'; });
       </script>
 
       <a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a>

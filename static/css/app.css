@@ -15,3 +15,16 @@ div.breadcrumbs {
     color: #c4dce8;
     text-align: left;
 }
+
+.errorlist {
+    color: red;
+    font-size: 12px;
+}
+
+.siw-form-control.is-invalid {
+    border : red;
+}
+
+.siw-form-control {
+    border : green;
+}
