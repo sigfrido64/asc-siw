@@ -57,5 +57,14 @@ def modifica_collaboratore_view(request, pk_collaboratore):
     except ObjectDoesNotExist:
         return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
     # Altrimenti prosegue con la modifica.
-    return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
+    if request.method == 'POST':
+        form = NewCollaboratoreForm(request.POST)
+        if form.is_valid():
+            collaboratore = form.save(commit=False)
+            collaboratore.persona = persona
+            collaboratore.save()
+            return redirect('collaboratori:lista_collaboratori')
+    else:
+        form = NewCollaboratoreForm(instance=collaboratore)
+    return render(request, 'collaboratori/inserisce_collaboratore.html', {'form': form})
 
