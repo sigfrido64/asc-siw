@@ -5,14 +5,6 @@ from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea
 
 
 class NewCollaboratoreForm(forms.ModelForm):
-    message = forms.CharField(
-        widget=forms.Textarea(
-            attrs={'rows': 5, 'placeholder': 'What is in your mind?'}
-        ),
-        max_length=4000,
-        help_text='The max length of the text is 4000.'
-    )
-
     url = 'collaboratori:ajax_lista_tipo_telefoni_persona'
 
     tel1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
@@ -77,4 +69,4 @@ class NewCollaboratoreForm(forms.ModelForm):
     class Meta:
         model = Collaboratore
         fields = ['tel1', 'tel2', 'tel3', 'tel4', 'doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4', 'mail1', 'mail2',
-                  'doc_mail1', 'doc_mail2', 'note', 'in_uso']
+                  'doc_mail1', 'doc_mail2', 'note']

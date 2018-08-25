@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.db import models
+from django.core.exceptions import ValidationError
 from anagrafe.models import Persona
 from siw.context_processor import get_current_username
 
@@ -59,3 +60,28 @@ class Collaboratore(models.Model):
     def save(self, *args, **kwargs):
         self.last_user = get_current_username()
         super().save(*args, **kwargs)  # Call the "real" save() method.
+
+    # Custon Check fields.
+    def clean(self):
+        # raise ValidationError({'tel3': 'Questo invece è una merda !.'})
+        # Devo avere almeno un telefono ed una mail per anagrafare un collaboratore.
+        telefoni = self.tel1 + self.tel2 + self.tel3 + self.tel4
+        mail = self.mail1 + self.mail2
+        if not telefoni or not mail:
+            raise ValidationError("Devono essere forniti almeno un numero di telefono ed una mail !")
+
+        # Se ho un campo telefono devo aver definito il relativo tipo.
+        if self.tel1 and not self.doc_tel1:
+            raise ValidationError({'doc_tel1': 'Il tipo di telefono non è stato definito.'})
+        if self.tel2 and not self.doc_tel2:
+            raise ValidationError({'doc_tel2': 'Il tipo di telefono non è stato definito.'})
+        if self.tel3 and not self.doc_tel3:
+            raise ValidationError({'doc_tel3': 'Il tipo di telefono non è stato definito.'})
+        if self.tel4 and not self.doc_tel1:
+            raise ValidationError({'doc_tel4': 'Il tipo di telefono non è stato definito.'})
+
+        # Se ho un campo mail devo aver definito il relativo tipo.
+        if self.mail1 and not self.doc_mail1:
+            raise ValidationError({'doc_mail1': 'Il tipo di mail non è stato definito.'})
+        if self.mail2 and not self.doc_mail2:
+            raise ValidationError({'doc_mail2': 'Il tipo di mail non è stato definito.'})
