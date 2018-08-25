@@ -44,9 +44,9 @@ def jqxattrs_data_adapter_fields(jqxattrs):
 def siw_field(field):
     class_attuale = field.field.widget.attrs.get('class', '')
     if field.errors:
-        class_da_appendere = 'siw-form-control is-invalid'
+        class_da_appendere = 'siw-form-control-invalid'
     else:
-        class_da_appendere = 'siw-form-control'
+        class_da_appendere = 'siw-form-control-valid'
     if class_attuale == '':
         class_nuova = class_da_appendere
     else:
