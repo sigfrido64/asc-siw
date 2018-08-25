@@ -52,6 +52,7 @@ class JqxPasswordInput(JqxInput):
 
 
 class JqxEmailInput(JqxInput):
+    # TODO da controllare il rendering
     template_name = 'includes/jq/jqxemail.html'
     input_type = 'email'
 
