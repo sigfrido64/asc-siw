@@ -28,6 +28,7 @@ class GeneralTests(TestCase):
         view = resolve(URL_PRESENTE)
         self.assertEquals(view.func, modifica_collaboratore_view)
 
+
 class MyAccountTestCase(TestCase):
     """
     Qui metto le informazioni di base per i test successivi.
@@ -42,7 +43,7 @@ class MyAccountTestCase(TestCase):
         # Recupero tutti i Dati dell'utente, serve dopo per aggiungere i permessi.
         self.myuser = User.objects.get(username=self.fake_user_username)
 
-@skip
+
 class LoginRequiredTests(MyAccountTestCase):
     def test_redirection_to_login_for_not_logged_in_user(self):
         login_url = reverse('login')

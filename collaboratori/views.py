@@ -49,5 +49,7 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
     return render(request, 'collaboratori/inserisce_collaboratore.html', {'persona': persona, 'form': form})
 
 
+@has_permission_decorator(SiwPermessi.COLLABORATORE_MODIFICA)
 def modifica_collaboratore_view(request, pk_collaboratore):
-    pass
+    from django.http.response import HttpResponse
+    return HttpResponse("CIao")
