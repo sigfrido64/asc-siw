@@ -39,6 +39,7 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
     # Altrimenti lavoro normalmente come inserimento.
     if request.method == 'POST':
         print("Form con dati")
+        print(request.POST)
         form = NewCollaboratoreForm(request.POST)
         if form.is_valid():
             print("Form valido !")
@@ -47,6 +48,7 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
             collaboratore.save()
             return redirect('board_topics', pk=board.pk)  # TODO: redirect to lista collaboratori
         else:
+            # print("Tel 1", form.tel2)
             print(form.errors)
     else:
         print("Form senza dati")

@@ -15,13 +15,13 @@ class NewCollaboratoreForm(forms.ModelForm):
 
     url = 'collaboratori:ajax_lista_tipo_telefoni_persona'
 
-    tel1 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel2 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel3 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel4 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    tel1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    tel2 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    tel3 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    tel4 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
 
     doc_tel1 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
@@ -29,7 +29,7 @@ class NewCollaboratoreForm(forms.ModelForm):
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel2 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
@@ -37,7 +37,7 @@ class NewCollaboratoreForm(forms.ModelForm):
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel3 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
@@ -45,18 +45,18 @@ class NewCollaboratoreForm(forms.ModelForm):
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel4 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
                       'data_adapter_url': url},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
-    mail1 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    mail2 = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    mail1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    mail2 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
 
     doc_mail1 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
@@ -64,7 +64,7 @@ class NewCollaboratoreForm(forms.ModelForm):
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_mail2 = forms.ComboField(
-        fields=[forms.CharField(), ],
+        fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
