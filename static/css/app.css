@@ -42,3 +42,9 @@ div.breadcrumbs {
     border: 1px solid transparent;
     border-radius: 0.25rem;
 }
+
+.img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -51,5 +51,11 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
 
 @has_permission_decorator(SiwPermessi.COLLABORATORE_MODIFICA)
 def modifica_collaboratore_view(request, pk_collaboratore):
-    from django.http.response import HttpResponse
-    return HttpResponse("CIao")
+    # Se il collaboratore non esiste segnala l'errore e non prosegue.
+    try:
+        collaboratore = Collaboratore.objects.get(pk=pk_collaboratore)
+    except ObjectDoesNotExist:
+        return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
+    # Altrimenti prosegue con la modifica.
+    return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
+

@@ -74,10 +74,10 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def test_server_serve_page_without_errors(self):
         self.response = self.client.get(URL_PRESENTE)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
-    @skip
-    def test_render_error_collaborator_already_present_with_error_templates(self):
-        self.response = self.client.get(URL_PRESENTE)
-        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
+
+    def test_render_error_inexistent_collaborator_with_error_templates(self):
+        self.response = self.client.get(URL_ASSENTE)
+        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_non_esiste.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
     @skip

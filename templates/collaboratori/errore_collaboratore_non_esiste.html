@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Collaboratore Inesistente{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<br><br>
+il collaboratore di matricola <strong>{{ pk }}</strong> non esiste !!!
+
+<br>
+<br>
+<u>Questo errore non si dovrebbe mai verificare e può essere associato ad un tentativo di forzatura del sistema !</u>
+<br>
+<br>
+<img src="{% static 'img/spongebob-wtf.jpg' %}" class="img-center">
+{% endblock %}
+
+
