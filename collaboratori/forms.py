@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import forms
 from .models import Collaboratore
-from siw.jqxwidgets import JqxTextInput, JqxComboInput
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea
 
 
 class NewCollaboratoreForm(forms.ModelForm):
@@ -71,7 +71,8 @@ class NewCollaboratoreForm(forms.ModelForm):
                       'data_adapter_url': url},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
-    note = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
+    note = forms.CharField(required=False,
+                           widget=JqxTextArea(jqxattrs={'height': 200, 'width': 500, 'minLength': 1}))
 
     class Meta:
         model = Collaboratore

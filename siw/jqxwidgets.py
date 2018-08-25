@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 # Definisco le Classi che possono essere importare da questo modulo.
 __all__ = (
-    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput'
+    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea'
 )
 
 # TODO Devo vedere se mi basta una sola funzione di rendering per tutta la classe !
@@ -52,13 +52,17 @@ class JqxPasswordInput(JqxInput):
 
 
 class JqxEmailInput(JqxInput):
-    # TODO da controllare il rendering
     template_name = 'includes/jq/jqxemail.html'
     input_type = 'email'
 
 
 class JqxTextInput(JqxInput):
     input_type = 'text'
+
+
+class JqxTextArea(JqxInput):
+    input_type = 'text-area'
+    template_name = 'includes/jq/jqxtextarea.html'
 
 
 class JqxComboInput(JqxInput):
