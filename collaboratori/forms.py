@@ -5,7 +5,8 @@ from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea
 
 
 class NewCollaboratoreForm(forms.ModelForm):
-    url = 'collaboratori:ajax_lista_tipo_telefoni_persona'
+    url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
+    url_mail = 'collaboratori:ajax_lista_tipo_mail_persona'
 
     tel1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
     tel2 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
@@ -17,7 +18,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'data_adapter_url': url_telefoni},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel2 = forms.ComboField(
@@ -25,7 +26,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'data_adapter_url': url_telefoni},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel3 = forms.ComboField(
@@ -33,7 +34,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'data_adapter_url': url_telefoni},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_tel4 = forms.ComboField(
@@ -41,7 +42,7 @@ class NewCollaboratoreForm(forms.ModelForm):
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
                       'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'data_adapter_url': url_telefoni},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     mail1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
@@ -51,16 +52,16 @@ class NewCollaboratoreForm(forms.ModelForm):
         fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'displayMember': 'descrizione_mail', 'valueMember': "descrizione_mail",
+                      'data_adapter_url': url_mail},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     doc_mail2 = forms.ComboField(
         fields=[forms.CharField(), ], required=False,
         widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url},
+                      'displayMember': 'descrizione_mail', 'valueMember': "descrizione_mail",
+                      'data_adapter_url': url_mail},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
     note = forms.CharField(required=False,

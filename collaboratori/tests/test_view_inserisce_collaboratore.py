@@ -6,7 +6,8 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from ..views import inserisce_nuovo_collaboratore_view
 
-from unittest import skip
+# TODO Bisogna creare i test per la parte di inserimento vero e proprio mettendo i valori nei campi e verificando che
+# vada a buon fine.
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_PRESENTE = 52639

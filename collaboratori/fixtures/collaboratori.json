@@ -211,5 +211,54 @@
     "data_creazione": "2018-08-08T16:09:55.974",
     "last_user": "Pilone Sigfrido"
   }
+},
+{
+  "model": "anagrafe.tipotelefonopersone",
+  "pk": 1,
+  "fields": {
+    "descrizione_telefono": "Abitazione"
+  }
+},
+{
+  "model": "anagrafe.tipotelefonopersone",
+  "pk": 2,
+  "fields": {
+    "descrizione_telefono": "Lavoro"
+  }
+},
+{
+  "model": "anagrafe.tipotelefonopersone",
+  "pk": 3,
+  "fields": {
+    "descrizione_telefono": "Cellulare Personale"
+  }
+},
+{
+  "model": "anagrafe.tipotelefonopersone",
+  "pk": 4,
+  "fields": {
+    "descrizione_telefono": "Cellulare Aziendale"
+  }
+},
+{
+  "model": "anagrafe.tipotelefonopersone",
+  "pk": 5,
+  "fields": {
+    "descrizione_telefono": "Abitazione Genitori"
+  }
+},
+{
+  "model": "anagrafe.tipomailpersone",
+  "pk": 1,
+  "fields": {
+    "descrizione_mail": "Abitazione"
+  }
+},
+{
+  "model": "anagrafe.tipomailpersone",
+  "pk": 2,
+  "fields": {
+    "descrizione_mail": "Lavoro"
+  }
 }
 ]

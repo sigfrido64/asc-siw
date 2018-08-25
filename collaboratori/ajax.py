@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from collaboratori.models import Collaboratore
-from anagrafe.models import Persona, TipoTelefonoPersone
+from anagrafe.models import Persona, TipoTelefonoPersone, TipoMailPersone
 from siw.decorators import ajax_has_permission_decorator
 from accounts.models import SiwPermessi
 
@@ -47,3 +47,11 @@ def ajax_tipi_telefono_persone(request):
     # Per convertire in Json devo prima convertire in lista.
     tipo_telefono_list = list(tipo_telefono)
     return JsonResponse(tipo_telefono_list, safe=False)
+
+
+def ajax_tipi_mail_persone(request):
+    tipo_mail = TipoMailPersone.objects.all()
+    tipo_mail = tipo_mail.values('descrizione_mail', 'pk')
+    # Per convertire in Json devo prima convertire in lista.
+    tipo_mail_list = list(tipo_mail)
+    return JsonResponse(tipo_mail_list, safe=False)

@@ -126,3 +126,15 @@ class TipoTelefonoPersone(models.Model):
     def __str__(self):
         return self.descrizione_telefono
 
+
+class TipoMailPersone(models.Model):
+    descrizione_mail = models.CharField(max_length=20)
+
+    # META Class.
+    class Meta:
+        verbose_name = "Tipo Mail"
+        verbose_name_plural = "Tipi Mail"
+
+    # To String.
+    def __str__(self):
+        return self.descrizione_mail
