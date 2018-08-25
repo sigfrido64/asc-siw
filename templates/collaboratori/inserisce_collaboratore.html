@@ -58,10 +58,18 @@ Inserire i dati che saranno utilizzati per contattare il collaboratore quando ne
       <strong>Eventuali Annotazioni :</strong> {% siw_field form.note %}
   </p>
 
-<button type="submit" class="btn btn-primary">Submit</button>
-
+  <div align="center">
+    <button id="do_insert" type="submit">Inserisce</button>
+  </div>
 </form>
 {% endblock %}
 
 {% block javascript %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+    });
+</script>
+
 {% endblock %}
