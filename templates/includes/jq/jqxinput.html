@@ -1,6 +1,8 @@
+{% load jqwidgets_tags %}
+
 <script type="text/javascript">
   $(document).ready(function () {
-    $("#{{ widget.attrs.id }}").jqxInput({placeHolder: '{{ widget.name }}', {% include "includes/jq/jsattrs.html" %} });
+    $("#{{ widget.attrs.id }}").jqxInput({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|generic_jqxattrs }} });
     {% if widget.value != None %} $("#{{ widget.attrs.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
   });
 </script>
