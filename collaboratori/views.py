@@ -47,3 +47,7 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
     else:
         form = NewCollaboratoreForm()
     return render(request, 'collaboratori/inserisce_collaboratore.html', {'persona': persona, 'form': form})
+
+
+def modifica_collaboratore_view(request, pk_collaboratore):
+    pass
