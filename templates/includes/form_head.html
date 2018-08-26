@@ -1,5 +1,14 @@
 {% for hidden_field in form.hidden_fields %}
-  {{ hidden_field }}
+    {% if hidden_field.errors %}
+        <div class="siw-alert siw-alert-danger">
+          <ul>
+            {% for error in hidden_field.errors %}
+              <li>(Hidden field {{ hidden_field.name }}) {{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+    {% endif %}
+    {{ hidden_field }}
 {% endfor %}
 
 {% if form.non_field_errors %}

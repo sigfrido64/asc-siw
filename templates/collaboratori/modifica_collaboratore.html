@@ -12,7 +12,7 @@
 Si sta procedendo a modificare i dati del collaboratore : <strong>{{ persona.cognome }} {{ persona.nome }}</strong>
     <br><br>
 Questi dati saranno utilizzati per contattare il collaboratore quando necessario:
-    <br>
+    <br><br>
 
 
 <form method="post" novalidate>
@@ -42,7 +42,7 @@ Questi dati saranno utilizzati per contattare il collaboratore quando necessario
           <td width="50%"><div>{% siw_field form.doc_mail2 %} : {% siw_field form.mail2 %}</div></td>
       </tr>
       <tr>
-          <td>{% siw_field form.in_uso %}</td>
+          <td>{{ form.in_uso.help_text }} : {{ form.in_uso }}</td>
           <td></td>
       </tr>
   </table>
@@ -52,7 +52,7 @@ Questi dati saranno utilizzati per contattare il collaboratore quando necessario
   </p>
 
   <div align="center">
-    <button id="do_modify" type="submit">Modifica</button>
+    <button id="do_modify" type="submit">Salva</button>
   </div>
 </form>
 {% endblock %}
