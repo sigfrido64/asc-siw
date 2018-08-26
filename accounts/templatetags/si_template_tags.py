@@ -20,3 +20,15 @@ def descrizione_e_valore(descrizione, valore):
     else:
         risultato = ''
     return mark_safe(risultato)
+
+
+@register.simple_tag
+def systemdata(form):
+    if form.in_uso:
+        risultato = "Il record è attivo<br>"
+    else:
+        risultato = "Il recordo <strong>non è</strong> attivo"
+    risultato = "Ciao sono !"
+    print(form.in_uso)
+    risultato += form.in_uso.__str__()
+    return mark_safe(risultato)

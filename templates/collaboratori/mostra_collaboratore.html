@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Mostra Collaboratore{% endblock %}
 
@@ -41,6 +42,8 @@
         <td colspan="2">{{ collaboratore.note }}</td>
     </tr>
 </table>
+
+{% include "includes/form_systemdata.html" with form=collaboratore %}
 
 {% endblock %}
 
