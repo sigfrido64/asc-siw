@@ -13,7 +13,17 @@
 {% endcomment %}
 
 {% block content %}
-<table style="width:100%">
+<br>
+{% if user|can:siwperms.COLLABORATORE_INSERISCE %}
+    <div align="right">
+      <a href="{% url 'collaboratori:propone-inserimento-collaboratore' %}">
+        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
+      </a>
+    </div>
+{% endif %}
+<br>
+
+<table style="width:100%" border="1">
   <thead>
     <tr>
       <th>Cognome</th>

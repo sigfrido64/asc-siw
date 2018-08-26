@@ -106,3 +106,13 @@ class FormTestsForLoggedInUsersWithPermissionsForListAndDetails(MyAccountTestCas
         self.assertInHTML('Gaspare', utf8_content)
         self.assertInHTML('<a href = "/collaboratori/anagrafica/dettaglio/mostra/1/">'
                           '<span class="fa fa-id-card" aria-hidden="true"></span ></a>', utf8_content)
+
+    def test_page_not_contains_add_link_without_permission(self):
+        self.assertNotContains(self.response, '/collaboratori/anagrafica/propone-inserimento-collaboratore/')
+
+    def test_page_contains_add_link_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_INSERISCE}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, '/collaboratori/anagrafica/propone-inserimento-collaboratore/')
