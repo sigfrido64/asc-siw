@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 # Definisco le Classi che possono essere importare da questo modulo.
 __all__ = (
-    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea'
+    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox'
 )
 
 # TODO Devo vedere se mi basta una sola funzione di rendering per tutta la classe !
@@ -85,3 +85,8 @@ class JqxComboInput(JqxInput):
         context['widget']['data_adapter_url'] = self.data_adapter_url
 
         return render_to_string(self.template_name, context)
+
+
+class JqxCheckBox(JqxInput):
+    input_type = 'checkbox'
+    template_name = 'includes/jq/jqxcheckbox.html'

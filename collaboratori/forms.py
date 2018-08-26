@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import forms
 from .models import Collaboratore
-from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox
 
 
 class NewCollaboratoreForm(forms.ModelForm):
@@ -74,6 +74,8 @@ class NewCollaboratoreForm(forms.ModelForm):
 
 
 class UpdateCollaboratoreForm(NewCollaboratoreForm):
+
+    in_uso = forms.BooleanField(required=True, widget=JqxCheckBox(jqxattrs={'height': 30, 'width': 150}))
 
     class Meta:
         model = Collaboratore

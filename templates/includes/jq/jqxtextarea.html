@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $("#{{ widget.attrs.id }}").jqxTextArea({placeHolder: '{{ widget.name }}' {{ widget.jqxattrs|generic_jqxattrs }} });
+    $("#{{ widget.attrs.id }}").jqxTextArea({placeHolder: '{{ widget.name }}', {{ widget.jqxattrs|generic_jqxattrs }} });
     {% if widget.value != None %} $("#{{ widget.attrs.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
   });
 </script>

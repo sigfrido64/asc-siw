@@ -12,11 +12,16 @@ def afield_type(bound_field):
 @register.filter
 def generic_jqxattrs(jqxattrs):
     risultato = ''
+    primo = True
     for key, value in jqxattrs.items():
+        if not primo:
+            risultato += ', '
+        else:
+            primo = False
         if isinstance(value, int) or isinstance(value, float):
-            risultato += f", {key} : {value}"
+            risultato += f"{key} : {value}"
         elif isinstance(value, str):
-            risultato += f", {key} : '{value}'"
+            risultato += f"{key} : '{value}'"
     return mark_safe(risultato)
 
 

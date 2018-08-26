@@ -1,0 +1,10 @@
+{% load jqwidgets_tags %}
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#{{ widget.attrs.id }}").jqxCheckBox({ {{ widget.jqxattrs|generic_jqxattrs }} });
+    {% if widget.value != None %} $("#{{ widget.attrs.id }}").val({{ widget.value|stringformat:'s'|lower }}); {% endif %}
+  });
+</script>
+<div name="{{ widget.name }}" {% include "includes/jq/attrs.html" %}>{{ widget.name }}</div>
+

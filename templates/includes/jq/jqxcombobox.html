@@ -11,7 +11,7 @@
       let {{ widget.name }}_data_adapter = new $.jqx.dataAdapter({{ widget.name }}_source);
 
 
-    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}', source: {{ widget.name }}_data_adapter {{ widget.jqxattrs|generic_jqxattrs }} });
+    $("#{{ widget.attrs.id }}").jqxComboBox({placeHolder: '{{ widget.name }}', source: {{ widget.name }}_data_adapter, {{ widget.jqxattrs|generic_jqxattrs }} });
 
     {% if widget.value != None %} $("#{{ widget.attrs.id }}").on('bindingComplete', function (event) {
         $("#{{ widget.attrs.id }}").val('{{ widget.value|stringformat:'s' }}');
