@@ -10,7 +10,7 @@
 
 {% block content %}
 <br>
-{% if user|can:siwperms.COLLABORATORE_MOSTRA %}
+{% if user|can:siwperms.COLLABORATORE_MODIFICA %}
     <div align="right">
       <a href="{% url 'collaboratori:modifica_esistente' collaboratore.pk %}">
         <span class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue"></span>Modifica
