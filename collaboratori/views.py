@@ -56,6 +56,7 @@ def modifica_collaboratore_view(request, pk_collaboratore):
         collaboratore = Collaboratore.objects.get(pk=pk_collaboratore)
     except ObjectDoesNotExist:
         return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
+    persona = collaboratore.persona
     # Altrimenti prosegue con la modifica.
     if request.method == 'POST':
         form = UpdateCollaboratoreForm(request.POST, instance=collaboratore)
@@ -64,5 +65,5 @@ def modifica_collaboratore_view(request, pk_collaboratore):
             return redirect('collaboratori:lista_collaboratori')
     else:
         form = UpdateCollaboratoreForm(instance=collaboratore)
-    return render(request, 'collaboratori/modifica_collaboratore.html', {'form': form})
+    return render(request, 'collaboratori/modifica_collaboratore.html', {'form': form, 'persona': persona})
 

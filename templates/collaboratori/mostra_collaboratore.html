@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load si_template_tags %}
 
 {% block title %}Mostra Collaboratore{% endblock %}
 
@@ -7,14 +8,23 @@
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
 {% endblock %}
 
-{% load si_template_tags %}
-
 {% block content %}
-    <p>
-      <strong>Collaboratore : </strong> {{ collaboratore.persona.cognome }}, {{ collaboratore.persona.nome }}<br>
-    </p>
-
+<br>
+{% if user|can:siwperms.COLLABORATORE_MOSTRA %}
+    <div align="right">
+      <a href="{% url 'collaboratori:modifica_esistente' collaboratore.pk %}">
+        <span class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue"></span>Modifica
+      </a>
+    </div>
+{% endif %}
+<br>
 <table border="1" width="100%">
+    <tr>
+        <td colspan="2">Dettagli Collaboratore
+    </tr>
+    <tr>
+        <td colspan="2">Cognome e nome : <strong>{{ collaboratore.persona.cognome }}, {{ collaboratore.persona.nome }}</strong></td>
+    </tr>
     <tr>
         <td colspan="2"><strong>Recapiti Telefonici</strong></td>
     </tr>
