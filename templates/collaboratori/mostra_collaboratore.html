@@ -6,27 +6,42 @@
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
 {% endblock %}
 
+{% load si_template_tags %}
+
 {% block content %}
-Cognome : {{ collaboratore.persona.cognome }} ---
-Nome : {{ collaboratore.persona.nome }}<br>
+    <p>
+      <strong>Collaboratore : </strong> {{ collaboratore.persona.cognome }}, {{ collaboratore.persona.nome }}<br>
+    </p>
 
---------------------------<br>
-Recapiti Telefonici <br><br>
-{{ collaboratore.doc_tel1 }} : {{ collaboratore.tel1 }} <br>
-{{ collaboratore.doc_tel2 }} : {{ collaboratore.tel2 }} <br>
-{{ collaboratore.doc_tel3 }} : {{ collaboratore.tel3 }} <br>
-{{ collaboratore.doc_tel4 }} : {{ collaboratore.tel4 }} <br>
+<table border="1" width="100%">
+    <tr>
+        <td colspan="2"><strong>Recapiti Telefonici</strong></td>
+    </tr>
+    <tr>
+        <td>{% descrizione_e_valore collaboratore.doc_tel1 collaboratore.tel1 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_tel2 collaboratore.tel2 %}</td>
+    </tr>
+    <tr>
+        <td>{% descrizione_e_valore collaboratore.doc_tel3 collaboratore.tel3 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_tel4 collaboratore.tel4 %}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><strong>Indirizzi mail</strong></td>
+    </tr>
+    <tr>
+        <td>{% descrizione_e_valore collaboratore.doc_mail1 collaboratore.mail1 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_mail2 collaboratore.mail2 %}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><strong>Note</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2">{{ collaboratore.note }}</td>
+    </tr>
+</table>
 
---------------------------- <br>
-E-Mail <br><br>
-
-{{ collaboratore.doc_mail1 }} : {{ collaboratore.mail1 }} <br>
-{{ collaboratore.doc_mail2 }} : {{ collaboratore.mail2 }} <br>
-
---------------------------- <br>
-Note <br><br>
-
-{{ collaboratore.note }}
 {% endblock %}
 
 {% block javascript %}
