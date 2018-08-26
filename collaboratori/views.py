@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Collaboratore, Persona
-from .forms import NewCollaboratoreForm
+from .forms import NewCollaboratoreForm, UpdateCollaboratoreForm
 
 
 # Create your views here.
@@ -58,13 +58,11 @@ def modifica_collaboratore_view(request, pk_collaboratore):
         return render(request, 'collaboratori/errore_collaboratore_non_esiste.html', {'pk': pk_collaboratore})
     # Altrimenti prosegue con la modifica.
     if request.method == 'POST':
-        form = NewCollaboratoreForm(request.POST)
+        form = UpdateCollaboratoreForm(request.POST, instance=collaboratore)
         if form.is_valid():
-            collaboratore = form.save(commit=False)
-            collaboratore.persona = persona
             collaboratore.save()
             return redirect('collaboratori:lista_collaboratori')
     else:
-        form = NewCollaboratoreForm(instance=collaboratore)
-    return render(request, 'collaboratori/inserisce_collaboratore.html', {'form': form})
+        form = UpdateCollaboratoreForm(instance=collaboratore)
+    return render(request, 'collaboratori/modifica_collaboratore.html', {'form': form})
 

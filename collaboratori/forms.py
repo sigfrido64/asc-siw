@@ -75,9 +75,8 @@ class NewCollaboratoreForm(forms.ModelForm):
 
 class UpdateCollaboratoreForm(NewCollaboratoreForm):
 
-# TODO Devo definire i field per persona ed in uso !
-
     class Meta:
         model = Collaboratore
         fields = ['persona', 'tel1', 'tel2', 'tel3', 'tel4', 'doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4',
                   'mail1', 'mail2', 'doc_mail1', 'doc_mail2', 'note', 'in_uso']
+        widgets = {'persona': forms.HiddenInput()}
