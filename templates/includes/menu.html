@@ -19,6 +19,15 @@
         </ul>
       </li>
       {% endif %}
+      {% if user|can:siwperms.MENU_COLLABORATORI %}     {# Vedi nota sopra per spiegazione #}
+      <li>Collaboratori
+        <ul>
+          {% if user|can:siwperms.MENU_COLLABORATORI_LISTA %}
+          <li><a href="{% url 'collaboratori:lista_collaboratori' %}">Lista Collaboratori</a></li>
+          {% endif %}
+        </ul>
+      </li>
+      {% endif %}
       {% comment %}
       In questa sezione mostro i menù relativi alle stampe.
       {% endcomment %}
