@@ -47,10 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',  # <- here
+    'django.contrib.humanize',
     'widget_tweaks',
     'import_export',
-    # 'boards',
     'accounts',
     'attesta',
     'amm',

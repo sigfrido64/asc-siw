@@ -1,16 +1,20 @@
+{% load humanize %}
+
 <br>
 {% if form.in_uso %}
-    Il record è attualmente utilizzabile.
+    <small>Il record è attualmente utilizzabile.</small>
 {% else %}
-    Il record <strong>non è</strong> attualmente utilizzabile.
+    <small>Il record <strong>non è</strong> attualmente utilizzabile.</small>
 {% endif %}
 
-<div>
-Data di creazione : {{ form.data_creazione }}
-</div>
-<div>
-Data Aggiornamento : {{ form.data_aggiornamento }}
-</div>
-<div>
-Utente che ha effettuato ultimo aggiornamento : {{ form.last_user }}
-</div>
+<small>
+    <div>
+        Data di creazione : {{ form.data_creazione|naturaltime }}
+    </div>
+    <div>
+        Data Aggiornamento : {{ form.data_aggiornamento|naturaltime }}
+    </div>
+    <div>
+        Utente che ha effettuato l'ultimo aggiornamento : {{ form.last_user }}
+    </div>
+</small>
