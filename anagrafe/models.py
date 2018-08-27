@@ -2,11 +2,6 @@
 from django.db import models
 from siw.context_processor import get_current_username
 
-# Create your models here.
-"""
-Definizione dei modelli
-"""
-
 
 class Persona(models.Model):
     """
@@ -95,7 +90,7 @@ class Persona(models.Model):
     # Data di creazione del record.
     data_creazione = models.DateTimeField(auto_now_add=True)
     # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, blank=True, default='')
+    last_user = models.CharField(max_length=80, default='')
 
     # META Class.
     class Meta:
@@ -106,6 +101,92 @@ class Persona(models.Model):
     # To String.
     def __str__(self):
         return self.cognome + ' - ' + self.nome
+
+    # Override Save.
+    # Set actual user for last_user.
+    def save(self, *args, **kwargs):
+        self.last_user = get_current_username()
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+
+class Azienda(models.Model):
+    """
+    Aziende : Anagrafica Aziende.
+
+    """
+    # Riferimenti agli altri database.
+    # Assocam Anagrafica Aziende -> Matricola Assocam
+    asc_id = models.BigIntegerField(unique=True, default=None, null=True)
+    asc_data_elemento = models.DateTimeField(null=True, blank=True)
+    asc_data_aggiornamento = models.DateTimeField(null=True, blank=True)
+
+    r2k_id = models.BigIntegerField(unique=True, default=None, null=True)      # Matricola rete 2000
+    r2k_data_elemento = models.DateTimeField(null=True, blank=True)
+    r2k_data_aggiornamento = models.DateTimeField(null=True, blank=True)
+
+    # Ragione sociale e descrizione azienda.
+    ragione_sociale = models.CharField(max_length=100)
+    descrizione = models.CharField(max_length=200, blank=True)
+
+    # Indirizzo
+    indirizzo = models.CharField(max_length=50, blank=True)
+    comune = models.CharField(max_length=50, blank=True)
+    cap = models.CharField(max_length=5, blank=True)
+    provincia = models.CharField(max_length=2, blank=True)
+    regione = models.CharField(max_length=25, blank=True)
+    stato = models.CharField(max_length=25, blank=True)
+
+    # Dati Amministrativi
+    cf = models.CharField(max_length=16, verbose_name="Codice Fiscale")
+    piva = models.CharField(max_length=16, verbose_name="Partita Iva")
+
+    # Recapiti telefonici
+    tel1 = models.CharField(max_length=30, blank=True)
+    tel2 = models.CharField(max_length=30, blank=True)
+    tel3 = models.CharField(max_length=30, blank=True)
+    tel4 = models.CharField(max_length=30, blank=True)
+    doc_tel1 = models.CharField(max_length=20, blank=True)
+    doc_tel2 = models.CharField(max_length=20, blank=True)
+    doc_tel3 = models.CharField(max_length=20, blank=True)
+    doc_tel4 = models.CharField(max_length=20, blank=True)
+
+    # Indirizzi di posta elettronica
+    mail1 = models.CharField(max_length=50, blank=True)
+    mail2 = models.CharField(max_length=50, blank=True)
+    doc_mail1 = models.CharField(max_length=20, blank=True)
+    doc_mail2 = models.CharField(max_length=20, blank=True)
+
+    # Sito Web
+    sito_web = models.CharField(max_length=50, blank=True)
+    hashragionesociale = models.CharField(max_length=100)
+
+    # Privacy
+    accetta_promozioni = models.BooleanField(default=True)
+
+    # Campo note
+    note = models.TextField(blank=True, verbose_name='Eventuali note')
+
+    """
+        Campi per la gestione di sistema.
+    """
+    # Il record è ancora in uso ?
+    in_uso = models.BooleanField(db_index=True, default=True, verbose_name="Il record è tutt'ora in uso ?")
+    # Data di aggiornamento del record.
+    data_aggiornamento = models.DateTimeField(auto_now=True)
+    # Data di creazione del record.
+    data_creazione = models.DateTimeField(auto_now_add=True)
+    # Utente che ha apportato l'ultima modifica.
+    last_user = models.CharField(max_length=80, default='')
+
+    # META Class.
+    class Meta:
+        verbose_name = "Azienda"
+        verbose_name_plural = "Aziende"
+        ordering = ['ragione_sociale']
+
+    # To String.
+    def __str__(self):
+        return self.ragione_sociale
 
     # Override Save.
     # Set actual user for last_user.

@@ -1,6 +1,6 @@
 # encoding=utf-8
 from django.urls import path
-from .views import vista1
+from .views import allinea_persone_view, allinea_aziende_view
 
 app_name = 'anagrafe'
 
@@ -10,6 +10,6 @@ app_name = 'anagrafe'
     l'url senza slash.
 """
 urlpatterns = [
-    path('', vista1, name="home"),
-    path('1/', vista1, name="v1"),
+    path('aggiorna/persone/', allinea_persone_view, name="allinea-persone"),
+    path('aggiorna/aziende/', allinea_aziende_view, name="allinea-aziende"),
 ]
