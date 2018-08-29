@@ -142,46 +142,83 @@ def _compila_e_salva_record_persona_in_azienda(persona_asc, persona, persona_in_
     persona_in_azienda.save()
 
 
-def _compila_e_salva_record_contatto_azienda_come_persona(persona_asc, persona=None):
+def _salva_contatto_azienda(persona_in_azienda_asc, persona):
+    try:
+        azienda = Azienda.objects.get(asc_id=persona_in_azienda_asc['Id Azienda'])
+    except ObjectDoesNotExist:
+        raise ValueError("Aggiorna prima le Aziende !")
+
+    persona_in_azienda = PersonaInAzienda()
+
+    # Inserisce i riferimenti alla persona ed all'azienda.
+    persona_in_azienda.persona = persona
+    persona_in_azienda.azienda = azienda
+
+    # Recapiti Telefonici
+    persona_in_azienda.tel1 = persona_in_azienda_asc['Tel1'] or ''
+    persona_in_azienda.tel2 = persona_in_azienda_asc['Tel2'] or ''
+    persona_in_azienda.tel3 = persona_in_azienda_asc['Tel3'] or ''
+    persona_in_azienda.tel4 = persona_in_azienda_asc['Tel4'] or ''
+
+    persona_in_azienda.doc_tel1 = persona_in_azienda_asc['DTel1'] or ''
+    persona_in_azienda.doc_tel2 = persona_in_azienda_asc['DTel2'] or ''
+    persona_in_azienda.doc_tel3 = persona_in_azienda_asc['DTel3'] or ''
+    persona_in_azienda.doc_tel4 = persona_in_azienda_asc['DTel4'] or ''
+
+    # Posta elettronica.
+    persona_in_azienda.mail1 = persona_in_azienda_asc['Email1'] or ''
+    persona_in_azienda.mail2 = persona_in_azienda_asc['Email2'] or ''
+
+    # Note.
+    persona_in_azienda.note = persona_in_azienda_asc['Note'] or ''
+
+    # Salva il tutto.
+    persona_in_azienda.save()
+
+
+def _salva_contatto_azienda_come_persona(contatto_in_azienda_asc, persona=None):
     if not persona:
         persona = Persona()
 
     # Sezione ID - Attenzione che qui uso il campo di contatto azienda.
-    persona.asc_ca_id = persona_asc['Id Contatto']
-    persona.asc_ca_data_elemento = persona_asc['TsAggiornamento']
+    persona.asc_ca_id = contatto_in_azienda_asc['Id Contatto']
+    persona.asc_ca_data_elemento = contatto_in_azienda_asc['TsAggiornamento']
     persona.asc_ca_data_aggiornamento = datetime.datetime.now()
 
     # Dati personali
-    persona.nome = persona_asc['Nome']
-    persona.cognome = persona_asc['Cognome']
-    persona.titolo = persona_asc['Titolo'] or ''
+    persona.nome = contatto_in_azienda_asc['Nome']
+    persona.cognome = contatto_in_azienda_asc['Cognome']
+    persona.titolo = contatto_in_azienda_asc['Titolo'] or ''
 
     # Data di nascita
-    persona.data_nascita = persona_asc['Data Nascita']
+    persona.data_nascita = contatto_in_azienda_asc['Data Nascita']
 
     # Recapiti telefonici.
-    persona.tel1 = persona_asc['Tel1'] or ''
-    persona.tel2 = persona_asc['Tel2'] or ''
-    persona.tel3 = persona_asc['Tel3'] or ''
-    persona.tel4 = persona_asc['Tel4'] or ''
+    persona.tel1 = contatto_in_azienda_asc['Tel1'] or ''
+    persona.tel2 = contatto_in_azienda_asc['Tel2'] or ''
+    persona.tel3 = contatto_in_azienda_asc['Tel3'] or ''
+    persona.tel4 = contatto_in_azienda_asc['Tel4'] or ''
 
-    persona.doc_tel1 = persona_asc['DTel1'] or ''
-    persona.doc_tel2 = persona_asc['DTel2'] or ''
-    persona.doc_tel3 = persona_asc['DTel3'] or ''
-    persona.doc_tel4 = persona_asc['DTel4'] or ''
+    persona.doc_tel1 = contatto_in_azienda_asc['DTel1'] or ''
+    persona.doc_tel2 = contatto_in_azienda_asc['DTel2'] or ''
+    persona.doc_tel3 = contatto_in_azienda_asc['DTel3'] or ''
+    persona.doc_tel4 = contatto_in_azienda_asc['DTel4'] or ''
 
     # Posta elettronica.
-    persona.mail1 = persona_asc['Email1'] or ''
-    persona.mail2 = persona_asc['Email2'] or ''
+    persona.mail1 = contatto_in_azienda_asc['Email1'] or ''
+    persona.mail2 = contatto_in_azienda_asc['Email2'] or ''
 
     # Note
-    persona.note = persona_asc['Note'] or ''
+    persona.note = contatto_in_azienda_asc['Note'] or ''
 
     # Salva il record.
     persona.save()
 
 
 def _compila_e_salva_record_persona(persona_asc, persona=None):
+    """
+    Compilo la parte relativa al contatto in Azienda. Vedi oltre per le motivazioni.
+    """
     if not persona:
         persona = Persona()
 
@@ -306,7 +343,7 @@ def allinea_persone_view(request):
             _compila_e_salva_record_persona(persona_asc)
             inseriti += 1
         else:
-            if persona_asc['Data Elemento'] > persona.asc_data_elemento or True:
+            if persona_asc['Data Elemento'] > persona.asc_data_elemento:
                 _compila_e_salva_record_persona(persona_asc, persona)
                 aggiornati += 1
 
@@ -318,7 +355,7 @@ def allinea_persone_view(request):
             count = 0
 
     # Compongo la risposta.
-    return HttpResponse(f"Allineate Persone !, aggiornati : {aggiornati}, inseriti : {inseriti}")
+    return HttpResponse(f"Allineate Persone !, processati : {totali}, aggiornati : {aggiornati}, inseriti : {inseriti}")
 
 
 def allinea_aziende_view(request):
@@ -347,25 +384,28 @@ def allinea_aziende_view(request):
             count = 0
 
     # Compongo la risposta.
-    return HttpResponse(f"Allineate Aziende !, aggiornate : {aggiornati}, inserite : {inseriti}")
+    return HttpResponse(f"Allineate Aziende !, processate : {totali}, aggiornate : {aggiornati}, inserite : {inseriti}")
 
 
 def allinea_contatti_aziende_view(request):
     # Vado a leggere gli elementi dal data base SQL Server.
     # query = "SELECT * from [Assocam].[dbo].[Anagrafica Persone] "
-    persone_asc = sqlserverinterface(QUERY_SELECT_CONTATTI_AZIENDE)
+    contatti_in_azienda_asc = sqlserverinterface(QUERY_SELECT_CONTATTI_AZIENDE)
 
     count = totali = aggiornati = inseriti = 0
     print("Si parte !")
-    for persona_asc in persone_asc:
+    for contatto_in_azienda_asc in contatti_in_azienda_asc:
         try:
-            persona = Persona.objects.get(asc_ca_id=persona_asc['Id Contatto'])
+            persona = Persona.objects.get(asc_ca_id=contatto_in_azienda_asc['Id Contatto'])
         except ObjectDoesNotExist:
-            _compila_e_salva_record_contatto_azienda_come_persona(persona_asc)
+            _salva_contatto_azienda_come_persona(contatto_in_azienda_asc)
+            persona = Persona.objects.get(asc_ca_id=contatto_in_azienda_asc['Id Contatto'])
+            _salva_contatto_azienda(contatto_in_azienda_asc, persona)
             inseriti += 1
         else:
-            if persona_asc['TsAggiornamento'] > persona.asc_ca_data_elemento:
-                _compila_e_salva_record_contatto_azienda_come_persona(persona_asc, persona)
+            if contatto_in_azienda_asc['TsAggiornamento'] > persona.asc_ca_data_elemento:
+                _salva_contatto_azienda_come_persona(contatto_in_azienda_asc, persona)
+                _salva_contatto_azienda(contatto_in_azienda_asc, persona)
                 aggiornati += 1
 
         count = count + 1
@@ -376,4 +416,4 @@ def allinea_contatti_aziende_view(request):
             count = 0
 
     # Compongo la risposta.
-    return HttpResponse(f"Allineato Contatti Aziende !, aggiornati : {aggiornati}, inseriti : {inseriti}")
+    return HttpResponse(f"Allineato Contatti Aziende !, processati : {totali}, aggiornati : {aggiornati}, inseriti : {inseriti}")
