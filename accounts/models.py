@@ -1,31 +1,61 @@
 # coding=utf-8
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
 class SiwPermessi(object):
     """
     Helper Class per la definizione dei Permessi in modo centrale ed univoco.
-    Ogni permesso DEVE iniziare con una maiuscola per essere poi compreso come tale.
+    Ogni nome di permesso DEVE iniziare con una maiuscola per essere poi compreso come tale nella funzione che lo
+    trasforma in dizionario.
     """
     STAMPE_MDL = 'stampe_mdl'
-    
+
+    """
+    Sezione Amministrazione
+    """
+    AMM_CDC_READ = 'amm_cdc_read'
+
+    """
+    Collaboratori
+    """
+    COLLABORATORI_LISTA_READ = 'coll_lista_view'
+    COLLABORATORE_MOSTRA = 'coll_mostra_view'
+    COLLABORATORE_INSERISCE = 'coll_inserisce_view'
+    COLLABORATORE_MODIFICA = 'coll_modifica_view'
+
+    """
+    Sezione Menù. Al momento uso un permesso per mostrare o meno le voci di menù così che sia possibile avere
+    accesso ad una pagina anche se non ho il menù visualizzato in quanto i permessi saranno diversi.
+    TODO : Da verificare se questa impostazione può o meno funzionare in generale e se non crea più problemi di quanti
+    ne risolve nel mismatch tra permessi sulle viste e permessi per i menù
+    """
+    MENU_AMM = 'menu_amm'
+    MENU_AMM_CDC = 'menu_cdc'
+    MENU_COLLABORATORI = 'menu_collaboratori'
+    MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
+
     @staticmethod
     def as_dict():
+        # Trasforma in dizionario dei permessi tutte le variabili nella radice della Classe se iniziano con una
+        # maiuscola.
         const = dict()
         for key, value in SiwPermessi.__dict__.items():
             if key[0].isupper():
                 const[key] = value
         return const
-    
-    
+
+
 class SiwRuoli(object):
     """
     Helper Classe per la definizione dei Ruoli in modo centrale ed univoco.
     """
     MDL = {SiwPermessi.STAMPE_MDL}
+    AMM = {SiwPermessi.AMM_CDC_READ, SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_CDC}
+    COLL = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_MOSTRA,
+            SiwPermessi.COLLABORATORE_INSERISCE, SiwPermessi.COLLABORATORE_MODIFICA}
     
 
 class Profile(models.Model):

@@ -1,0 +1,18 @@
+<strong>{{ persona.cognome }} {{ persona.nome }}</strong> può essere inserito come collaboratore.
+<br><br>
+Per procedere all'inserimento dei dati premere il pulsante qui sotto
+<br><br>
+
+<div align="center">
+<br>
+
+    <a href={% url 'collaboratori:inserisce_nuovo' persona.pk %} id='nuovo_collaboratore'>Inserisci Collaboratore</a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Create a jqxLinkButton widget.
+        $("#nuovo_collaboratore").jqxLinkButton({ width: '200', height: '30'});
+    });
+</script>
+

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load si_template_tags %}
+
+{% block title %}Mostra Collaboratore{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+<br>
+{% if user|can:siwperms.COLLABORATORE_MODIFICA %}
+    <div align="right">
+      <a href="{% url 'collaboratori:modifica_esistente' collaboratore.pk %}">
+        <span class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue"></span>Modifica
+      </a>
+    </div>
+{% endif %}
+<br>
+<table border="1" width="100%">
+    <tr>
+        <td colspan="2">Dettagli Collaboratore
+    </tr>
+    <tr>
+        <td colspan="2">Cognome e nome : <strong>{{ collaboratore.persona.cognome }}, {{ collaboratore.persona.nome }}</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2"><strong>Recapiti Telefonici</strong></td>
+    </tr>
+    <tr>
+        <td width="50%">{% descrizione_e_valore collaboratore.doc_tel1 collaboratore.tel1 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_tel2 collaboratore.tel2 %}</td>
+    </tr>
+    <tr>
+        <td>{% descrizione_e_valore collaboratore.doc_tel3 collaboratore.tel3 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_tel4 collaboratore.tel4 %}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><strong>Indirizzi mail</strong></td>
+    </tr>
+    <tr>
+        <td>{% descrizione_e_valore collaboratore.doc_mail1 collaboratore.mail1 %}</td>
+        <td>{% descrizione_e_valore collaboratore.doc_mail2 collaboratore.mail2 %}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><strong>Note</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2">{{ collaboratore.note }}</td>
+    </tr>
+</table>
+
+{% include "includes/form_systemdata.html" with form=collaboratore %}
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

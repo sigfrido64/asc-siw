@@ -1,0 +1,40 @@
+Virtualenv
+
+Il virtualenv lo voglio allo stesso livello di .idea di PyCharm
+
+Per installare uso il comando :
+
+python -m venv venv
+
+Il - m venv sta per : installare il modulo venv
+il venv che viene dopo gli dice il nome della cartella in cui voglio che sia creato. Ovviamente, come al solito,
+la mia fantasia fa schifo !
+
+
+- Pacchetti che ho installato per lavorare.
+
+django : manco a dirlo
+pipdeptree : per vedere le dipendenze dai pacchetti che installo.
+python-decouple : per avere la separazione delle variabili delle varie configurazioni che uso.
+unipath : per la gestione dei path nei diversi ambienti di lavoro (Windows o Linux).
+dj-database-url : usato con decouple per accedere ai database con il loro url senza fare casini.
+django-widget-tweaks : Usato in alcune parti di login in account. Preso da simpleisbetterthancomplex.
+django-import-export : per la parte di import/export in files di vario tipo
+django-markdown : Serve ? Al momento non sembra perchè usato solo in boards
+pyodbc : Collegamento a quella merda di SQL Server !
+docxtpl : Per la stampa unione con i documenti word.
+django-cprofile-middleware : Middleware per il profiling delle viste
+selenium : Per la parte dei test funzionali.
+
+
+Dopo aver creato il venv installo i pacchetti con 'pip install -r requirements.txt'
+
+i pacchetti Python sono spesso legati alle applicazioni windows su macchine windows per cui ho dovuto anche installare
+
+1) Visual Studio 2017 Build Tools per avere tutti i comandi per compilare e linkare programmi sotto windows. Usato dal
+    pacchetto 'cffi'
+2) OpenSSL da sourceforge per la parte di 'criptography'
+
+
+ATTENZIONE CHE le vecchie versioni dei pacchetti qui non sono riuscito ad installarle. Ho aggiornato alcuni pacchetti.
+Adesso vediamo che succede !

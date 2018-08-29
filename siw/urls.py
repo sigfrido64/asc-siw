@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from boards import views
+# from boards import views
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
 from accounts.forms import LoginForm, MyPasswordResetForm, MySetPasswordForm, MyPasswordChangeForm
@@ -39,7 +39,9 @@ urlpatterns = [
     # il prefisso accounts: che non viene recepito nelle viste di sistema.
     # Quindi anche se è una schifezza a livello di refactoring lo lascio qui.
     #
+    #
     # Reset della password
+    #
     path('reset/done/',
          auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'),
          name='password_reset_done'),
@@ -54,10 +56,14 @@ urlpatterns = [
          form_class=MyPasswordResetForm, email_template_name='accounts/password_reset_email.html',
          subject_template_name='accounts/password_reset_subject.txt'), name='password_reset'),
     
+    #
     # Registrazione dell'utente.
+    #
     path('signup/', accounts_views.signup, name='signup', ),
     
+    #
     # Dati utente.
+    #
     re_path(r'^settings/account/$', accounts_views.UserUpdateView.as_view(template_name='accounts/my_account.html'),
             name='my_account'),
     re_path(r'^settings/password/$',
@@ -67,19 +73,31 @@ urlpatterns = [
     re_path(r'^settings/password/done/$',
             auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),
             name='password_change_done'),
-    
     #
     # Inclusione app 'attesta'.
     #
     path('attesta/', include('attesta.urls', 'attesta')),
-        
-    re_path(r'^boards/(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
-    re_path(r'^boards/(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
-    re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
-        views.PostUpdateView.as_view(), name='edit_post')
+
+    #
+    # Inclusione app 'amm'.
+    #
+    path('amm/', include('amm.urls', 'amm')),
+    path('anagrafe/', include('anagrafe.urls', 'anagrafe')),
+    path('collaboratori/', include('collaboratori.urls', 'collaboratori')),
 ]
 
-
+"""
 # path('', views.BoardListView.as_view(), name='home'),
+
+
+#
+# TODO : Vecchi path che probabilmente posso eliminare !
+#
+re_path(r'^boards/(?P<pk>\d+)/$', views.TopicListView.as_view(), name='board_topics'),
+re_path(r'^boards/(?P<pk>\d+)/new/$', views.new_topic, name='new_topic'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.PostListView.as_view(), name='topic_posts'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
+re_path(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
+        views.PostUpdateView.as_view(), name='edit_post')
+
+"""

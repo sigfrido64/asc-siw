@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Collaboratori{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% block content %}
+<br>
+{% if user|can:siwperms.COLLABORATORE_INSERISCE %}
+    <div align="right">
+      <a href="{% url 'collaboratori:propone-inserimento-collaboratore' %}">
+        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
+      </a>
+    </div>
+{% endif %}
+<br>
+
+<table style="width:100%" border="1">
+  <thead>
+    <tr>
+      <th>Cognome</th>
+      <th>Nome</th>
+      <th>Dettagli</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for collaboratore in collaboratori %}
+    <tr>
+      <td>{{ collaboratore.persona.cognome }}</td>
+      <td>{{ collaboratore.persona.nome }}</td>
+      <td>
+        {% if user|can:siwperms.COLLABORATORE_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
+          <a href="{% url 'collaboratori:mostra_collaboratore' collaboratore.pk %}">
+            <span class="fa fa-id-card" aria-hidden="true"></span>
+          </a>
+        {% else %}
+          <i class="fa fa-id-card" aria-hidden="true"></i>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

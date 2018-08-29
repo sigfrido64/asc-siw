@@ -1,0 +1,19 @@
+Python Zen !
+    Bello è meglio che brutto.
+    Esplicito è meglio di implicito.
+    Semplice è meglio che complesso.
+    Complesso è meglio di complicato.
+    Lineare è meglio che nidificato.
+    Sparso è meglio di denso.
+    La leggibilità conta.
+    I casi speciali non sono abbastanza speciali per infrangere le regole.
+    Anche se la praticità batte la purezza.
+    Gli errori non dovrebbero mai essere ignorati.A meno che non vengano esplicitamente messi a tacere.
+    In caso di ambiguità, rifiuta la tentazione di indovinare.
+    Ci dovrebbe essere un modo ovvio, e preferibilmente uno solo, di fare le cose.
+    Anche se questo modo potrebbe non essere ovvio da subito, a meno che non siate olandesi.
+    Ora è meglio che mai.
+    Sebbene mai sia spesso meglio che proprio adesso.
+    Se l’implementazione è difficile da spiegare, l’idea è pessima.
+    Se l’implementazione facile da spiegare, idea può essere buona.
+    I namespace sono una grandissima idea, usiamoli il più possibile!

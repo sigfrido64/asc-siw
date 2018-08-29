@@ -47,11 +47,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',  # <- here
+    'django.contrib.humanize',
     'widget_tweaks',
-    'boards',
+    'import_export',
     'accounts',
-    'attesta'
+    'attesta',
+    'amm',
+    'anagrafe',
+    'collaboratori',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'siw.context_processor.si_middleware',
+    'django_cprofile_middleware.middleware.ProfilerMiddleware',
 ]
 
 ROOT_URLCONF = 'siw.urls'
@@ -202,3 +206,8 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 # Pagina di Login.
 #
 LOGIN_URL = 'login'
+
+#
+# Settaggi specifici per Django import-export che garantiscono l'incapsulamento delle operazioni.
+#
+IMPORT_EXPORT_USE_TRANSACTIONS = True

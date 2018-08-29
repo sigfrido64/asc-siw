@@ -15,3 +15,36 @@ div.breadcrumbs {
     color: #c4dce8;
     text-align: left;
 }
+
+.errorlist {
+    color: red;
+    font-size: 12px;
+}
+
+.siw-form-control-invalid {
+    border : red;
+}
+
+.siw-form-control-valid {
+    border : green;
+}
+
+.siw-alert-danger {
+    color: white;
+    background-color: red;
+    border-color: darkred;
+}
+
+.siw-alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.img-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

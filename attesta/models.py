@@ -1,9 +1,7 @@
 # coding=utf-8
-__author__ = "Pilone Ing. Sigfrido"
 from django.db import models
 from operator import itemgetter
-
-# Create your models here.
+__author__ = "Pilone Ing. Sigfrido"
 
 
 class Report(models.Model):
