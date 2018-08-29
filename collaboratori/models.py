@@ -144,6 +144,10 @@ class Dipendente(models.Model):
     # Campo note
     note = models.TextField(blank=True, verbose_name='Eventuali note')
 
+    # Campi relativi all'inizio ed alla fine del rapporto di lavoro.
+    data_inizio_collaborazione = models.DateField()
+    data_fine_collaborazione = models.DateField(null=True, default=None, blank=True)
+
     """
         Campi per la gestione di sistema.
     """
