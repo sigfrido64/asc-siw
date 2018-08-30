@@ -2,12 +2,12 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from anagrafe.models import Persona
-from siw.context_processor import get_current_username
+from siw.siwmodels import SiwGeneralModel
 
 # Create your models here.
 
 
-class Collaboratore(models.Model):
+class Collaboratore(SiwGeneralModel):
     """
     Sono le schede dei vari collaboratori della Scuola.
 
@@ -34,18 +34,6 @@ class Collaboratore(models.Model):
     # Campo note
     note = models.TextField(blank=True, verbose_name='Eventuali note')
 
-    """
-        Campi per la gestione di sistema.
-    """
-    # Il record è ancora in uso ?
-    in_uso = models.BooleanField(db_index=True, default=True, help_text="Il collaboratore è tutt'ora attivo ?")
-    # Data di aggiornamento del record.
-    data_aggiornamento = models.DateTimeField(auto_now=True)
-    # Data di creazione del record.
-    data_creazione = models.DateTimeField(auto_now_add=True)
-    # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, blank=True, default='')
-
     # META Class.
     class Meta:
         verbose_name = "Collaboratore"
@@ -54,12 +42,6 @@ class Collaboratore(models.Model):
     # To String.
     def __str__(self):
         return self.persona.cognome + ' - ' + self.persona.nome
-
-    # Override Save.
-    # Set actual user for last_user.
-    def save(self, *args, **kwargs):
-        self.last_user = get_current_username()
-        super().save(*args, **kwargs)  # Call the "real" save() method.
 
     # Custon Check fields.
     def clean(self):
@@ -87,7 +69,7 @@ class Collaboratore(models.Model):
             raise ValidationError({'doc_mail2': 'Il tipo di mail non è stato definito.'})
 
 
-class Dipendente(models.Model):
+class Dipendente(SiwGeneralModel):
     """
     Dipendenti della Scuola.
     """
@@ -148,18 +130,6 @@ class Dipendente(models.Model):
     data_inizio_collaborazione = models.DateField()
     data_fine_collaborazione = models.DateField(null=True, default=None, blank=True)
 
-    """
-        Campi per la gestione di sistema.
-    """
-    # Il record è ancora in uso ?
-    in_uso = models.BooleanField(db_index=True, default=True, verbose_name="Il record è tutt'ora in uso ?")
-    # Data di aggiornamento del record.
-    data_aggiornamento = models.DateTimeField(auto_now=True)
-    # Data di creazione del record.
-    data_creazione = models.DateTimeField(auto_now_add=True)
-    # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, default='')
-
     # META Class.
     class Meta:
         verbose_name = "Dipendente"
@@ -169,9 +139,3 @@ class Dipendente(models.Model):
     # To String.
     def __str__(self):
         return self.cognome + ' - ' + self.nome
-
-    # Override Save.
-    # Set actual user for last_user.
-    def save(self, *args, **kwargs):
-        self.last_user = get_current_username()
-        super().save(*args, **kwargs)  # Call the "real" save() method.
