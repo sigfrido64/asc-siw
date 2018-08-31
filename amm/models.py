@@ -2,10 +2,11 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from siw.context_processor import get_current_username
+from siw.siwmodels import SiwGeneralModel
 __author__ = "Pilone Ing. Sigfrido"
 
 
-class Iniziativa(models.Model):
+class Iniziativa(SiwGeneralModel):
     """
     Definizione delle iniziative
     """
@@ -22,21 +23,11 @@ class Iniziativa(models.Model):
     
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
-    """
-        Campi per la gestione di sistema.
-    """
-    # Il record è ancora in uso ?
-    in_uso = models.BooleanField(db_index=True, default=True, verbose_name="Il record è tutt'ora in uso ?")
     # Data da cui parto a considerare valido il record.
     valido_dal = models.DateField(verbose_name="Data di inizio validità")
     # Data in cui il record cessa di essere valido.
     valido_al = models.DateField(verbose_name="Data di fine validità")
     # Data di aggiornamento del record.
-    data_aggiornamento = models.DateTimeField(auto_now=True)
-    # Data di creazione del record.
-    data_creazione = models.DateTimeField(auto_now_add=True)
-    # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, blank=True, default='')
 
     # META Class.
     class Meta:
@@ -48,15 +39,8 @@ class Iniziativa(models.Model):
     def __str__(self):
         return self.nome + ' - ' + self.descrizione
 
-    # Override Save.
-    # Set actual user for last_user.
-    def save(self, *args, **kwargs):
-        self.last_user = get_current_username()
-        print('user : ' + get_current_username())
-        super().save(*args, **kwargs)  # Call the "real" save() method.
 
-
-class Progetto(models.Model):
+class Progetto(SiwGeneralModel):
     """
     Definizione di un progetto
     """
@@ -73,21 +57,10 @@ class Progetto(models.Model):
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
-    """
-        Campi per la gestione di sistema.
-    """
-    # Il record è ancora in uso ?
-    in_uso = models.BooleanField(db_index=True, default=True, verbose_name="Il record è tutt'ora in uso ?")
     # Data da cui parto a considerare valido il record.
     valido_dal = models.DateField(verbose_name="Data di inizio validità")
     # Data in cui il record cessa di essere valido.
     valido_al = models.DateField(verbose_name="Data di fine validità")
-    # Data di aggiornamento del record.
-    data_aggiornamento = models.DateTimeField(auto_now=True)
-    # Data di creazione del record.
-    data_creazione = models.DateTimeField(auto_now_add=True)
-    # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, blank=True, default='')
 
     # META Class.
     class Meta:
@@ -99,15 +72,8 @@ class Progetto(models.Model):
     def __str__(self):
         return self.iniziativa.nome + ' = > ' + self.nome + ' - ' + self.descrizione
 
-    # Override Save.
-    # Set actual user for last_user.
-    def save(self, *args, **kwargs):
-        self.last_user = get_current_username()
-        print('user : ' + get_current_username())
-        super().save(*args, **kwargs)  # Call the "real" save() method.
 
-
-class SottoProgetto(models.Model):
+class SottoProgetto(SiwGeneralModel):
     """
     Definizione di un sotto-progetto
     """
@@ -124,21 +90,10 @@ class SottoProgetto(models.Model):
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
-    """
-        Campi per la gestione di sistema.
-    """
-    # Il record è ancora in uso ?
-    in_uso = models.BooleanField(db_index=True, default=True, verbose_name="Il record è tutt'ora in uso ?")
     # Data da cui parto a considerare valido il record.
     valido_dal = models.DateField(verbose_name="Data di inizio validità")
     # Data in cui il record cessa di essere valido.
     valido_al = models.DateField(verbose_name="Data di fine validità")
-    # Data di aggiornamento del record.
-    data_aggiornamento = models.DateTimeField(auto_now=True)
-    # Data di creazione del record.
-    data_creazione = models.DateTimeField(auto_now_add=True)
-    # Utente che ha apportato l'ultima modifica.
-    last_user = models.CharField(max_length=80, blank=True, default='')
 
     # META Class.
     class Meta:
@@ -150,10 +105,3 @@ class SottoProgetto(models.Model):
     def __str__(self):
         return self.progetto.iniziativa.nome + ' - > ' + self.progetto.nome + ' => ' + \
                self.nome + ' - ' + self.descrizione
-
-    # Override Save.
-    # Set actual user for last_user.
-    def save(self, *args, **kwargs):
-        self.last_user = get_current_username()
-        print('user : ' + get_current_username())
-        super().save(*args, **kwargs)  # Call the "real" save() method.
