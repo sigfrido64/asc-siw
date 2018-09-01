@@ -1,9 +1,29 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.validators import MinLengthValidator
-from siw.context_processor import get_current_username
 from siw.siwmodels import SiwGeneralModel
+from collaboratori.models import Collaboratore
+from anagrafe.models import PersonaInAzienda
 __author__ = "Pilone Ing. Sigfrido"
+
+
+class IncarichiExtension(models.Model):
+    """
+            Campi per la gestione di sistema.
+    """
+    # Data da cui parto a considerare valido il record.
+    valido_dal = models.DateField(verbose_name="Data di inizio validità")
+    # Data in cui il record cessa di essere valido.
+    valido_al = models.DateField(verbose_name="Data di fine validità")
+
+    class Meta:
+        abstract = True
+
+    def incaricabile(self, data_inizio_incarico, data_fine_incarico):
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def costo_azienda(self, lista_pagamenti):
+        raise NotImplementedError("La classe deve definire questo metodo !")
 
 
 class Iniziativa(SiwGeneralModel):
@@ -105,3 +125,91 @@ class SottoProgetto(SiwGeneralModel):
     def __str__(self):
         return self.progetto.iniziativa.nome + ' - > ' + self.progetto.nome + ' => ' + \
                self.nome + ' - ' + self.descrizione
+
+
+class Occasionale(SiwGeneralModel, IncarichiExtension):
+    """
+    Definizione degli elementi amministrativi per i collaboratori occasionali.
+    """
+    collaboratore = models.OneToOneField(Collaboratore, on_delete=models.PROTECT)
+    documenti_consegnati = models.BooleanField(default=False)
+
+    note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
+
+    class Meta:
+        verbose_name = "Collaborazione Occasionale"
+        verbose_name_plural = "Collaborazioni Occasionali"
+
+    def incaricabile(self, data_inizio_incarico, data_fine_incarico):
+        """
+        devo dire se il collaboratore 
+        :param data_inizio_incarico:
+        :param data_fine_incarico:
+        :return:
+        """
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def costo_azienda(self, lista_pagamenti):
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def __str__(self):
+        return self.collaboratore.persona.cognome + ' - ' + self.collaboratore.persona.nome
+
+
+class Parasubordinato(SiwGeneralModel, IncarichiExtension):
+    """
+    Definizione degli elementi amministrativi per i collaboratori occasionali.
+    """
+    collaboratore = models.ForeignKey(Collaboratore, on_delete=models.PROTECT)
+    documenti_consegnati = models.BooleanField(default=False)
+
+    note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
+
+    class Meta:
+        verbose_name = "Collaborazione CoCoCo"
+        verbose_name_plural = "Collaborazioni CoCoCo"
+
+    def incaricabile(self, data_inizio_incarico, data_fine_incarico):
+        """
+        devo dire se il collaboratore
+        :param data_inizio_incarico:
+        :param data_fine_incarico:
+        :return:
+        """
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def costo_azienda(self, lista_pagamenti):
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def __str__(self):
+        return self.collaboratore.persona.cognome + ' - ' + self.collaboratore.persona.nome
+
+
+class Autonomo(SiwGeneralModel, IncarichiExtension):
+    """
+    Definizione degli elementi amministrativi per i collaboratori occasionali.
+    """
+    collaboratore = models.ForeignKey(Collaboratore, on_delete=models.PROTECT)
+    personainazienda = models.ForeignKey(PersonaInAzienda, on_delete=models.PROTECT)
+    documenti_consegnati = models.BooleanField(default=False)
+
+    note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
+
+    class Meta:
+        verbose_name = "Collaborazione Autonoma"
+        verbose_name_plural = "Collaborazioni Autonome"
+
+    def incaricabile(self, data_inizio_incarico, data_fine_incarico):
+        """
+        devo dire se il collaboratore
+        :param data_inizio_incarico:
+        :param data_fine_incarico:
+        :return:
+        """
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def costo_azienda(self, lista_pagamenti):
+        raise NotImplementedError("La classe deve definire questo metodo !")
+
+    def __str__(self):
+        return self.collaboratore.persona.cognome + ' - ' + self.collaboratore.persona.nome
