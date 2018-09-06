@@ -35,7 +35,6 @@ class Corso(SiwGeneralModel):
     codice_edizione = models.CharField(primary_key=True, max_length=10)
     denominazione = models.CharField(max_length=150)
     durata = models.IntegerField(default=8)
-    ordine_produzione = models.ForeignKey(OrdineProduzione, on_delete=models.PROTECT)
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
