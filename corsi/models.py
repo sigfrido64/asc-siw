@@ -1,9 +1,7 @@
 # coding=utf-8
-import datetime
 from django.db import models
-from django.core.exceptions import ValidationError
 from siw.siwmodels import SiwGeneralModel
-from amm.models import Iniziativa, Progetto, SottoProgetto
+from amm.models import CentroDiCosto
 
 
 class OrdineProduzione(SiwGeneralModel):
@@ -13,9 +11,7 @@ class OrdineProduzione(SiwGeneralModel):
     numero_ordine = models.CharField(max_length=10, unique=True)
 
     # Almeno uno di loro deve essere valorizzato !
-    iniziativa = models.ForeignKey(Iniziativa, on_delete=models.PROTECT, blank=True, null=True)
-    progetto = models.ForeignKey(Progetto, on_delete=models.PROTECT, blank=True, null=True)
-    sottoprogetto = models.ForeignKey(SottoProgetto, on_delete=models.PROTECT, blank=True, null=True)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT, blank=True, null=True)
 
     data_inizio = models.DateField()
     data_inizio_annodoy = models.IntegerField(default=0)
@@ -29,10 +25,7 @@ class OrdineProduzione(SiwGeneralModel):
 
     # Custon Check fields.
     def clean(self):
-        raise NotImplementedError("Devo garantire che almeno uno sia valorizzato tra i tre qui sotto !")
-        # Devo valorizzare almeno uno tra : iniziativa, progetto, sottoprogetto !
-        if any(v is not None for v in [[self.iniziativa, self.progetto, self.sottoprogetto]]):
-            raise ValidationError("Deve essere definito una tra : Iniziativa, Progetto o Sotto-Progetto !")
+        raise NotImplementedError("E qui cosa devo controllare ?")
 
 
 class Corso(SiwGeneralModel):
