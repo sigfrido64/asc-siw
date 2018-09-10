@@ -119,6 +119,8 @@ class Collaboratore(SiwGeneralModel):
 
     # Custon Check fields.
     def clean(self):
+        # TODO se è dipendente non posso inserirlo diversamente e viceversa. Almeno uno dei due deve essere
+        # valorizzato.
         # raise ValidationError({'tel3': 'Questo invece è una merda !.'})
         # Devo avere almeno un telefono ed una mail per anagrafare un collaboratore.
         telefoni = self.tel1 + self.tel2 + self.tel3 + self.tel4

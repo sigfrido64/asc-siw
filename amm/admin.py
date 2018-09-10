@@ -1,8 +1,8 @@
 # coding=utf-8
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import CentroDiCosto
-from .models import Occasionale, Parasubordinato, Autonomo
+from .models.centri_di_costo import CentroDiCosto
+from .models.anagrafe_amministrativa_collaboratori import Occasionale, Parasubordinato, Autonomo
 
 __author__ = "Pilone Ing. Sigfrido"
 

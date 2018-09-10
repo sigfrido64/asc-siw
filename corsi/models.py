@@ -1,7 +1,7 @@
 # coding=utf-8
 from django.db import models
 from siw.siwmodels import SiwGeneralModel
-from amm.models import CentroDiCosto
+from amm.models.centri_di_costo import CentroDiCosto
 
 
 def date_to_int(data):
@@ -33,23 +33,26 @@ class OrdineProduzione(SiwGeneralModel):
 
 
 class Corso(SiwGeneralModel):
-    """
-    Definizione del corso
-    TODO Devo definire degli stati per permettere di gestire il catalogo, la bozza, e poi il corso vero e proprio
-    con un relativo stato.
+    BOZZA = 0
+    IN_SVOLGIMENTO = 1
+    TERMINATO = 2
+    CHIUSO = 3
+    STATO_CORSO_CHOICES = (
+        (BOZZA, 'Bozza'),
+        (IN_SVOLGIMENTO, 'In Svolgimento'),
+        (TERMINATO, 'Terminato'),
+        (CHIUSO, 'Chiuso')
+    )
 
-    annodoy lo devo scrivere quando salvo
-    in admin
-    deve essere visualizzato ma di sola lettura.
-    """
     codice_edizione = models.CharField(primary_key=True, max_length=10)
     denominazione = models.CharField(max_length=150)
-    durata = models.IntegerField(default=8)
+    durata = models.FloatField(default=8)
     cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT, blank=True, null=True)
+    stato_corso = models.IntegerField(choices=STATO_CORSO_CHOICES, default=BOZZA)
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
-    # Campi compilati durante il salvataggio.
+    # Date di inizio e fine corso.
     data_inizio = models.DateField()
     data_inizio_annodoy = models.IntegerField(default=0)
     data_fine = models.DateField()

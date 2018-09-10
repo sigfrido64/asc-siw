@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
-from .models import CentroDiCosto
+from .models.centri_di_costo import CentroDiCosto
 
 
 @has_permission_decorator(SiwPermessi.AMM_CDC_READ)
