@@ -4,6 +4,10 @@ from siw.siwmodels import SiwGeneralModel
 from amm.models import CentroDiCosto
 
 
+def date_to_int(data):
+    return data.year * 1000 + data.timetuple().tm_yday
+
+
 class OrdineProduzione(SiwGeneralModel):
     """
     Definisce l'ordine di produzione per i corsi.
@@ -31,10 +35,17 @@ class OrdineProduzione(SiwGeneralModel):
 class Corso(SiwGeneralModel):
     """
     Definizione del corso
+    TODO Devo definire degli stati per permettere di gestire il catalogo, la bozza, e poi il corso vero e proprio
+    con un relativo stato.
+
+    annodoy lo devo scrivere quando salvo
+    in admin
+    deve essere visualizzato ma di sola lettura.
     """
     codice_edizione = models.CharField(primary_key=True, max_length=10)
     denominazione = models.CharField(max_length=150)
     durata = models.IntegerField(default=8)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT, blank=True, null=True)
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
@@ -49,12 +60,12 @@ class Corso(SiwGeneralModel):
         verbose_name = "Corso"
         verbose_name_plural = "Corsi"
 
+    def __str__(self):
+        return self.codice_edizione + ' - ' + self.denominazione
+
     # Override Save.
-    # Set annodoy per data_inizio e data_fine
     def save(self, *args, **kwargs):
-        day_of_year = self.data_inizio.year * 1000 + self.data_inizio.timetuple().tm_yday
-        print("Mi è venuto fuori questo : ", day_of_year)
-        print("Mentre il monotono è : ", self.data_inizio.monotonic())
-        self.data_inizio_annodoy = self.data_inizio
-        raise NotADirectoryError("Devi finire di implementare il save qui !")
+        # Aggiorna ad "anno + numero del giorno da gennaio" che mi è utile per poi semplificare le query
+        self.data_inizio_annodoy = date_to_int(self.data_inizio)
+        self.data_fine_annodoy = date_to_int(self.data_fine)
         super().save(*args, **kwargs)

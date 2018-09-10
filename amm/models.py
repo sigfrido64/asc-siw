@@ -89,8 +89,9 @@ class CentroDiCosto(SiwGeneralModel):
         return root + ' > ' + self.nome + ' - ' + self.descrizione
 
     # Custon Check fields.
+    # TODO qui è da decidere cosa devo contrallare quando devo salvare un centro di costo.
     def clean(self):
-        raise NotImplementedError("E qui cosa devo controllare ?")
+        pass
 
 
 class Occasionale(SiwGeneralModel, IncarichiExtension):
