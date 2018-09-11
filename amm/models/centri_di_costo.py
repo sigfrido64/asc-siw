@@ -1,11 +1,9 @@
 # coding=utf-8
 from django.db import models
 from django.core.validators import MinLengthValidator
+from django.core.exceptions import ValidationError
 
 from siw.siwmodels import SiwGeneralModel
-from collaboratori.models import Collaboratore
-from anagrafe.models import PersonaInAzienda
-
 
 __author__ = "Pilone Ing. Sigfrido"
 
@@ -14,6 +12,9 @@ class CentroDiCosto(SiwGeneralModel):
     """
     Definizione dei centri di costo.
     TODO
+
+    devo prevedere una rappresentazione "umana" anche in interfaccia admin altrimenti mi posso scordare aiuto da
+    chiunque.
 
     Le date di inizio e fine validità devono stare entro quelle della radice. Possono essere minori ma non maggiori.
     Di default posso proporre quelle nella vista della creazione quando ci sarà.
@@ -33,7 +34,11 @@ class CentroDiCosto(SiwGeneralModel):
 
     Il controllo treeview permette di aggiungere elementi in modo semplice sotto un certo nodo ?
     """
-    # Riferimenti al parent ed alla radice e se lui stesso è una radice.
+    """
+        Riferimenti al parent ed alla radice e se lui stesso è una radice.
+        root : Mi serve per semplificare la ricerca di tutte le iniziative di un anno formativo, altrimenti dovrei
+            scorrere tutto l'albero ogni volta !
+    """
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT,
                                related_name='iniziativa_parent')
     root = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT,
@@ -70,6 +75,10 @@ class CentroDiCosto(SiwGeneralModel):
         return root + ' > ' + self.nome + ' - ' + self.descrizione
 
     # Custon Check fields.
-    # TODO qui è da decidere cosa devo contrallare quando devo salvare un centro di costo.
+    # TODO qui è da decidere cosa devo controllare quando devo salvare un centro di costo.
     def clean(self):
-        pass
+        """
+
+        if not self.is_root and not self.parent:
+            raise Va
+        """
