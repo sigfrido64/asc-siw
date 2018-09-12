@@ -71,8 +71,12 @@ class CentroDiCosto(SiwGeneralModel):
 
     # To String.
     def __str__(self):
-        root = self.root.nome if self.root else '^'
-        return root + ' > ' + self.nome + ' - ' + self.descrizione
+        parent = self.parent
+        root = ''
+        while parent:
+            root = parent.nome + '->' + root
+            parent = parent.parent
+        return root + self.nome + ' : ' + self.descrizione
 
     # Custon Check fields.
     # TODO qui è da decidere cosa devo controllare quando devo salvare un centro di costo.

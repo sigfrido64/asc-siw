@@ -38,7 +38,6 @@ class LoginRequiredTests(MyAccountTestCase):
         # Un utente non loggato deve essere rediretto alla pagina di login.
         login_url = reverse('login')
         response = self.client.get(self.url)
-        response_debug(response)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 

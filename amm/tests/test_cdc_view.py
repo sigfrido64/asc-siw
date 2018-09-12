@@ -5,7 +5,6 @@ from django.urls import reverse, resolve
 from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
-from siw.sig_debug import response_debug
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -35,7 +34,6 @@ class LoginRequiredTests(MyAccountTestCase):
         # Un utente non loggato deve essere rediretto alla pagina di login.
         login_url = reverse('login')
         response = self.client.get(self.url)
-        response_debug(response)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
