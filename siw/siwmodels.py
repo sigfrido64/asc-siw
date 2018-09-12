@@ -22,6 +22,5 @@ class SiwGeneralModel(models.Model):
     # Override Save.
     # Set actual user for last_user.
     def save(self, *args, **kwargs):
-        print("Beccata quella derivata !")
         self.last_user = get_current_username()
         super().save(*args, **kwargs)

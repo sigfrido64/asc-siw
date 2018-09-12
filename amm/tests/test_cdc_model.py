@@ -5,9 +5,13 @@ from django.urls import reverse, resolve
 from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
+from siw.sig_debug import response_debug
 __author__ = "Pilone Ing. Sigfrido"
 
-
+"""
+TODO 
+Questa è tutta da rivedere !
+"""
 URL = '/amm/cdc/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
 REVERSE_URL = 'amm:cdc_home'  # Questa è la stringa che uso per il reverse per vedere che link genera.
 

@@ -7,9 +7,6 @@ __all__ = (
     'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox'
 )
 
-# TODO Devo vedere se mi basta una sola funzione di rendering per tutta la classe !
-# nel combo box ho solo una riga in più che può essere eliminata !
-
 
 class JqxInput(Widget):
     """
