@@ -66,6 +66,7 @@ class IncaricoDocenzaAdmin(ImportExportModelAdmin):
     # Metto in readonly anche le due date perchè per loro natura ereditano Editable = False. Così invece le vedo in
     # read only che mi garantisce anche che non possano essere modificate.
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione', 'importo_incarico_previsto',
-                       'importo_incarico_effettivo', 'costo_incarico_previsto', 'costo_incarico_effettivo')
+                       'importo_incarico_effettivo', 'costo_incarico_previsto', 'costo_incarico_effettivo',
+                       'ore_effettive')
     list_select_related = True
     exclude = None

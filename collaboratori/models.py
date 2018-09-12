@@ -119,9 +119,6 @@ class Collaboratore(SiwGeneralModel):
 
     # Custon Check fields.
     def clean(self):
-        # TODO se è dipendente non posso inserirlo diversamente e viceversa. Almeno uno dei due deve essere
-        # valorizzato.
-        # raise ValidationError({'tel3': 'Questo invece è una merda !.'})
         # Devo avere almeno un telefono ed una mail per anagrafare un collaboratore.
         telefoni = self.tel1 + self.tel2 + self.tel3 + self.tel4
         mail = self.mail1 + self.mail2
@@ -143,3 +140,11 @@ class Collaboratore(SiwGeneralModel):
             raise ValidationError({'doc_mail1': 'Il tipo di mail non è stato definito.'})
         if self.mail2 and not self.doc_mail2:
             raise ValidationError({'doc_mail2': 'Il tipo di mail non è stato definito.'})
+
+        # Se è un dipendente non devo valorizzare il campo persona e viceversa.
+        if self.persona and self.dipendente:
+            raise ValidationError('Il collaboratore non può essere contemporaneamente una persona ed un dipendente.')
+        # Ma almeno uno dei due deve essere valorizzato.
+        if (self.persona or self.dipendente) is None :
+            raise ValidationError({'persona': 'Il collaboratore deve essere una persona o un dipendente.',
+                                   'dipendente': 'Il collaboratore deve essere una persona o un dipendente.'})

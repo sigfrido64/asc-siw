@@ -67,6 +67,9 @@ class IncaricoDocenza(SiwGeneralModel):
         verbose_name = "Incarico di Docenza"
         verbose_name_plural = "Incarichi di Docenza"
 
+    def __str__(self):
+        return self.corso.codice_edizione + ' - ' + self.collaboratore.persona.__str__()
+
     # Override Save.
     # Set actual user for last_user.
     def save(self, *args, **kwargs):
