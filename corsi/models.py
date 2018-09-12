@@ -1,9 +1,11 @@
 # coding=utf-8
-import datetime
 from django.db import models
-from django.core.exceptions import ValidationError
 from siw.siwmodels import SiwGeneralModel
-from amm.models import Iniziativa, Progetto, SottoProgetto
+from amm.models.centri_di_costo import CentroDiCosto
+
+
+def date_to_int(data):
+    return data.year * 1000 + data.timetuple().tm_yday
 
 
 class OrdineProduzione(SiwGeneralModel):
@@ -13,9 +15,7 @@ class OrdineProduzione(SiwGeneralModel):
     numero_ordine = models.CharField(max_length=10, unique=True)
 
     # Almeno uno di loro deve essere valorizzato !
-    iniziativa = models.ForeignKey(Iniziativa, on_delete=models.PROTECT, blank=True, null=True)
-    progetto = models.ForeignKey(Progetto, on_delete=models.PROTECT, blank=True, null=True)
-    sottoprogetto = models.ForeignKey(SottoProgetto, on_delete=models.PROTECT, blank=True, null=True)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT, blank=True, null=True)
 
     data_inizio = models.DateField()
     data_inizio_annodoy = models.IntegerField(default=0)
@@ -29,24 +29,30 @@ class OrdineProduzione(SiwGeneralModel):
 
     # Custon Check fields.
     def clean(self):
-        raise NotImplementedError("Devo garantire che almeno uno sia valorizzato tra i tre qui sotto !")
-        # Devo valorizzare almeno uno tra : iniziativa, progetto, sottoprogetto !
-        if any(v is not None for v in [[self.iniziativa, self.progetto, self.sottoprogetto]]):
-            raise ValidationError("Deve essere definito una tra : Iniziativa, Progetto o Sotto-Progetto !")
+        raise NotImplementedError("E qui cosa devo controllare ?")
 
 
 class Corso(SiwGeneralModel):
-    """
-    Definizione del corso
-    """
+    BOZZA = 0
+    IN_SVOLGIMENTO = 1
+    TERMINATO = 2
+    CHIUSO = 3
+    STATO_CORSO_CHOICES = (
+        (BOZZA, 'Bozza'),
+        (IN_SVOLGIMENTO, 'In Svolgimento'),
+        (TERMINATO, 'Terminato'),
+        (CHIUSO, 'Chiuso')
+    )
+
     codice_edizione = models.CharField(primary_key=True, max_length=10)
     denominazione = models.CharField(max_length=150)
-    durata = models.IntegerField(default=8)
-    ordine_produzione = models.ForeignKey(OrdineProduzione, on_delete=models.PROTECT)
+    durata = models.FloatField(default=8)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT, blank=True, null=True)
+    stato_corso = models.IntegerField(choices=STATO_CORSO_CHOICES, default=BOZZA)
 
     note = models.TextField(blank=True, default='', verbose_name='Eventuali note')
 
-    # Campi compilati durante il salvataggio.
+    # Date di inizio e fine corso.
     data_inizio = models.DateField()
     data_inizio_annodoy = models.IntegerField(default=0)
     data_fine = models.DateField()
@@ -57,12 +63,12 @@ class Corso(SiwGeneralModel):
         verbose_name = "Corso"
         verbose_name_plural = "Corsi"
 
+    def __str__(self):
+        return self.codice_edizione + ' - ' + self.denominazione
+
     # Override Save.
-    # Set annodoy per data_inizio e data_fine
     def save(self, *args, **kwargs):
-        day_of_year = self.data_inizio.year * 1000 + self.data_inizio.timetuple().tm_yday
-        print("Mi è venuto fuori questo : ", day_of_year)
-        print("Mentre il monotono è : ", self.data_inizio.monotonic())
-        self.data_inizio_annodoy = self.data_inizio
-        raise NotADirectoryError("Devi finire di implementare il save qui !")
+        # Aggiorna ad "anno + numero del giorno da gennaio" che mi è utile per poi semplificare le query
+        self.data_inizio_annodoy = date_to_int(self.data_inizio)
+        self.data_fine_annodoy = date_to_int(self.data_fine)
         super().save(*args, **kwargs)

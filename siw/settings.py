@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'amm',
     'anagrafe',
     'collaboratori',
-    'corsi'
+    'corsi',
 ]
 
 MIDDLEWARE = [

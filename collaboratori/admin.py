@@ -12,6 +12,8 @@ class CollaboratoreAdmin(ImportExportModelAdmin):
     # Metto in readonly anche le due date perchè per loro natura ereditano Editable = False. Così invece le vedo in
     # read only che mi garantisce anche che non possano essere modificate.
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione')
+    list_select_related = True
+    autocomplete_fields = ['persona', 'dipendente']
     exclude = None
 
 
@@ -21,4 +23,6 @@ class DipendenteAdmin(ImportExportModelAdmin):
     # Metto in readonly anche le due date perchè per loro natura ereditano Editable = False. Così invece le vedo in
     # read only che mi garantisce anche che non possano essere modificate.
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione')
+    list_select_related = True
+    search_fields = ['dipendente__cognome']
     exclude = None
