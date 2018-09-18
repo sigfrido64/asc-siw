@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Centri di Costo{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <p>Qui sotto la lista dei CDC attuali</p>
+    <div id='jqxTreeView'></div>
+    <input type="button" style="margin: 10px;" id="jqxbutton" value="Espandi tutto" />
+
+    <br><br>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(document).ready(function () {
+   let source = {
+     datatype: "json",
+     datafields: [
+         {name: 'parent'},
+         {name: 'nome'},
+         {name: 'id'} ],
+     url: "{% url 'amm:ajax_centri_di_costo_per_treeview' %}",
+       async: true
+   };
+   let dataAdapter = new $.jqx.dataAdapter(source, {
+       loadComplete: function() {
+           var records = dataAdapter.getRecordsHierarchy('id', 'parent', 'items', [{ name: 'nome', map: 'label'}]);
+           $('#jqxTreeView').jqxTree({ source: records, width: '300px'})
+       }
+   });
+   dataAdapter.dataBind();
+
+   $("#jqxbutton").jqxButton({
+       width: 200,
+       height: 30
+   });
+   $('#jqxbutton').click(function () {
+       $("#jqxTreeView").jqxTree('expandAll')
+   });
+
+   $('#jqxTreeView').on('select', function (event) {
+       var args = event.args;
+       var item = $('#jqxTreeView').jqxTree('getItem', args.element);
+       var label = item.label;
+       alert("You selected " + label + " with id : " + item.id);
+   });
+
+
+ });
+</script>
+
+{% endblock %}
+
+
