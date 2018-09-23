@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Centri di Costo{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div id="jqxLayout">
+        <!--autoHideGroup-->
+        <div data-container="CentriDiCostoPanel">
+            Centri di Costo</div>
+        <div data-container="HelpPanel">
+            Help topics</div>
+        <!--documentGroup-->
+        <div data-container="Document1Panel">
+            Document 1 content</div>
+        <div data-container="Document2Panel">
+            Document 2 content</div>
+        <!--bottom tabbedGroup-->
+        <div data-container="ErrorListPanel">
+            List of errors</div>
+        <div data-container="OutputPanel">
+            Output</div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+ $(document).ready(function () {
+            // the 'layout' JSON array defines the internal structure of the layout
+            var layout = [{
+                type: 'layoutGroup',
+                orientation: 'horizontal',
+                items: [{
+                    type: 'tabbedGroup',
+                    alignment: 'left',
+                    width: 300,
+                    unpinnedWidth: 300,
+                    items: [{
+                        type: 'layoutPanel',
+                        title: 'Centri di Costo',
+                        contentContainer: 'CentriDiCostoPanel'
+                    }]
+                }, {
+                    type: 'layoutGroup',
+                    orientation: 'vertical',
+                    width: 600,
+                    items: [{
+                        type: 'documentGroup',
+                        height: 400,
+                        minHeight: 200,
+                        items: [{
+                            type: 'documentPanel',
+                            title: 'Document 1',
+                            contentContainer: 'Document1Panel'
+                        }, {
+                            type: 'documentPanel',
+                            title: 'Document 2',
+                            contentContainer: 'Document2Panel'
+                        }]
+                    }, {
+                        type: 'tabbedGroup',
+                        height: 200,
+                        pinnedHeight: 30,
+                        items: [{
+                            type: 'layoutPanel',
+                            title: 'Error List',
+                            contentContainer: 'ErrorListPanel'
+                        }, {
+                            type: 'layoutPanel',
+                            title: 'Output',
+                            contentContainer: 'OutputPanel',
+                            selected: true
+                        }]
+                    }]
+                }]
+            }];
+            $('#jqxLayout').jqxLayout({ width: 900, height: 600, layout: layout });
+        });
+</script>
+
+{% endblock %}
+
+

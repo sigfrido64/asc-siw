@@ -15,4 +15,4 @@ def cdc(request):
 # @has_permission_decorator(SiwPermessi.AMM_CDC_READ)
 def cdc_list(request):
     # Compongo la lista degli anni formativi
-    return render(request, 'amm/cdc_list.html')
+    return render(request, 'amm/cdc_list1.html')
