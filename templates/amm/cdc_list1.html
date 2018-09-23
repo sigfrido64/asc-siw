@@ -11,12 +11,16 @@
     <div id="jqxLayout">
         <!--autoHideGroup-->
         <div data-container="CentriDiCostoPanel">
-            Centri di Costo</div>
+            <div id='jqxTreeView' lista-cdc-url="{% url 'amm:ajax_centri_di_costo_per_treeview' %}"></div>
+            <input type="button" style="margin: 10px;" id="jqxbutton" value="Espandi tutto" />
+        </div>
         <div data-container="HelpPanel">
             Help topics</div>
         <!--documentGroup-->
         <div data-container="Document1Panel">
-            Document 1 content</div>
+            Document 1 content
+            <div id='ciccio'></div>
+        </div>
         <div data-container="Document2Panel">
             Document 2 content</div>
         <!--bottom tabbedGroup-->
@@ -25,62 +29,99 @@
         <div data-container="OutputPanel">
             Output</div>
     </div>
-
 {% endblock %}
+
 
 {% block javascript %}
 <script type="text/javascript">
- $(document).ready(function () {
-            // the 'layout' JSON array defines the internal structure of the layout
-            var layout = [{
-                type: 'layoutGroup',
-                orientation: 'horizontal',
+  $(document).ready(function () {
+    // the 'layout' JSON array defines the internal structure of the layout
+    var layout = [{
+        type: 'layoutGroup',
+        orientation: 'horizontal',
+        items: [{
+            type: 'tabbedGroup',
+            alignment: 'left',
+            width: 300,
+            items: [{
+                type: 'layoutPanel',
+                title: 'Centri di Costo',
+                contentContainer: 'CentriDiCostoPanel',
+                initContent : sig_vince()
+            }]
+        }, {
+            type: 'layoutGroup',
+            orientation: 'vertical',
+            width: 600,
+            items: [{
+                type: 'documentGroup',
+                height: 400,
+                minHeight: 200,
                 items: [{
-                    type: 'tabbedGroup',
-                    alignment: 'left',
-                    width: 300,
-                    unpinnedWidth: 300,
-                    items: [{
-                        type: 'layoutPanel',
-                        title: 'Centri di Costo',
-                        contentContainer: 'CentriDiCostoPanel'
-                    }]
-                }, {
-                    type: 'layoutGroup',
-                    orientation: 'vertical',
-                    width: 600,
-                    items: [{
-                        type: 'documentGroup',
-                        height: 400,
-                        minHeight: 200,
-                        items: [{
-                            type: 'documentPanel',
-                            title: 'Document 1',
-                            contentContainer: 'Document1Panel'
-                        }, {
-                            type: 'documentPanel',
-                            title: 'Document 2',
-                            contentContainer: 'Document2Panel'
-                        }]
-                    }, {
-                        type: 'tabbedGroup',
-                        height: 200,
-                        pinnedHeight: 30,
-                        items: [{
-                            type: 'layoutPanel',
-                            title: 'Error List',
-                            contentContainer: 'ErrorListPanel'
-                        }, {
-                            type: 'layoutPanel',
-                            title: 'Output',
-                            contentContainer: 'OutputPanel',
-                            selected: true
-                        }]
-                    }]
+                    type: 'documentPanel',
+                    title: 'Document 1',
+                    contentContainer: 'Document1Panel'
                 }]
-            }];
-            $('#jqxLayout').jqxLayout({ width: 900, height: 600, layout: layout });
-        });
+            }, {
+                type: 'tabbedGroup',
+                height: 200,
+                pinnedHeight: 30,
+                items: [{
+                    type: 'layoutPanel',
+                    title: 'Error List',
+                    contentContainer: 'ErrorListPanel'
+                }, {
+                    type: 'layoutPanel',
+                    title: 'Output',
+                    contentContainer: 'OutputPanel',
+                    selected: true
+                }]
+            }]
+        }]
+    }];
+    $('#jqxLayout').jqxLayout({ width: 900, height: 600, layout: layout });
+
+    let expandButton = $('#jqxbutton');
+    let treeView = $("#jqxTreeView");
+    expandButton.jqxButton({
+       width: 200,
+       height: 30
+    });
+    expandButton.click(function () {
+       treeView.jqxTree('expandAll')
+    });
+
+    treeView.on('select', function (event) {
+       var args = event.args;
+       var item = treeView.jqxTree('getItem', args.element);
+       var label = item.label;
+       var linea = "You selected " + label + " with id : " + item.id;
+       alert(linea);
+       $("#ciccio").html(linea);
+    });
+
+   function sig_vince() {
+     let cdcUrl = $("#jqxTreeView").attr("lista-cdc-url");
+     let source = {
+       datatype: "json",
+       datafields: [
+         {name: 'parent'},
+         {name: 'nome'},
+         {name: 'id'}],
+       url: cdcUrl,
+       async: true
+     };
+     let dataAdapter = new $.jqx.dataAdapter(source, {
+       loadComplete: function () {
+         var records = dataAdapter.getRecordsHierarchy('id', 'parent', 'items', [{name: 'nome', map: 'label'}]);
+         treeView.jqxTree({source: records, width: '300px'})
+       }
+     });
+     dataAdapter.dataBind();
+   }
+
+});
+
 </script>
 
 {% endblock %}
