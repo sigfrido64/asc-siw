@@ -5,6 +5,7 @@ from django.urls import reverse, resolve
 from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
+from amm.views import cdc
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -63,12 +64,11 @@ class FormGeneralTests(MyAccountTestCase):
         # Il server riesce a fornire la pagina richiesta.
         self.assertEquals(self.response.status_code, 200)
 
-    @skip
-    def test_url_resolves_correct_view(self):
+    def test_url_resolves_cdc_view(self):
         # La risoluzione dell'url mi manda alla vista corretta.
         # Il test fallisce quando il link non mi porta alla vista e devi guardare negli urls dell'app.
         view = resolve(URL)
-        self.assertEquals(view.func, mdl)
+        self.assertEquals(view.func, cdc)
         
     @skip("In questa vista non sono presenti form per cui non c'è csrfmiddlewaretoken")
     def test_csrf(self):

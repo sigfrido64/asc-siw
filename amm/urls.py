@@ -14,5 +14,4 @@ urlpatterns = [
     path('ajax/list-cdc/', ajax_centri_di_costo_per_treeview, name='ajax_centri_di_costo_per_treeview'),
     path('ajax/detail-cdc/', ajax_centro_di_costo_dettaglio, name='ajax_centro_di_costo_dettaglio'),
     path('cdc/', views.cdc, name="cdc_home"),
-    path('cdc-list/', views.cdc_list, name="cdc_list"),
 ]
