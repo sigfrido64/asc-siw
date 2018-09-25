@@ -11,8 +11,6 @@ def ajax_centri_di_costo_per_treeview(request):
     cdc = CentroDiCosto.objects.all()
     cdc = cdc.values('id', 'parent', 'nome')
     cdc_list = list(cdc)
-    print('debug')
-    print(cdc_list)
     return JsonResponse(cdc_list, safe=False)
 
 

@@ -1,7 +1,6 @@
 # coding=utf-8
 from django.contrib.auth.models import User
 from django.test import TestCase
-from unittest import skip
 from django.urls import reverse, resolve
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
@@ -50,24 +49,24 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
-@skip
+
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
+    fixtures = ['cdc.json']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
+        self.myuser.profile.permessi = {SiwPermessi.AMM_CDC_READ}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
+        self.response = self.client.get(URL)
 
     def test_server_serve_page_without_errors(self):
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_lista_persone_note(self):
-        self.assertContains(self.response, 'Pace')
-        self.assertContains(self.response, 'Gaspare')
+    def test_lista_cdc_dati_in_fixtures(self):
+        self.assertContains(self.response, 'ITS 2018-2019')
+        self.assertContains(self.response, 'MDL 2018-2019')
