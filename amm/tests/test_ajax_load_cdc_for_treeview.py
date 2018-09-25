@@ -37,10 +37,10 @@ class MyAccountTestCase(TestCase):
         # Recupero tutti i Dati dell'utente, serve dopo per aggiungere i permessi.
         self.myuser = User.objects.get(username=self.fake_user_username)
 
-@skip
+
 class LoginRequiredTests(MyAccountTestCase):
     def test_forbidden_for_not_logged_in_user(self):
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 @skip
