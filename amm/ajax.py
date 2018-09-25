@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models.centri_di_costo import CentroDiCosto
 

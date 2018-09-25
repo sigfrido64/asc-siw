@@ -28,28 +28,26 @@ class MyAccountTestCase(TestCase):
 
 
 class LoginRequiredTests(MyAccountTestCase):
-    # Test che faccio per un utente non loggato, un utente guest.
+    # Un utente non loggato deve essere rediretto alla pagina di login.
     def test_redirection(self):
-        # Un utente non loggato deve essere rediretto alla pagina di login.
         login_url = reverse('login')
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
 class PermissionRequiredTests(MyAccountTestCase):
-    # Qui metto i test per un utente che si logga ma che non ha i permessi per accedere all'app.
+    # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
+    # come risposta 403 = Denied !
     def test_no_perms_on_app(self):
-        # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
-        # come risposta 403 = Denied !
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
         self.assertEquals(self.response.status_code, 403)
         
 
 class FormGeneralTests(MyAccountTestCase):
-    # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
-    # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
-    # garantire che non si acceda senza permessi.
+    # Utente che si logga e che ha i permessi per accedere in lettura.
+    fixtures = ['cdc']
+    
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
         super().setUp()
