@@ -43,11 +43,11 @@ class LoginRequiredTests(MyAccountTestCase):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
-@skip
+
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'name_starts_with': 'pac'})
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 @skip
