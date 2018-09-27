@@ -9,7 +9,8 @@ from siw.sig_debug import response_debug
 __author__ = "Pilone Ing. Sigfrido"
 
 """
-TODO 
+TODO
+!! A T T E N Z I O N E !! 
 Questa è tutta da rivedere !
 """
 URL = '/amm/cdc/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
