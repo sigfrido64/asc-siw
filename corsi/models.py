@@ -5,6 +5,7 @@ from amm.models.centri_di_costo import CentroDiCosto
 
 
 def date_to_int(data):
+    # anno + numero del giorno da gennaio
     return data.year * 1000 + data.timetuple().tm_yday
 
 
