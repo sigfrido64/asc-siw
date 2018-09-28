@@ -1,0 +1,4 @@
+Stati delle segnalazioni di interesse :
+
+-1 : Rinuncia al corso
+6 : Da Conferma

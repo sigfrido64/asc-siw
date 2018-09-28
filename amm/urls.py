@@ -1,6 +1,7 @@
 # encoding=utf-8
 from django.urls import path
 from . import views
+from .ajax import ajax_centri_di_costo_per_treeview, ajax_centro_di_costo_dettaglio
 
 app_name = 'amm'
 
@@ -10,5 +11,7 @@ app_name = 'amm'
     l'url senza slash.
 """
 urlpatterns = [
+    path('ajax/list-cdc/', ajax_centri_di_costo_per_treeview, name='ajax_centri_di_costo_per_treeview'),
+    path('ajax/detail-cdc/', ajax_centro_di_costo_dettaglio, name='ajax_centro_di_costo_dettaglio'),
     path('cdc/', views.cdc, name="cdc_home"),
 ]

@@ -1,0 +1,11 @@
+<p><strong>Cdc : {{ cdc.nome }}</strong></p>
+Descrizione : {{ cdc.descrizione }} <br>
+CUP : {{ cdc.cup }} <br>
+CIG : {{ cdc.cig }} <br>
+Iva Detraibile : {{ cdc.iva_detraibile }} <br>
+Note : {{ cdc.note }} <br>
+<br>
+Data Inizio Validità : {{ cdc.valido_dal }} <br>
+Data Fine Validità : {{ cdc.valido_al }} <br>
+
+{% include "includes/form_systemdata.html" with form=cdc %}
