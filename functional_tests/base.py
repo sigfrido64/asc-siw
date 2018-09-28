@@ -63,7 +63,8 @@ class FunctionalTest(StaticLiveServerTestCase):
             print("Stagin server !")
             self.live_server_url = 'http://' + self.staging_server
             # reset_database(self.staging_server)
-        self.browser.implicitly_wait(5)  # Max 10 Sec di attesa prima di un find_element
+        self.browser.implicitly_wait(5)  # Max 5 Sec di attesa prima di un find_element
+        self.browser.set_script_timeout(5)  # Max 5 Sec di attesa per l'attesa di uno Script.
 
     def tearDown(self):
         if self._test_has_failed():

@@ -2,12 +2,11 @@
 __author__ = "Pilone Ing. Sigfrido"
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 from accounts.models import User, SiwPermessi
 from functional_tests.base import FunctionalTest
-
-import time
-
-SUBJECT = 'Your login link for Superlists'
 
 
 class LoginTest(FunctionalTest):
@@ -32,44 +31,27 @@ class LoginTest(FunctionalTest):
 
     def test_cdc_page(self):
         # Naviga nei menù per arrivare a quello dei Centri di Costo
-        action = ActionChains(self.browser)
         menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Amministrazione')]")
-        action.move_to_element(menu)
-        action.perform()
-        menu_item = self.browser.find_element_by_link_text('Centri di Costo')
-        menu_item.send_keys(Keys.ENTER)
-        
+        ActionChains(self.browser).move_to_element(menu).perform()
+        self.browser.find_element_by_link_text('Centri di Costo').send_keys(Keys.ENTER)
+
         # Controlla che nella pagina che trova ci sia AF 2018-2019
         self.assertIn('AF 2018-2019', self.browser.page_source)
         
         # Espande completamente l'albero dei centri di costo.
-        expand = self.browser.find_element_by_id('jqxbutton')
-        expand.send_keys(Keys.ENTER)
-        
+        self.browser.find_element_by_id('jqxbutton').send_keys(Keys.ENTER)
+
         # Adesso seleziona quello di PF44
-        pf44 = ActionChains(self.browser)
-        menu_pf44 = self.browser.find_element_by_xpath("//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'PF44')]")
-        pf44.move_to_element_with_offset(menu_pf44, 10, 10)
-        pf44.click()
-        pf44.perform()
-        # ActionChains(self.browser).move_to_element(menu_pf44).perform()
-        # Gli da il tempo di popolare il frame
-        # TODO E' giusto fare così ?
-        time.sleep(1)
+        menu_pf44 = self.browser.find_element_by_xpath(
+            "//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'PF44')]")
+        ActionChains(self.browser).move_to_element_with_offset(menu_pf44, 10, 10).click().perform()
 
-        # Controlla che nella pagina che trova ci sia AF 2018-2019
-        self.assertIn('Progetto Formativo PF44', self.browser.page_source)
-
-"""
-SPUNTO INTERESSANTE
-
-WebElement admin = driver.findElement(By.xpath("//b[contains(., 'Admin')]"));
-
-new Actions(driver).moveToElement(admin).perform();
-
-WebElement userManagement = new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("menu_admin_UserManagement")));
-new Actions(driver).moveToElement(userManagement).perform();
-
-WebElement users = new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.id("menu_admin_viewSystemUsers")));
-users.click();
-"""
+        # Gli da il tempo di popolare il frame e poi controllo se trovo il dettaglio del Centro di Costo.
+        try:
+            WebDriverWait(self.browser, 10).until(
+                expected_conditions.presence_of_element_located((By.ID, "dettaglio_cdc")))
+        finally:
+            pass
+        dettaglio_cdc = self.browser.find_element_by_id("dettaglio_cdc")
+        print(dettaglio_cdc.text)
+        self.assertIn('Progetto Formativo PF44', dettaglio_cdc.text)
