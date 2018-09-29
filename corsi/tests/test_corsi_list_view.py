@@ -3,12 +3,13 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
-from amm.views import cdc
+from corsi.views import corsi_list_home
 __author__ = "Pilone Ing. Sigfrido"
 
+from unittest import skip
 
-URL = '/amm/cdc/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
-REVERSE_URL = 'amm:cdc_home'  # Questa è la stringa che uso per il reverse per vedere che link genera.
+URL = '/corsi/lista/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
+REVERSE_URL = 'corsi:home'  # Questa è la stringa che uso per il reverse per vedere che link genera.
 
 
 class GeneralTests(TestCase):
@@ -16,9 +17,9 @@ class GeneralTests(TestCase):
         url = reverse(REVERSE_URL)
         self.assertEquals(url, URL)
 
-    def test_list_cdc_url_resolves_cdc_view(self):
+    def test_list_cdc_url_resolves_ajax_centro_di_costo_dettaglio(self):
         view = resolve(URL)
-        self.assertEquals(view.func, cdc)
+        self.assertEquals(view.func, corsi_list_home)
 
 
 class MyAccountTestCase(TestCase):
@@ -44,7 +45,7 @@ class LoginRequiredTests(MyAccountTestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
-
+@skip
 class PermissionRequiredTests(MyAccountTestCase):
     # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
     # come risposta 403 = Denied !
@@ -53,7 +54,7 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(self.url)
         self.assertEquals(self.response.status_code, 403)
         
-
+@skip
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
     fixtures = ['cdc']
@@ -69,6 +70,12 @@ class FormGeneralTests(MyAccountTestCase):
     def test_status_code(self):
         # Il server riesce a fornire la pagina richiesta.
         self.assertEquals(self.response.status_code, 200)
+
+    def test_url_resolves_cdc_view(self):
+        # La risoluzione dell'url mi manda alla vista corretta.
+        # Il test fallisce quando il link non mi porta alla vista e devi guardare negli urls dell'app.
+        view = resolve(URL)
+        self.assertEquals(view.func, cdc)
         
     def test_use_correct_template(self):
         # Controllo che usi il template corretto.

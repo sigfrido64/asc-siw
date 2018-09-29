@@ -84,6 +84,7 @@ urlpatterns = [
     path('amm/', include('amm.urls', 'amm')),
     path('anagrafe/', include('anagrafe.urls', 'anagrafe')),
     path('collaboratori/', include('collaboratori.urls', 'collaboratori')),
+    path('corsi/', include('corsi.urls', 'corsi')),
 ]
 
 """

@@ -25,6 +25,11 @@ class SiwPermessi(object):
     COLLABORATORE_MOSTRA = 'coll_mostra_view'
     COLLABORATORE_INSERISCE = 'coll_inserisce_view'
     COLLABORATORE_MODIFICA = 'coll_modifica_view'
+    
+    """
+    Corsi
+    """
+    CORSI_LISTA_READ = 'corsi_lista_view'
 
     """
     Sezione Menù. Al momento uso un permesso per mostrare o meno le voci di menù così che sia possibile avere
