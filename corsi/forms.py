@@ -1,10 +1,18 @@
 # coding=utf-8
 from django import forms
 from .models import Corso
-from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxNumberInput
 
 
 class NewCorsoForm(forms.ModelForm):
+    codice_edizione = forms.CharField(required=True,
+                                      widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    denominazione = forms.CharField(required=True,
+                                    widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
+    durata = forms.CharField(required=True,
+                             widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
+
+    
     """
     url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
     url_mail = 'collaboratori:ajax_lista_tipo_mail_persona'

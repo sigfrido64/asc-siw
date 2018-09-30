@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 
 # Definisco le Classi che possono essere importare da questo modulo.
 __all__ = (
-    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox'
+    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox', 'JqxNumberInput'
 )
 
 
@@ -12,7 +12,6 @@ class JqxInput(Widget):
     """
         Classe di base per tutti gli <input> JQWidgets.
     """
-    
     input_type = None  # Subclasses must define this.
     template_name = 'includes/jq/jqxinput.html'
     
@@ -60,6 +59,11 @@ class JqxTextInput(JqxInput):
 class JqxTextArea(JqxInput):
     input_type = 'text-area'
     template_name = 'includes/jq/jqxtextarea.html'
+    
+    
+class JqxNumberInput(JqxInput):
+    input_type = 'text'
+    template_name = 'includes/jq/jqxnumberinput.html'
 
 
 class JqxComboInput(JqxInput):

@@ -15,8 +15,22 @@
   {% csrf_token %}
   {% include "includes/form_head.html" with form=corso %}
 
+  <table width="100%" border="1">
+      <tr>
+          <td width="20%">Codice Edizione : {% siw_field corso.codice_edizione %}</td>
+          <td width="80%">Denominazione : {% siw_field corso.denominazione %}</td>
+      </tr>
+      <tr>
+        <td colspan="2">Durata : {% siw_field corso.durata %}</td>
+      </tr>
+
+  </table>
+
+
+
+
   {{ corso.as_p }}
-  
+
   <div align="center">
     <button id="do_insert" type="submit">Inserisce</button>
   </div>
