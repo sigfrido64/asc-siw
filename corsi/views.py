@@ -1,8 +1,9 @@
 # coding=utf-8
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Corso
+from .forms import NewCorsoForm
 
 
 @has_permission_decorator(SiwPermessi.CORSI_LISTA_READ)
@@ -17,9 +18,13 @@ def corso_dettaglio_view(request, pk):
     return render(request, 'corsi/dettaglio_corso.html', {'corso': corso})
 
 
-def corso_inserisce_view(request, pk):
-    pass
-    """
-    corso = get_object_or_404(Corso, pk=pk)
-    return render(request, 'corsi/dettaglio_corso.html', {'corso': corso})
-    """
+@has_permission_decorator(SiwPermessi.CORSI_INSERISCE)
+def corso_inserisce_view(request):
+    if request.method == 'POST':
+        form = NewCorsoForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('corsi:home')
+    else:
+        form = NewCorsoForm()
+    return render(request, 'corsi/inserisce_corso.html', {'corso': form})

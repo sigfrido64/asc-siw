@@ -41,46 +41,40 @@ class MyAccountTestCase(TestCase):
         # Recupero tutti i Dati dell'utente, serve dopo per aggiungere i permessi.
         self.myuser = User.objects.get(username=self.fake_user_username)
 
-@skip
+
 class LoginRequiredTests(MyAccountTestCase):
     def test_redirection_to_login_for_not_logged_in_user(self):
         login_url = reverse('login')
-        response = self.client.get(URL_PRESENTE)
-        self.assertRedirects(response, f'{login_url}?next={URL_PRESENTE}')
+        response = self.client.get(URL)
+        self.assertRedirects(response, f'{login_url}?next={URL}')
 
-@skip
+
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL_PRESENTE)
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
-@skip
+
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_INSERISCE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
     def test_server_serve_page_without_errors(self):
-        self.response = self.client.get(URL_PRESENTE)
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_render_error_collaborator_already_present_with_error_templates(self):
-        self.response = self.client.get(URL_PRESENTE)
-        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
-        self.assertTemplateUsed(self.response, 'base.html')
-        self.assertTemplateUsed(self.response, 'includes/menu.html')
-
-    def test_render_new_collaborator_with_correct_templates(self):
-        self.response = self.client.get(URL_NUOVO)
+    def test_render_new_corso_with_correct_templates(self):
+        self.fail("Questi sono poi da vedere")
+        self.response = self.client.get(URL)
         self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')

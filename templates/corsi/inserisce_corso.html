@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load jqwidgets_tags %}
+
+{% block title %}Inserisce Corso{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+<form method="post" novalidate>
+
+  {% csrf_token %}
+  {% include "includes/form_head.html" with form=corso %}
+
+  {{ corso.as_p }}
+  
+  <div align="center">
+    <button id="do_insert" type="submit">Inserisce</button>
+  </div>
+</form>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+    });
+</script>
+
+{% endblock %}
+
+
+<table width="100%" border="1">
+      <tr>
+          <td><strong>Recapiti Telefonici :</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{% siw_field form.doc_tel1 %} : {% siw_field form.tel1 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel2 %} : {% siw_field form.tel2 %}</div></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{% siw_field form.doc_tel3 %} : {% siw_field form.tel3 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_tel4 %} : {% siw_field form.tel4 %}</div></td>
+      </tr>
+      <tr>
+          <td><strong>Indirizzi e-mail :</strong></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td width="50%"><div>{% siw_field form.doc_mail1 %} : {% siw_field form.mail1 %}</div></td>
+          <td width="50%"><div>{% siw_field form.doc_mail2 %} : {% siw_field form.mail2 %}</div></td>
+      </tr>
+  </table>
+
+  <p>
+      <strong>Eventuali Annotazioni :</strong> {% siw_field form.note %}
+  </p>
