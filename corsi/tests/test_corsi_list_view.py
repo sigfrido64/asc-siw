@@ -57,7 +57,7 @@ class PermissionRequiredTests(MyAccountTestCase):
 
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
-    # fixtures = ['cdc']
+    fixtures = ['cdc.json', 'corsi.json']
     
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
@@ -76,8 +76,13 @@ class FormGeneralTests(MyAccountTestCase):
         self.assertTemplateUsed(self.response, 'corsi/lista_corsi.html',
                                 "Non è stato usato il template corretto")
 
-
-
-"""
-Deve contenere dati noti dalla fixture
-"""
+    def test_find_know_fields_and_data(self):
+        utf8_content = self.response.content.decode('utf8')
+        expected_html = """
+            <tr>
+              <td>LIIV08</td>
+              <td>Lingua Inglese - Livello Elementare</td>
+              <td>60,0</td>
+            </tr>
+        """
+        self.assertInHTML(expected_html, utf8_content)
