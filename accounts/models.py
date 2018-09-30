@@ -40,8 +40,12 @@ class SiwPermessi(object):
     """
     MENU_AMM = 'menu_amm'
     MENU_AMM_CDC = 'menu_cdc'
+
     MENU_COLLABORATORI = 'menu_collaboratori'
     MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
+    
+    MENU_CORSI = 'menu_corsi'
+    MENU_CORSI_LISTA = 'menu_corsi_lista'
 
     @staticmethod
     def as_dict():

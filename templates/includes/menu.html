@@ -19,6 +19,15 @@
         </ul>
       </li>
       {% endif %}
+            {% if user|can:siwperms.MENU_CORSI %}     {# Vedi nota sopra per spiegazione #}
+      <li>Corsi
+        <ul>
+          {% if user|can:siwperms.MENU_CORSI_LISTA %}
+          <li><a href="{% url 'corsi:home' %}">Lista Corsi</a></li>
+          {% endif %}
+        </ul>
+      </li>
+      {% endif %}
       {% if user|can:siwperms.MENU_COLLABORATORI %}     {# Vedi nota sopra per spiegazione #}
       <li>Collaboratori
         <ul>
