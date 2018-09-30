@@ -10,3 +10,7 @@ def corsi_list_home(request):
     lista_corsi = Corso.objects.all()
     return render(request, 'corsi/lista_corsi.html', {'lista_corsi': lista_corsi})
 
+
+def corso_dettaglio_view(request):
+    lista_corsi = Corso.objects.all()
+    return render(request, 'corsi/lista_corsi.html', {'lista_corsi': lista_corsi})

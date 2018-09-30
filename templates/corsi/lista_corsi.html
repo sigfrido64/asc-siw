@@ -20,6 +20,7 @@
       <th>Codice Edizione</th>
       <th>Denominazione</th>
       <th>Durata</th>
+      <th>Dettagli</th>
     </tr>
   </thead>
   <tbody>
@@ -28,6 +29,11 @@
       <td>{{ corso.codice_edizione }}</td>
       <td>{{ corso.denominazione }}</td>
       <td>{{ corso.durata }}</td>
+      <td>
+        <a href="{% url 'corsi:dettaglio_corso' corso.pk %}">
+            <span class="fa fa-id-card" aria-hidden="true"></span>
+        </a>
+      </td>
     </tr>
   {% endfor %}
   </tbody>

@@ -11,4 +11,5 @@ app_name = 'corsi'
 """
 urlpatterns = [
     path('lista/', views.corsi_list_home, name='home'),
+    path('dettaglio/<str:pk>/', views.corso_dettaglio_view, name='dettaglio_corso'),
 ]
