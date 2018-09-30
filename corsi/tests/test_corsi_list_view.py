@@ -45,7 +45,7 @@ class LoginRequiredTests(MyAccountTestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
-@skip
+
 class PermissionRequiredTests(MyAccountTestCase):
     # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
     # come risposta 403 = Denied !
@@ -54,15 +54,15 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(self.url)
         self.assertEquals(self.response.status_code, 403)
         
-@skip
+
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
-    fixtures = ['cdc']
+    # fixtures = ['cdc']
     
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.AMM_CDC_READ}
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_LISTA_READ}
         self.myuser.save(force_update=True)
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
@@ -70,14 +70,14 @@ class FormGeneralTests(MyAccountTestCase):
     def test_status_code(self):
         # Il server riesce a fornire la pagina richiesta.
         self.assertEquals(self.response.status_code, 200)
-
-    def test_url_resolves_cdc_view(self):
-        # La risoluzione dell'url mi manda alla vista corretta.
-        # Il test fallisce quando il link non mi porta alla vista e devi guardare negli urls dell'app.
-        view = resolve(URL)
-        self.assertEquals(view.func, cdc)
         
     def test_use_correct_template(self):
         # Controllo che usi il template corretto.
-        self.assertTemplateUsed(self.response, 'amm/cdc_list.html',
+        self.assertTemplateUsed(self.response, 'corsi/lista_corsi.html',
                                 "Non è stato usato il template corretto")
+
+
+
+"""
+Deve contenere dati noti dalla fixture
+"""

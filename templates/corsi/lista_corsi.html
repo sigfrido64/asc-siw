@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Corsi{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% block content %}
+
+<table style="width:100%" border="1">
+  <thead>
+    <tr>
+      <th>Codice Edizione</th>
+      <th>Denominazione</th>
+      <th>Durata</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for corso in lista_corsi %}
+    <tr>
+      <td>{{ corso.codice_edizione }}</td>
+      <td>{{ corso.denominazione }}</td>
+      <td>{{ corso.durata }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
