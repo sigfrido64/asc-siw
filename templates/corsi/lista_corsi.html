@@ -30,9 +30,13 @@
       <td>{{ corso.denominazione }}</td>
       <td>{{ corso.durata }}</td>
       <td>
-        <a href="{% url 'corsi:dettaglio_corso' corso.pk %}">
+        {% if user|can:siwperms.CORSI_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
+          <a href="{% url 'corsi:dettaglio_corso' corso.pk %}">
             <span class="fa fa-id-card" aria-hidden="true"></span>
-        </a>
+          </a>
+        {% else %}
+          <i class="fa fa-id-card" aria-hidden="true"></i>
+        {% endif %}
       </td>
     </tr>
   {% endfor %}

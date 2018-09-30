@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load si_template_tags %}
+
+{% block title %}Dettagli del Corso{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+<table border="1" width="100%">
+    <tr>
+        <td colspan="2">Dettaglio Corso
+    </tr>
+    <tr>
+        <td colspan="2">Codice Edizione : <strong>{{ corso.codice_edizione }} - {{ corso.denominazione }}</strong></td>
+    </tr>
+    <tr>
+        <td>Durata : {{ corso.codice_edizione }}</td>
+        <td>Centro di Costo : {{ corso.cdc }}</td>
+    </tr>
+    <tr>
+        <td colspan="2">Stato Corso : {{ corso.stato }}</td>
+    </tr>
+    <tr>
+        <td>Data di Inizio Corso : {{ corso.data_inizio }}</td>
+        <td>Data di Fine Corso : {{ corso.data_fine }}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><strong>Note</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2">{{ corso.note }}</td>
+    </tr>
+</table>
+
+{% include "includes/form_systemdata.html" with form=corso %}
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

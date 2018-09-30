@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Corso
@@ -11,6 +11,7 @@ def corsi_list_home(request):
     return render(request, 'corsi/lista_corsi.html', {'lista_corsi': lista_corsi})
 
 
-def corso_dettaglio_view(request):
-    lista_corsi = Corso.objects.all()
-    return render(request, 'corsi/lista_corsi.html', {'lista_corsi': lista_corsi})
+@has_permission_decorator(SiwPermessi.CORSI_MOSTRA)
+def corso_dettaglio_view(request, pk):
+    corso = get_object_or_404(Corso, pk=pk)
+    return render(request, 'corsi/dettaglio_corso.html', {'corso': corso})

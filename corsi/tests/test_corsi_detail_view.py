@@ -16,7 +16,6 @@ REVERSE_URL = 'corsi:dettaglio_corso'
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
         url = reverse(REVERSE_URL, kwargs={'pk': ID})
-        print("Url : ", url)
         self.assertEquals(url, URL)
 
     def test_corsi_dettaglio_url_resolves_dettaglio_corso_view(self):
@@ -37,9 +36,9 @@ class MyAccountTestCase(TestCase):
         # Dati dell'utente
         self.myuser = User.objects.get(username=self.username)
         # Link alla vista
-        self.url = reverse(REVERSE_URL)
+        self.url = reverse(REVERSE_URL, kwargs={'pk': ID})
 
-@skip
+
 class LoginRequiredTests(MyAccountTestCase):
     # Un utente non loggato deve essere rediretto alla pagina di login.
     def test_redirection(self):
@@ -47,7 +46,7 @@ class LoginRequiredTests(MyAccountTestCase):
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
-@skip
+
 class PermissionRequiredTests(MyAccountTestCase):
     # Un utente che si logga senza permessi e prova ad accere alla pagina dell'applicazione deve ricevere
     # come risposta 403 = Denied !
@@ -56,7 +55,7 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(self.url)
         self.assertEquals(self.response.status_code, 403)
         
-@skip
+
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
     fixtures = ['cdc.json', 'corsi.json']
@@ -64,7 +63,7 @@ class FormGeneralTests(MyAccountTestCase):
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.CORSI_LISTA_READ}
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_MOSTRA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
@@ -72,19 +71,20 @@ class FormGeneralTests(MyAccountTestCase):
     def test_status_code(self):
         # Il server riesce a fornire la pagina richiesta.
         self.assertEquals(self.response.status_code, 200)
-        
+    
     def test_use_correct_template(self):
         # Controllo che usi il template corretto.
-        self.assertTemplateUsed(self.response, 'corsi/lista_corsi.html',
+        self.assertTemplateUsed(self.response, 'corsi/dettaglio_corso.html',
                                 "Non è stato usato il template corretto")
 
     def test_find_know_fields_and_data(self):
         utf8_content = self.response.content.decode('utf8')
         expected_html = """
-            <tr>
-              <td>LIIV08</td>
-              <td>Lingua Inglese - Livello Elementare</td>
-              <td>60,0</td>
-            </tr>
+        <td colspan="2">
+          Codice Edizione :
+            <strong>
+              CCEA438 - ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO
+            </strong>
+        </td>
         """
         self.assertInHTML(expected_html, utf8_content)

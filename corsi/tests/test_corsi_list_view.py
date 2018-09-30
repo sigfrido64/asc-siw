@@ -75,13 +75,23 @@ class FormGeneralTests(MyAccountTestCase):
         self.assertTemplateUsed(self.response, 'corsi/lista_corsi.html',
                                 "Non è stato usato il template corretto")
 
-    def test_find_know_fields_and_data(self):
+    def test_find_know_fields_and_data_but_no_detail_link(self):
         utf8_content = self.response.content.decode('utf8')
         expected_html = """
-            <tr>
-              <td>LIIV08</td>
-              <td>Lingua Inglese - Livello Elementare</td>
-              <td>60,0</td>
-            </tr>
+          <tr>
+            <td>LIIV08</td>
+            <td>Lingua Inglese - Livello Elementare</td>
+            <td>60,0</td>
+            <td>
+              <i class="fa fa-id-card" aria-hidden="true"></i>
+            </td>
+          </tr>
         """
         self.assertInHTML(expected_html, utf8_content)
+
+    def test_find_know_fields_and_data_but_and_detail_link_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_MOSTRA}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.username, password=self.password)
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, '/corsi/dettaglio/LIIV08/')
