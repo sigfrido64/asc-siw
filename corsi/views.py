@@ -15,3 +15,11 @@ def corsi_list_home(request):
 def corso_dettaglio_view(request, pk):
     corso = get_object_or_404(Corso, pk=pk)
     return render(request, 'corsi/dettaglio_corso.html', {'corso': corso})
+
+
+def corso_inserisce_view(request, pk):
+    pass
+    """
+    corso = get_object_or_404(Corso, pk=pk)
+    return render(request, 'corsi/dettaglio_corso.html', {'corso': corso})
+    """
