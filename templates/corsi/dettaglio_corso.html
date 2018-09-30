@@ -12,17 +12,18 @@
 
 <table border="1" width="100%">
     <tr>
-        <td colspan="2">Dettaglio Corso
+        <td colspan="2">Dettaglio Corso : <strong>{{ corso.codice_edizione }}</strong>
     </tr>
     <tr>
-        <td colspan="2">Codice Edizione : <strong>{{ corso.codice_edizione }} - {{ corso.denominazione }}</strong></td>
+        <td>Codice Edizione : <strong>{{ corso.codice_edizione }}</strong></td>
+        <td>Denominazione: <strong>{{ corso.denominazione }}</strong></td>
     </tr>
     <tr>
-        <td>Durata : {{ corso.codice_edizione }}</td>
+        <td>Durata : {{ corso.durata }}</td>
         <td>Centro di Costo : {{ corso.cdc }}</td>
     </tr>
     <tr>
-        <td colspan="2">Stato Corso : {{ corso.stato }}</td>
+        <td colspan="2">Stato Corso : {{ corso.stato_corso }}</td>
     </tr>
     <tr>
         <td>Data di Inizio Corso : {{ corso.data_inizio }}</td>

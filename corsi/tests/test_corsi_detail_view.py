@@ -80,11 +80,11 @@ class FormGeneralTests(MyAccountTestCase):
     def test_find_know_fields_and_data(self):
         utf8_content = self.response.content.decode('utf8')
         expected_html = """
-        <td colspan="2">
-          Codice Edizione :
-            <strong>
-              CCEA438 - ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO
-            </strong>
+        <td>Codice Edizione : <strong>CCEA438</strong></td>
+        <td>Denominazione:
+          <strong>
+            ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO
+          </strong>
         </td>
         """
         self.assertInHTML(expected_html, utf8_content)
