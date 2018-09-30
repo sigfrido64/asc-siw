@@ -20,10 +20,10 @@
     </tr>
     <tr>
         <td>Durata : {{ corso.durata }}</td>
-        <td>Centro di Costo : {{ corso.cdc }}</td>
+        <td>Centro di Costo : {{ corso.cdc.nome }}</td>
     </tr>
     <tr>
-        <td colspan="2">Stato Corso : {{ corso.stato_corso }}</td>
+        <td colspan="2">Stato Corso : {% stato_corso_testuale corso.stato_corso %}</td>
     </tr>
     <tr>
         <td>Data di Inizio Corso : {{ corso.data_inizio }}</td>

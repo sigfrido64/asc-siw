@@ -31,6 +31,7 @@ class SiwPermessi(object):
     """
     CORSI_LISTA_READ = 'corsi_lista_view'
     CORSI_MOSTRA = 'corsi_mostra_view'
+    CORSI_INSERISCE = 'corsi_inserisce_view'
 
     """
     Sezione Menù. Al momento uso un permesso per mostrare o meno le voci di menù così che sia possibile avere

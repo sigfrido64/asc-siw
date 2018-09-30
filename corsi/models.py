@@ -37,9 +37,9 @@ class Corso(SiwGeneralModel):
     # TODO
     # Il cdc deve avere lo stesso nome del corso. Da mettere nel metodo clean.
     BOZZA = 0
-    IN_SVOLGIMENTO = 1
-    TERMINATO = 2
-    CHIUSO = 3
+    IN_SVOLGIMENTO = 50
+    TERMINATO = 100
+    CHIUSO = 150
     STATO_CORSO_CHOICES = (
         (BOZZA, 'Bozza'),
         (IN_SVOLGIMENTO, 'In Svolgimento'),
@@ -75,4 +75,3 @@ class Corso(SiwGeneralModel):
         self.data_inizio_annodoy = date_to_int(self.data_inizio)
         self.data_fine_annodoy = date_to_int(self.data_fine)
         super().save(*args, **kwargs)
-

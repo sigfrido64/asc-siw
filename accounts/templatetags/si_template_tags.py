@@ -3,7 +3,7 @@ from django.utils.html import mark_safe
 
 # from rolepermissions.checkers import has_permission
 from ..models import has_permission
-
+from corsi.models import Corso
 
 register = template.Library()
 
@@ -32,3 +32,10 @@ def systemdata(form):
     print(form.in_uso)
     risultato += form.in_uso.__str__()
     return mark_safe(risultato)
+
+
+@register.simple_tag
+def stato_corso_testuale(stato):
+    stati = dict(Corso.STATO_CORSO_CHOICES)
+    testo = stati[stato]
+    return mark_safe(testo)
