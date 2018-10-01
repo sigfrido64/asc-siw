@@ -21,20 +21,29 @@
           <td width="80%">Denominazione : {% siw_field corso.denominazione %}</td>
       </tr>
       <tr>
-        <td colspan="2">Durata : {% siw_field corso.durata %}</td>
+        <td width="10%">Durata : </td>
+        <td>{% siw_field corso.durata %}</td>
       </tr>
+      <tr>
+        <td>{{ corso.cdc }}</td>
+        <td><button type="button" id="choose_cdc">Inserisce</button></td>
+      </tr>
+
 
   </table>
 
 
 
 
-  {{ corso.as_p }}
 
   <div align="center">
     <button id="do_insert" type="submit">Inserisce</button>
   </div>
 </form>
+
+  <div id="choose_cdc_window">
+    <div id='jqxTreeView' lista-cdc-url="{% url 'amm:ajax_centri_di_costo_per_treeview' %}"></div>
+  </div>
 {% endblock %}
 
 {% block javascript %}
@@ -42,6 +51,39 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+
+        $("#choose_cdc").jqxButton({ width: '100', height: '30', template: "success"});
+        $('#choose_cdc').on('click', function () {
+          $('#choose_cdc_window').jqxWindow({  width: 400,
+                      height: 600, resizable: false,
+                      position: 'center',
+                      isModal: true,
+                      initContent : sig_vince(),
+                      title: 'Scegli Centro di Costo'
+          });
+          $("#id_cdc").val('Fatto !');
+        });
+
+        let treeView = $("#jqxTreeView");
+        function sig_vince() {
+           let cdcUrl = $("#jqxTreeView").attr("lista-cdc-url");
+           let source = {
+             datatype: "json",
+             datafields: [
+               {name: 'parent'},
+               {name: 'nome'},
+               {name: 'id'}],
+             url: cdcUrl,
+             async: true
+           };
+           let dataAdapter = new $.jqx.dataAdapter(source, {
+             loadComplete: function () {
+               var records = dataAdapter.getRecordsHierarchy('id', 'parent', 'items', [{name: 'nome', map: 'label'}]);
+               treeView.jqxTree({source: records, width: '300px'})
+             }
+           });
+           dataAdapter.dataBind();
+         }
     });
 </script>
 
@@ -74,3 +116,4 @@
   <p>
       <strong>Eventuali Annotazioni :</strong> {% siw_field form.note %}
   </p>
+

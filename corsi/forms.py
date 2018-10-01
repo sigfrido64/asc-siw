@@ -11,8 +11,9 @@ class NewCorsoForm(forms.ModelForm):
                                     widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
     durata = forms.CharField(required=True,
                              widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
+    cdc = forms.CharField(required=True,
+                          widget=JqxTextInput(jqxattrs={'height': 30, 'width': 30}, attrs={'readonly': 'True'}))
 
-    
     """
     url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
     url_mail = 'collaboratori:ajax_lista_tipo_mail_persona'
