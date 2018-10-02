@@ -11,8 +11,8 @@ class NewCorsoForm(forms.ModelForm):
                                     widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
     durata = forms.CharField(required=True,
                              widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
-    #cdc = forms.CharField(required=True,
-    #                      widget=JqxTextInput(jqxattrs={'height': 30, 'width': 30}, attrs={'hidden': 'True'}))
+    # cdc_id = forms.CharField(required=True, widget=forms.HiddenInput())
+    cdc_txt = forms.CharField(required=True, widget=forms.TextInput(attrs={'readonly': 'True'}))
 
     """
     url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'

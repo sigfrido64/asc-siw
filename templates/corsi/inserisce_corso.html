@@ -25,7 +25,7 @@
         <td>{% siw_field corso.durata %}</td>
       </tr>
       <tr>
-        <td>{{ corso.cdc }} <div id="txt_cdc"></div></td>
+        <td>{{ corso.cdc_txt }} <div id="txt_cdc"></div></td>
         <td><button type="button" id="choose_cdc">Scegli CDC</button></td>
       </tr>
 
@@ -94,7 +94,7 @@
            $('#jqxTreeView').on('select',function (event) {
                 var args = event.args;
                 var item = $('#jqxTreeView').jqxTree('getItem', args.element);
-                $("#txt_cdc").text(item.label);
+                $("#id_cdc_txt").val(item.label);
                 $("#id_cdc").val(item.id);
            });
         }

@@ -23,10 +23,8 @@ def corso_dettaglio_view(request, pk):
 def corso_inserisce_view(request):
     if request.method == 'POST':
         form = NewCorsoForm(request.POST)
-        cdc = get_object_or_404(CentroDiCosto, pk=request.POST['cdc'])
-        form.cdc = cdc
         if form.is_valid():
-            form.save(commit=True)
+            form.save()
             return redirect('corsi:home')
     else:
         form = NewCorsoForm()
