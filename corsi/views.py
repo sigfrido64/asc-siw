@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Corso
+from amm.models.centri_di_costo import CentroDiCosto
 from .forms import NewCorsoForm
 
 
@@ -22,6 +23,8 @@ def corso_dettaglio_view(request, pk):
 def corso_inserisce_view(request):
     if request.method == 'POST':
         form = NewCorsoForm(request.POST)
+        cdc = get_object_or_404(CentroDiCosto, pk=request.POST['cdc'])
+        form.cdc = cdc
         if form.is_valid():
             form.save(commit=True)
             return redirect('corsi:home')

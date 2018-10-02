@@ -11,8 +11,8 @@ class NewCorsoForm(forms.ModelForm):
                                     widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
     durata = forms.CharField(required=True,
                              widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
-    cdc = forms.CharField(required=True,
-                          widget=JqxTextInput(jqxattrs={'height': 30, 'width': 30}, attrs={'readonly': 'True'}))
+    #cdc = forms.CharField(required=True,
+    #                      widget=JqxTextInput(jqxattrs={'height': 30, 'width': 30}, attrs={'hidden': 'True'}))
 
     """
     url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
@@ -82,6 +82,9 @@ class NewCorsoForm(forms.ModelForm):
         model = Corso
         fields = ['codice_edizione', 'denominazione', 'durata', 'cdc', 'stato_corso', 'note',
                   'data_inizio', 'data_fine']
+        widgets = {
+            'cdc': forms.HiddenInput(),
+        }
 
 
 """
