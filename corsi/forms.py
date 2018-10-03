@@ -5,14 +5,22 @@ from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox
 
 
 class NewCorsoForm(forms.ModelForm):
+    url_stato_corso = 'corsi:ajax_lista_stati_corso'
+
     codice_edizione = forms.CharField(required=True,
                                       widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     denominazione = forms.CharField(required=True,
                                     widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
     durata = forms.CharField(required=True,
                              widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
-    # cdc_id = forms.CharField(required=True, widget=forms.HiddenInput())
     cdc_txt = forms.CharField(required=True, widget=forms.TextInput(attrs={'readonly': 'True'}))
+    stato_corso = forms.ComboField(
+        fields=[forms.CharField(), ], required=False,
+        widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 150, 'minLength': 5,
+                      'displayMember': 'descrizione', 'valueMember': "id",
+                      'data_adapter_url': url_stato_corso},
+            attrs={'style': 'float: left; margin-right: 5px;'}))
 
     """
     url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
