@@ -29,3 +29,16 @@ def corso_inserisce_view(request):
     else:
         form = NewCorsoForm()
     return render(request, 'corsi/inserisce_corso.html', {'corso': form})
+
+
+# @has_permission_decorator(SiwPermessi.CORSI_MODIFICA)
+def corso_modifica_view(request, pk):
+    corso = get_object_or_404(Corso, pk=pk)
+    if request.method == 'POST':
+        form = NewCorsoForm(request.POST, instance=corso)
+        if form.is_valid():
+            form.save()
+            return redirect('corsi:home')
+    else:
+        form = NewCorsoForm(instance=corso)
+    return render(request, 'corsi/inserisce_corso.html', {'corso': form})

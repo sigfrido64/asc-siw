@@ -10,6 +10,14 @@
 
 {% block content %}
 
+{% if user|can:siwperms.CORSI_MODIFICA %}
+    <div align="right">
+      <a href="{% url 'corsi:modifica' corso.pk %}">
+        <span class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue"></span>Modifica
+      </a>
+    </div>
+{% endif %}
+
 <table border="1" width="100%">
     <tr>
         <td colspan="2">Dettaglio Corso : <strong>{{ corso.codice_edizione }}</strong>
