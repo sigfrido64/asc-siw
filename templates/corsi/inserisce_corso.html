@@ -25,8 +25,15 @@
         <td>{% siw_field corso.durata %}</td>
       </tr>
       <tr>
-        <td>{{ corso.cdc_txt }} <div id="txt_cdc"></div></td>
+        <td>{{ corso.cdc_txt }}</td>
         <td><button type="button" id="choose_cdc">Scegli CDC</button></td>
+      </tr>
+      <tr>
+        <td colspan="2">{{ corso.stato_corso }}</td>
+      </tr>
+      <tr>
+          <td>{{ corso.data_inizio }}</td>
+          <td>{{ corso.data_fine }}</td>
       </tr>
 
 
