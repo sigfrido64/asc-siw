@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import forms
 from .models import Corso
-from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxNumberInput
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxNumberInput, JqxDateInput
 
 
 class NewCorsoForm(forms.ModelForm):
@@ -11,8 +11,8 @@ class NewCorsoForm(forms.ModelForm):
                                       widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     denominazione = forms.CharField(required=True,
                                     widget=JqxTextInput(jqxattrs={'height': 30, 'width': 400, 'minLength': 5}))
-    durata = forms.CharField(required=True,
-                             widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
+    durata = forms.IntegerField(required=True,
+                                widget=JqxTextInput(jqxattrs={'height': 30, 'width': 50}))
     cdc_txt = forms.CharField(required=True, widget=forms.TextInput(attrs={'readonly': 'True'}))
     stato_corso = forms.ComboField(
         fields=[forms.CharField(), ], required=False,
@@ -21,71 +21,13 @@ class NewCorsoForm(forms.ModelForm):
                       'displayMember': 'descrizione', 'valueMember': "id",
                       'data_adapter_url': url_stato_corso},
             attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    """
-    url_telefoni = 'collaboratori:ajax_lista_tipo_telefoni_persona'
-    url_mail = 'collaboratori:ajax_lista_tipo_mail_persona'
-
-    tel1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel2 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel3 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    tel4 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-
-    doc_tel1 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url_telefoni},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    doc_tel2 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url_telefoni},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    doc_tel3 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url_telefoni},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    doc_tel4 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_telefono', 'valueMember': "descrizione_telefono",
-                      'data_adapter_url': url_telefoni},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    mail1 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-    mail2 = forms.CharField(required=False, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 150, 'minLength': 1}))
-
-    doc_mail1 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_mail', 'valueMember': "descrizione_mail",
-                      'data_adapter_url': url_mail},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    doc_mail2 = forms.ComboField(
-        fields=[forms.CharField(), ], required=False,
-        widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 150, 'minLength': 1,
-                      'displayMember': 'descrizione_mail', 'valueMember': "descrizione_mail",
-                      'data_adapter_url': url_mail},
-            attrs={'style': 'float: left; margin-right: 5px;'}))
-
+    data_inizio = forms.DateField(required=True,
+                                  widget=JqxDateInput(jqxattrs={'height': 30, 'width': '150'}))
+    data_fine = forms.DateField(required=True,
+                                widget=JqxDateInput(jqxattrs={'height': 30, 'width': '150'}))
     note = forms.CharField(required=False,
                            widget=JqxTextArea(jqxattrs={'height': 200, 'width': 500, 'minLength': 1}))
-"""
-    
+
     class Meta:
         model = Corso
         fields = ['codice_edizione', 'denominazione', 'durata', 'cdc', 'stato_corso', 'note',
