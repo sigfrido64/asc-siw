@@ -73,8 +73,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
     def test_render_new_corso_with_correct_templates(self):
-        self.fail("Questi sono poi da vedere")
         self.response = self.client.get(URL)
-        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
+        self.assertTemplateUsed(self.response, 'corsi/inserisce_corso.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
