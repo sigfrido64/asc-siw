@@ -6,12 +6,6 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from ..views import corso_inserisce_view
 
-# TODO Bisogna creare i test per la parte di inserimento vero e proprio mettendo i valori nei campi e verificando che
-# vada a buon fine.
-
-from unittest import skip
-
-
 # Url della vista scritto sia in modo diretto che in modo interno.
 URL = "/corsi/inserisce-nuovo/"
 REVERSE_URL = 'corsi:inserisce_nuovo'

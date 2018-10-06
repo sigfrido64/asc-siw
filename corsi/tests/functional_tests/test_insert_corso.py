@@ -10,13 +10,16 @@ from functional_tests.base import FunctionalTest
 
 
 class LoginTest(FunctionalTest):
+    fixtures = ['cdc.json', 'corsi.json']
+    
     def setUp(self):
         # Crea l'utente per le prove.
         super().setUp()
         self.username = 'john'
         self.password = 'secret123'
         self.user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
-        self.user.profile.permessi = {SiwPermessi.AMM_CDC_READ, SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_CDC}
+        self.user.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_INSERISCE,
+                                      SiwPermessi.MENU_CORSI, SiwPermessi.MENU_CORSI_LISTA}
         self.user.save(force_update=True)
         # Login
         self.browser.get(self.live_server_url)
@@ -27,28 +30,29 @@ class LoginTest(FunctionalTest):
         button = self.browser.find_element_by_id('button_login')
         button.send_keys(Keys.ENTER)
     
-    def test_cdc_page(self):
-        # Naviga nei menù per arrivare a quello dei Centri di Costo
-        menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Amministrazione')]")
+    def test_inserisce_corso(self):
+        # Navigo nei menù per arrivare a quello dei Centri di Costo
+        menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Corsi')]")
         ActionChains(self.browser).move_to_element(menu).perform()
-        self.browser.find_element_by_link_text('Centri di Costo').send_keys(Keys.ENTER)
+        self.browser.find_element_by_link_text('Lista Corsi').send_keys(Keys.ENTER)
         
-        # Controlla che nella pagina che trova ci sia AF 2018-2019
-        self.assertIn('AF 2018-2019', self.browser.page_source)
+        # Controllo che ci sia la lista in quanto trovo almeno un corso noto.
+        self.assertIn('CCEA438', self.browser.page_source)
+
+        # Premo il tasto di inserimento.
+        self.browser.find_element_by_id('inserisce_corso').send_keys(Keys.ENTER)
+
+        # Compilo i campi con i dati del nuovo corso
+        self.browser.find_element_by_id('id_codice_edizione').send_keys('SIGI123')
+        self.browser.find_element_by_id('id_denominazione').send_keys('Corso di Prova by SIG')
+        self.browser.find_element_by_id('id_durata').send_keys('60')
+        self.browser.find_element_by_id('id_stato_corso').send_keys('1')
+        self.browser.find_element_by_id('id_data_inizio').send_keys('13/11/1964')
+        self.browser.find_element_by_id('id_data_fine').send_keys('13/11/1965')
+        self.browser.find_element_by_id('id_note').send_keys('Nota dei prova by SIG')
         
-        # Espande completamente l'albero dei centri di costo.
-        self.browser.find_element_by_id('jqxbutton').send_keys(Keys.ENTER)
+        # Faccio l'insert
+        self.browser.find_element_by_id('do_insert').send_keys(Keys.ENTER)
+
+        self.fail('Va a finire il test !')
         
-        # Adesso seleziona quello di PF44
-        menu_pf44 = self.browser.find_element_by_xpath(
-            "//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'PF44')]")
-        ActionChains(self.browser).move_to_element_with_offset(menu_pf44, 10, 10).click().perform()
-        
-        # Gli da il tempo di popolare il frame e poi controllo se trovo il dettaglio del Centro di Costo.
-        try:
-            WebDriverWait(self.browser, 10).until(
-                expected_conditions.presence_of_element_located((By.ID, "dettaglio_cdc")))
-        finally:
-            pass
-        dettaglio_cdc = self.browser.find_element_by_id("dettaglio_cdc")
-        self.assertIn('Progetto Formativo PF44', dettaglio_cdc.text)

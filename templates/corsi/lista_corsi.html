@@ -17,7 +17,7 @@
 <br>
 {% if user|can:siwperms.CORSI_INSERISCE %}
     <div align="right">
-      <a href="{% url 'corsi:inserisce_nuovo' %}">
+      <a href="{% url 'corsi:inserisce_nuovo' %}" id="inserisce_corso">
         <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
       </a>
     </div>
