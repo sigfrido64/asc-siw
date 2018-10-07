@@ -3,22 +3,23 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
-from amm.views import cdc
+from ..views import corso_dettaglio_view
 __author__ = "Pilone Ing. Sigfrido"
 
 
-URL = '/amm/cdc/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
-REVERSE_URL = 'amm:cdc_home'  # Questa è la stringa che uso per il reverse per vedere che link genera.
+ID = 'CCEA438'
+URL = f"/corsi/dettaglio/{ID}/"
+REVERSE_URL = 'corsi:dettaglio_corso'
 
 
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
-        url = reverse(REVERSE_URL)
+        url = reverse(REVERSE_URL, kwargs={'pk': ID})
         self.assertEquals(url, URL)
 
-    def test_list_cdc_url_resolves_cdc_view(self):
+    def test_corsi_dettaglio_url_resolves_dettaglio_corso_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, cdc)
+        self.assertEquals(view.func, corso_dettaglio_view)
 
 
 class MyAccountTestCase(TestCase):
@@ -34,7 +35,7 @@ class MyAccountTestCase(TestCase):
         # Dati dell'utente
         self.myuser = User.objects.get(username=self.username)
         # Link alla vista
-        self.url = reverse(REVERSE_URL)
+        self.url = reverse(REVERSE_URL, kwargs={'pk': ID})
 
 
 class LoginRequiredTests(MyAccountTestCase):
@@ -56,12 +57,12 @@ class PermissionRequiredTests(MyAccountTestCase):
 
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
-    fixtures = ['cdc']
+    fixtures = ['cdc.json', 'corsi.json']
     
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.AMM_CDC_READ}
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_MOSTRA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
@@ -69,8 +70,28 @@ class FormGeneralTests(MyAccountTestCase):
     def test_status_code(self):
         # Il server riesce a fornire la pagina richiesta.
         self.assertEquals(self.response.status_code, 200)
-        
+    
     def test_use_correct_template(self):
         # Controllo che usi il template corretto.
-        self.assertTemplateUsed(self.response, 'amm/cdc_list.html',
+        self.assertTemplateUsed(self.response, 'corsi/dettaglio_corso.html',
                                 "Non è stato usato il template corretto")
+
+    def test_find_know_fields_and_data(self):
+        utf8_content = self.response.content.decode('utf8')
+        expected_html = """
+        <td>Codice Edizione : <strong>CCEA438</strong></td>
+        <td>Denominazione:
+          <strong>
+            ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO
+          </strong>
+        </td>
+        """
+        self.assertInHTML(expected_html, utf8_content)
+
+    def test_find_modify_button_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_MOSTRA,
+                                        SiwPermessi.CORSI_MODIFICA}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.username, password=self.password)
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, 'id="modifica_corso_link"')

@@ -1,0 +1,192 @@
+[
+{
+  "model": "corsi.corso",
+  "pk": "CCEA438",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO",
+    "durata": 12.0,
+    "cdc": 10,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "CCEI131",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "ADDETTO ALLA CONDUZIONE DI CARRELLI ELEVATORI INDUSTRIALI SEMOVENTI CON CONDUCENTE A BORDO",
+    "durata": 12.0,
+    "cdc": 11,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "FFSI10",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "FORMAZIONE PER I FORMATORI DELLA SICUREZZA",
+    "durata": 24.0,
+    "cdc": 10,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "LIIV08",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Lingua Inglese - Livello Elementare",
+    "durata": 60.0,
+    "cdc": 18,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORIOCNC13",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - OCNC",
+    "durata": 2.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORISACC6",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - SACC",
+    "durata": 1.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORISALC7",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - SALC",
+    "durata": 2.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORITGRC56",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - TGRC",
+    "durata": 2.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORITIRC64",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - TIRC",
+    "durata": 2.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+},
+{
+  "model": "corsi.corso",
+  "pk": "ORITMSC28",
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2018-09-11T09:19:53.397",
+    "data_creazione": "2018-09-11T09:19:53.397",
+    "last_user": "Pilone Sigfrido",
+    "denominazione": "Orientamento partecipanti corsi MDL serali - TMSC",
+    "durata": 2.0,
+    "cdc": 13,
+    "stato_corso": 0,
+    "note": "",
+    "data_inizio": "2018-09-03",
+    "data_inizio_annodoy": 2018246,
+    "data_fine": "2018-09-28",
+    "data_fine_annodoy": 2018271
+  }
+}
+]

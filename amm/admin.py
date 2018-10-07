@@ -4,8 +4,14 @@ from import_export.admin import ImportExportModelAdmin
 from .models.centri_di_costo import CentroDiCosto
 from .models.anagrafe_amministrativa_collaboratori import Occasionale, Parasubordinato, Autonomo
 from .models.incarichi import IncaricoDocenza
+from .models.mixins import AnnoFormativo
 
 __author__ = "Pilone Ing. Sigfrido"
+
+
+@admin.register(AnnoFormativo)
+class AnnoFormativoAdmin(ImportExportModelAdmin):
+    exclude = None
 
 
 @admin.register(CentroDiCosto)

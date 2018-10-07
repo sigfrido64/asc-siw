@@ -6,7 +6,7 @@ from accounts.models import SiwPermessi
 from .models.centri_di_costo import CentroDiCosto
 
 
-@ajax_has_permission_decorator(SiwPermessi.AMM_CDC_READ)
+@ajax_has_permission_decorator((SiwPermessi.AMM_CDC_READ, SiwPermessi.CORSI_INSERISCE, SiwPermessi.CORSI_MODIFICA))
 def ajax_centri_di_costo_per_treeview(request):
     cdc = CentroDiCosto.objects.all()
     cdc = cdc.values('id', 'parent', 'nome')

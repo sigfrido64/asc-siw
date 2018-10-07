@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Corsi{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% block content %}
+
+<br>
+{% if user|can:siwperms.CORSI_INSERISCE %}
+    <div align="right">
+      <a href="{% url 'corsi:inserisce_nuovo' %}" id="inserisce_corso">
+        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
+      </a>
+    </div>
+{% endif %}
+<br>
+
+<table style="width:100%" border="1" id="tabella_lista_corsi">
+  <thead>
+    <tr>
+      <th>Codice Edizione</th>
+      <th>Denominazione</th>
+      <th>Durata</th>
+      <th>Dettagli</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for corso in lista_corsi %}
+    <tr>
+      <td>{{ corso.codice_edizione }}</td>
+      <td>{{ corso.denominazione }}</td>
+      <td>{{ corso.durata }}</td>
+      <td>
+        {% if user|can:siwperms.CORSI_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
+          <a href="{% url 'corsi:dettaglio_corso' corso.pk %}">
+            <span class="fa fa-id-card" aria-hidden="true"></span>
+          </a>
+        {% else %}
+          <i class="fa fa-id-card" aria-hidden="true"></i>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

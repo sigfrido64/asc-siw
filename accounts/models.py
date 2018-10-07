@@ -25,6 +25,14 @@ class SiwPermessi(object):
     COLLABORATORE_MOSTRA = 'coll_mostra_view'
     COLLABORATORE_INSERISCE = 'coll_inserisce_view'
     COLLABORATORE_MODIFICA = 'coll_modifica_view'
+    
+    """
+    Corsi
+    """
+    CORSI_LISTA_READ = 'corsi_lista_view'
+    CORSI_MOSTRA = 'corsi_mostra_view'
+    CORSI_INSERISCE = 'corsi_inserisce_view'
+    CORSI_MODIFICA = 'corsi_modifica_view'
 
     """
     Sezione Menù. Al momento uso un permesso per mostrare o meno le voci di menù così che sia possibile avere
@@ -34,8 +42,12 @@ class SiwPermessi(object):
     """
     MENU_AMM = 'menu_amm'
     MENU_AMM_CDC = 'menu_cdc'
+
     MENU_COLLABORATORI = 'menu_collaboratori'
     MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
+    
+    MENU_CORSI = 'menu_corsi'
+    MENU_CORSI_LISTA = 'menu_corsi_lista'
 
     @staticmethod
     def as_dict():
@@ -172,10 +184,16 @@ def get_real_perms(request_user):
     return permessi
 
 
-def has_permission(user, permission_name):
+def has_permission(user, permission_list):
     """Check if a user has a given permission."""
     # Superuser win all !
     if user and user.is_superuser:
         return True
     # Otherwise check for real permissions.
-    return permission_name in user.si_perms
+    if type(permission_list) is tuple or type(permission_list) is list:
+        for permission in permission_list:
+            if permission in user.si_perms:
+                return True
+        return False
+    else:
+        return permission_list in user.si_perms

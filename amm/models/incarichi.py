@@ -74,7 +74,7 @@ class IncaricoDocenza(SiwGeneralModel):
     # Set actual user for last_user.
     def save(self, *args, **kwargs):
         self.importo_incarico_previsto = self.ore_previste * self.parametro_orario + self.aggiuntivo_corso
-        # TODO qui devo usare il calcolo del costo da tipo di incrico amministrativo !
+        # TODO qui devo usare il calcolo del costo da tipo di incarico amministrativo !
         self.costo_incarico_previsto = self.importo_incarico_previsto * 1.2
         super().save(*args, **kwargs)
 

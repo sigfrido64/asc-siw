@@ -4,7 +4,8 @@ from django.template.loader import render_to_string
 
 # Definisco le Classi che possono essere importare da questo modulo.
 __all__ = (
-    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox'
+    'JqxPasswordInput', 'JqxEmailInput', 'JqxTextInput', 'JqxComboInput', 'JqxTextArea', 'JqxCheckBox',
+    'JqxNumberInput', 'JqxDateInput'
 )
 
 
@@ -12,7 +13,6 @@ class JqxInput(Widget):
     """
         Classe di base per tutti gli <input> JQWidgets.
     """
-    
     input_type = None  # Subclasses must define this.
     template_name = 'includes/jq/jqxinput.html'
     
@@ -60,6 +60,11 @@ class JqxTextInput(JqxInput):
 class JqxTextArea(JqxInput):
     input_type = 'text-area'
     template_name = 'includes/jq/jqxtextarea.html'
+    
+    
+class JqxNumberInput(JqxInput):
+    input_type = 'text'
+    template_name = 'includes/jq/jqxnumberinput.html'
 
 
 class JqxComboInput(JqxInput):
@@ -87,3 +92,13 @@ class JqxComboInput(JqxInput):
 class JqxCheckBox(JqxInput):
     input_type = 'checkbox'
     template_name = 'includes/jq/jqxcheckbox.html'
+
+
+class JqxDateInput(JqxInput):
+    input_type = 'text'
+    template_name = 'includes/jq/jqxdatetimeinput.html'
+
+    def __init__(self, attrs=None, jqxattrs=None):
+        jqxattrs['culture'] = 'it-IT'
+        jqxattrs['formatString'] = 'dd-MM-yyyy'
+        super().__init__(attrs, jqxattrs)
