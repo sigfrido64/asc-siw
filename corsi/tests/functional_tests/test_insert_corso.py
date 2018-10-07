@@ -2,11 +2,26 @@
 __author__ = "Pilone Ing. Sigfrido"
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from accounts.models import User, SiwPermessi
 from functional_tests.base import FunctionalTest
+
+import time
+
+
+def scrive_data(web_broser_instance, id_field, date_as_raw_string):
+    wbi = web_broser_instance
+    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
+        send_keys(Keys.ARROW_LEFT).send_keys(Keys.ARROW_LEFT).send_keys(date_as_raw_string).perform()
+
+
+def scrive_nota(web_broser_instance, id_field, testo_per_nota):
+    wbi = web_broser_instance
+    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
+        send_keys(testo_per_nota).perform()
 
 
 class LoginTest(FunctionalTest):
@@ -46,13 +61,25 @@ class LoginTest(FunctionalTest):
         self.browser.find_element_by_id('id_codice_edizione').send_keys('SIGI123')
         self.browser.find_element_by_id('id_denominazione').send_keys('Corso di Prova by SIG')
         self.browser.find_element_by_id('id_durata').send_keys('60')
-        self.browser.find_element_by_id('id_stato_corso').send_keys('1')
-        self.browser.find_element_by_id('id_data_inizio').send_keys('13/11/1964')
-        self.browser.find_element_by_id('id_data_fine').send_keys('13/11/1965')
-        self.browser.find_element_by_id('id_note').send_keys('Nota dei prova by SIG')
         
-        # Faccio l'insert
-        self.browser.find_element_by_id('do_insert').send_keys(Keys.ENTER)
+        # Imposto il cdc corretto.
+        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('choose_cdc')).click().perform()
+        time.sleep(5)
+        
+        # Setto lo stato del corso.
+        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('id_stato_corso')).\
+            click().send_keys(Keys.ARROW_DOWN).perform()
+        # Date di inizio e di fine corso.
+        scrive_data(self.browser, 'id_data_inizio', '13111964')
+        scrive_data(self.browser, 'id_data_fine', '13111965')
+        
+        # Note
+        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('id_note')).\
+            click().pause(0.5).send_keys('Ciao').perform()
 
+        # Faccio l'insert
+        self.browser.find_element_by_id('do_insert').click()
+        
+        time.sleep(5)
         self.fail('Va a finire il test !')
         

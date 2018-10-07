@@ -26,6 +26,8 @@ def corso_inserisce_view(request):
         if form.is_valid():
             form.save()
             return redirect('corsi:home')
+        else:
+            print(form.errors)
     else:
         form = NewCorsoForm()
     return render(request, 'corsi/inserisce_corso.html', {'corso': form})
