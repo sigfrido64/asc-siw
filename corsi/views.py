@@ -41,5 +41,6 @@ def corso_modifica_view(request, pk):
             form.save()
             return redirect('corsi:home')
     else:
-        form = NewCorsoForm(instance=corso)
+        cdc_txt = corso.cdc.nome
+        form = NewCorsoForm(instance=corso, initial={'cdc_txt': cdc_txt})
     return render(request, 'corsi/inserisce_corso.html', {'corso': form})
