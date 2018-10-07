@@ -29,7 +29,7 @@ def corso_inserisce_view(request):
             print(form.errors)
     else:
         form = CorsoForm()
-    return render(request, 'corsi/inserisce_corso.html', {'corso': form})
+    return render(request, 'corsi/inserisce_modifica_corso.html', {'corso': form})
 
 
 @has_permission_decorator(SiwPermessi.CORSI_MODIFICA)
@@ -43,4 +43,4 @@ def corso_modifica_view(request, pk):
     else:
         cdc_txt = corso.cdc.nome
         form = CorsoForm(instance=corso, initial={'cdc_txt': cdc_txt})
-    return render(request, 'corsi/inserisce_corso.html', {'corso': form})
+    return render(request, 'corsi/inserisce_modifica_corso.html', {'corso': form})

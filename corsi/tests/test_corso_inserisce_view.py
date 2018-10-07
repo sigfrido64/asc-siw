@@ -68,6 +68,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
     def test_render_new_corso_with_correct_templates(self):
         self.response = self.client.get(URL)
-        self.assertTemplateUsed(self.response, 'corsi/inserisce_corso.html')
+        self.assertTemplateUsed(self.response, 'corsi/inserisce_modifica_corso.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')

@@ -9,7 +9,7 @@ from ..views import corso_modifica_view
 from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-ID = 'CCEA438'
+ID = 'LIIV08'
 URL = f"/corsi/modifica/{ID}/"
 REVERSE_URL = 'corsi:modifica'
 
@@ -52,25 +52,27 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
-@skip
+
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
+    fixtures = ['cdc.json', 'corsi.json']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.CORSI_INSERISCE}
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_MODIFICA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
     def test_server_serve_page_without_errors(self):
+        print("URL : ", URL)
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
     def test_render_new_corso_with_correct_templates(self):
         self.response = self.client.get(URL)
-        self.assertTemplateUsed(self.response, 'corsi/inserisce_corso.html')
+        self.assertTemplateUsed(self.response, 'corsi/inserisce_modifica_corso.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
