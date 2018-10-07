@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver import ActionChains
 import time
 
 # from .server_tools import reset_database
@@ -15,6 +16,7 @@ from .management.commands.create_session import create_pre_authenticated_session
 MAX_WAIT = 10
 
 CHROME = True
+
 
 def wait(fn):
     def modified_fn(*args, **kwargs):
@@ -32,6 +34,18 @@ def wait(fn):
 SCREEN_DUMP_LOCATION = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'screendumps'
 )
+
+
+def scrive_data(web_broser_instance, id_field, date_as_raw_string):
+    wbi = web_broser_instance
+    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
+        send_keys(Keys.ARROW_LEFT).send_keys(Keys.ARROW_LEFT).send_keys(date_as_raw_string).perform()
+
+
+def scrive_nota(web_broser_instance, id_field, testo_per_nota):
+    wbi = web_broser_instance
+    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
+        send_keys(testo_per_nota).perform()
 
 
 class FunctionalTest(StaticLiveServerTestCase):

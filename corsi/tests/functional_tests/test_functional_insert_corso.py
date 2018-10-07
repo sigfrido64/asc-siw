@@ -2,26 +2,13 @@
 __author__ = "Pilone Ing. Sigfrido"
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from accounts.models import User, SiwPermessi
-from functional_tests.base import FunctionalTest
+from functional_tests.base import FunctionalTest, scrive_data, scrive_nota
 
 import time
-
-
-def scrive_data(web_broser_instance, id_field, date_as_raw_string):
-    wbi = web_broser_instance
-    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
-        send_keys(Keys.ARROW_LEFT).send_keys(Keys.ARROW_LEFT).send_keys(date_as_raw_string).perform()
-
-
-def scrive_nota(web_broser_instance, id_field, testo_per_nota):
-    wbi = web_broser_instance
-    ActionChains(wbi).move_to_element(wbi.find_element_by_id(id_field)).click().pause(0.5).\
-        send_keys(testo_per_nota).perform()
 
 
 class LoginTest(FunctionalTest):
@@ -64,8 +51,22 @@ class LoginTest(FunctionalTest):
         
         # Imposto il cdc corretto.
         ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('choose_cdc')).click().perform()
-        time.sleep(5)
-        
+
+        # Adesso seleziona quello di PF44
+        menu_af = self.browser.find_element_by_xpath(
+            "//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'AF 2018-2019')]")
+        ActionChains(self.browser).move_to_element_with_offset(menu_af, 10, 10).click().perform()
+        time.sleep(0.5)
+        menu_pf = self.browser.find_element_by_xpath(
+            "//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'Apprendisti 2018-2019')]")
+        ActionChains(self.browser).move_to_element_with_offset(menu_pf, 10, 10).click().perform()
+        time.sleep(0.5)
+        menu_pf1 = self.browser.find_element_by_xpath(
+            "//li[contains(@class, 'jqx-tree-item-li') and contains(.//div, 'PF44')]")
+        ActionChains(self.browser).move_to_element_with_offset(menu_pf1, 10, 10).click().perform()
+        # Confermo la selezione.
+        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('do_select')).click().perform()
+
         # Setto lo stato del corso.
         ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('id_stato_corso')).\
             click().send_keys(Keys.ARROW_DOWN).perform()
@@ -74,12 +75,18 @@ class LoginTest(FunctionalTest):
         scrive_data(self.browser, 'id_data_fine', '13111965')
         
         # Note
-        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('id_note')).\
-            click().pause(0.5).send_keys('Ciao').perform()
+        scrive_nota(self.browser, 'id_note', 'Ciao')
 
         # Faccio l'insert
         self.browser.find_element_by_id('do_insert').click()
         
-        time.sleep(5)
-        self.fail('Va a finire il test !')
+        # Aspetto di essere reindirizzato alla pagina della lista dei corsi.
+        try:
+            WebDriverWait(self.browser, 10).until(
+                expected_conditions.presence_of_element_located((By.ID, "tabella_lista_corsi")))
+        finally:
+            pass
         
+        # Qui devo trovare il nuovo corso appena inserito.
+        lista_corsi = self.browser.find_element_by_id("tabella_lista_corsi")
+        self.assertIn('SIGI123', lista_corsi.text)

@@ -6,7 +6,6 @@ from accounts.models import SiwPermessi
 from ..views import corso_dettaglio_view
 __author__ = "Pilone Ing. Sigfrido"
 
-from unittest import skip
 
 ID = 'CCEA438'
 URL = f"/corsi/dettaglio/{ID}/"
