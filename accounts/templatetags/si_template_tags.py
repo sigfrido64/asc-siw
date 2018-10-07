@@ -9,8 +9,8 @@ register = template.Library()
 
 
 @register.filter(name='can')
-def can_template_tag(user, permission):
-    return has_permission(user, permission)
+def can_template_tag(user, permission_list):
+    return has_permission(user, permission_list)
 
 
 @register.simple_tag

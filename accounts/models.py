@@ -184,10 +184,16 @@ def get_real_perms(request_user):
     return permessi
 
 
-def has_permission(user, permission_name):
+def has_permission(user, permission_list):
     """Check if a user has a given permission."""
     # Superuser win all !
     if user and user.is_superuser:
         return True
     # Otherwise check for real permissions.
-    return permission_name in user.si_perms
+    if type(permission_list) is tuple or type(permission_list) is list:
+        for permission in permission_list:
+            if permission in user.si_perms:
+                return True
+        return False
+    else:
+        return permission_list in user.si_perms
