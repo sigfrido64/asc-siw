@@ -31,12 +31,13 @@ class LoginTest(FunctionalTest):
         password_input.send_keys('secret123')
         button = self.browser.find_element_by_id('button_login')
         button.send_keys(Keys.ENTER)
-    
-    def test_inserisce_corso(self):
+        
         # Navigo nei menù per arrivare a quello dei Centri di Costo
         menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Corsi')]")
         ActionChains(self.browser).move_to_element(menu).perform()
         self.browser.find_element_by_link_text('Lista Corsi').send_keys(Keys.ENTER)
+    
+    def test_inserisce_corso(self):
         
         # Controllo che ci sia la lista in quanto trovo almeno un corso noto.
         self.assertIn('CCEA438', self.browser.page_source)

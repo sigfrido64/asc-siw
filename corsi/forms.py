@@ -1,10 +1,10 @@
 # coding=utf-8
 from django import forms
 from .models import Corso
-from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxNumberInput, JqxDateInput
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxDateInput
 
 
-class NewCorsoForm(forms.ModelForm):
+class CorsoForm(forms.ModelForm):
     url_stato_corso = 'corsi:ajax_lista_stati_corso'
 
     codice_edizione = forms.CharField(required=True,
