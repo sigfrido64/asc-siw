@@ -1,5 +1,6 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
+from django.urls import reverse
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -21,7 +22,7 @@ class LoginTest(FunctionalTest):
         self.password = 'secret123'
         self.user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
         self.user.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_MODIFICA,
-                                      SiwPermessi.MENU_CORSI, SiwPermessi.MENU_CORSI_LISTA}
+                                      SiwPermessi.CORSI_MOSTRA, SiwPermessi.MENU_CORSI, SiwPermessi.MENU_CORSI_LISTA}
         self.user.save(force_update=True)
         # Login
         self.browser.get(self.live_server_url)
@@ -32,7 +33,7 @@ class LoginTest(FunctionalTest):
         button = self.browser.find_element_by_id('button_login')
         button.send_keys(Keys.ENTER)
     
-    def test_inserisce_corso(self):
+    def test_modifica_corso(self):
         # Navigo nei menù per arrivare a quello dei Centri di Costo
         menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Corsi')]")
         ActionChains(self.browser).move_to_element(menu).perform()
@@ -41,13 +42,19 @@ class LoginTest(FunctionalTest):
         # Controllo che ci sia la lista in quanto trovo almeno un corso noto.
         self.assertIn('CCEA438', self.browser.page_source)
 
-        # Premo il tasto di inserimento.
-        self.browser.find_element_by_id('inserisce_corso').send_keys(Keys.ENTER)
+        # Premo il link di dettaglio.
+        url = reverse('corsi:dettaglio_corso', kwargs={'pk': 'CCEA438'})
+        self.browser.find_element_by_xpath('//a[@href="' + url + '"]').click()
 
+        # Poi quello di modifica.
+        time.sleep(0.5)
+        self.browser.find_element_by_id('modifica_corso_link').click()
+        
         # Compilo i campi con i dati del nuovo corso
-        self.browser.find_element_by_id('id_codice_edizione').send_keys('SIGI123')
-        self.browser.find_element_by_id('id_denominazione').send_keys('Corso di Prova by SIG')
-        self.browser.find_element_by_id('id_durata').send_keys('60')
+        time.sleep(0.5)
+        self.browser.execute_script("document.getElementById('id_denominazione').value='Corso di Prova by SIG'")
+        
+        self.browser.find_element_by_id('id_durata').send_keys(Keys.DELETE)
         
         # Imposto il cdc corretto.
         ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('choose_cdc')).click().perform()
@@ -89,4 +96,4 @@ class LoginTest(FunctionalTest):
         
         # Qui devo trovare il nuovo corso appena inserito.
         lista_corsi = self.browser.find_element_by_id("tabella_lista_corsi")
-        self.assertIn('SIGI123', lista_corsi.text)
+        self.assertIn('Corso di Prova by SIG', lista_corsi.text)

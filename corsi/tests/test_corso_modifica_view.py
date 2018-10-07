@@ -67,7 +67,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
     def test_server_serve_page_without_errors(self):
-        print("URL : ", URL)
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
