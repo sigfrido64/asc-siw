@@ -87,3 +87,11 @@ class FormGeneralTests(MyAccountTestCase):
         </td>
         """
         self.assertInHTML(expected_html, utf8_content)
+
+    def test_find_modify_button_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_MOSTRA,
+                                        SiwPermessi.CORSI_MODIFICA}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.username, password=self.password)
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, 'id="modifica_corso_link"')

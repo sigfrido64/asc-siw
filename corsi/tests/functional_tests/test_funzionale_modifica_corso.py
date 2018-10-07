@@ -20,7 +20,7 @@ class LoginTest(FunctionalTest):
         self.username = 'john'
         self.password = 'secret123'
         self.user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
-        self.user.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_INSERISCE,
+        self.user.profile.permessi = {SiwPermessi.CORSI_LISTA_READ, SiwPermessi.CORSI_MODIFICA,
                                       SiwPermessi.MENU_CORSI, SiwPermessi.MENU_CORSI_LISTA}
         self.user.save(force_update=True)
         # Login
@@ -31,13 +31,12 @@ class LoginTest(FunctionalTest):
         password_input.send_keys('secret123')
         button = self.browser.find_element_by_id('button_login')
         button.send_keys(Keys.ENTER)
-        
+    
+    def test_inserisce_corso(self):
         # Navigo nei menù per arrivare a quello dei Centri di Costo
         menu = self.browser.find_element_by_xpath("//*[starts-with(.,'Corsi')]")
         ActionChains(self.browser).move_to_element(menu).perform()
         self.browser.find_element_by_link_text('Lista Corsi').send_keys(Keys.ENTER)
-    
-    def test_inserisce_corso(self):
         
         # Controllo che ci sia la lista in quanto trovo almeno un corso noto.
         self.assertIn('CCEA438', self.browser.page_source)

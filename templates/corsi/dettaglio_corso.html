@@ -12,7 +12,7 @@
 
 {% if user|can:siwperms.CORSI_MODIFICA %}
     <div align="right">
-      <a href="{% url 'corsi:modifica' corso.pk %}">
+      <a href="{% url 'corsi:modifica' corso.pk %}" id="modifica_corso_link">
         <span class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue"></span>Modifica
       </a>
     </div>
