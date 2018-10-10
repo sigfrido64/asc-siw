@@ -1,11 +1,5 @@
 # coding=utf-8
 from django.http import JsonResponse
-from django.template.loader import render_to_string
-from django.core.exceptions import ObjectDoesNotExist
-from collaboratori.models import Collaboratore
-from anagrafe.models import Persona, TipoTelefonoPersone, TipoMailPersone
-from siw.decorators import ajax_has_permission_decorator
-from accounts.models import SiwPermessi
 from .models import Corso
 
 

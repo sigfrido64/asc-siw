@@ -36,7 +36,7 @@ class IncaricoDocenza(SiwGeneralModel):
     )
 
     stato_incarico = models.IntegerField(choices=STATO_INCARICO_CHOICES, default=BOZZA)
-    numero = models.IntegerField()
+    numero = models.CharField(max_length=10, unique=True)
 
     data_incarico = models.DateField(auto_now=True)
     data_inizio_incarico = models.DateField(auto_now=True)

@@ -77,6 +77,8 @@ class LoginTest(FunctionalTest):
         # Note
         scrive_nota(self.browser, 'id_note', 'Ciao')
 
+        time.sleep(10)
+
         # Faccio l'insert
         self.browser.find_element_by_id('do_insert').click()
         

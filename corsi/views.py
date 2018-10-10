@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
 from .models import Corso
