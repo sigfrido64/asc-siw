@@ -1,0 +1,23 @@
+<p><strong>Dettaglio Persona</strong></p>
+{{ persona.titolo }} {{ persona.cognome }}, {{ persona.nome }}<br>
+Vip : {{ persona.vip }}<br>
+Nato a : {{ persona.comune_nascita }} ({{ persona.provincia_nascita }}) [{{ persona.stato_nascita }}]<br>
+Il : {{ persona.data_nascita }}<br>
+Cittadinanza : {{ persona.cittadinanza }}<br>
+Sesso : {{ persona.sesso }}<br>
+Domicilio : {{ persona.indirizzo_domicilio }},{{ persona.cap_domicilio }},{{ persona.comune_domicilio }} ({{ persona.provincia_domicilio }})
+[{{ persona.regione_domicilio }} - {{ persona.stato_domicilio }}]<br>
+Residenza : {{ persona.indirizzo_residenza }},{{ persona.cap_residenza }},{{ persona.comune_residenza }} ({{ persona.provincia_residenza }})
+[{{ persona.regione_residenza }} - {{ persona.stato_residenza }}]<br>
+Codice Fiscale : {{ persona.cf }}<br>
+Recapiti Telefonici : <br>
+{{ persona.doc_tel1 }} : {{ persona.tel1 }} - {{ persona.doc_tel2 }} : {{ persona.tel2 }}<br>
+{{ persona.doc_tel3 }} : {{ persona.tel3 }} - {{ persona.doc_tel4 }} : {{ persona.tel4 }}<br>
+Recapiti Posta Elettronica :<br>
+{{ persona.doc_mail1 }} : {{ persona.mail1 }}<br>
+{{ persona.doc_mail2 }} : {{ persona.mail2 }}<br>
+Note : {{ persona.note }}<br>
+
+<br>
+{% include "includes/form_systemdata.html" with form=persona %}
+
