@@ -18,6 +18,14 @@
     </div>
 {% endif %}
 <br>
+{% if user|can:siwperms.ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA %}
+    <div align="right">
+      <a href="{% url 'collaboratori:modifica_esistente' collaboratore.pk %}">
+        <span class="fa fa-search-plus" aria-hidden="true" style="color:blue"></span>Visualizza Dettaglio Anagrafica
+      </a>
+    </div>
+{% endif %}
+<br>
 <table border="1" width="100%">
     <tr>
         <td colspan="2">Dettagli Collaboratore
@@ -52,10 +60,44 @@
         <td colspan="2">{{ collaboratore.note }}</td>
     </tr>
 </table>
-
 {% include "includes/form_systemdata.html" with form=collaboratore %}
+
+<div id="window_detail">
+    <div id="window_detail_header"></div>
+    <div id="window_detail_content"></div>
+</div>
 
 {% endblock %}
 
 {% block javascript %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+        function carica_dettaglio_collaboratore(id_collaboratore) {
+            var url = $("#ciccio").attr("detail-collaboratore-url");  // recupera l'url del dettaglio collaboratore
+            var dettaglio_collaboratore = "";
+            $.ajax({                       // Inizializza la richiesta AJAX
+                url: url,                    // Imposta l'url della richiesta
+                data: {
+                    'id_collaboratore': id_collaboratore               // Mette l'id collaboratore nel parametro GET
+                },
+                success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
+                    dettaglio_collaboratore = data;  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                    // arrivato dal server !
+                }
+            });
+            $('#window_detail').jqxWindow({
+                width: 400,
+                height: 120, resizable: false,
+                content: dettaglio_collaboratore
+                // cancelButton: $('#cancelButton'),
+                // position: { x: offset.left + 50, y: offset.top + 50},
+                // initContent: function () {
+                //    $('#searchTextButton').jqxButton({ width: '80px', disabled: true });
+                //    $('#cancelButton').jqxButton({ width: '80px', disabled: false });
+                //    $('#matchCaseCheckBox').jqxCheckBox({ width: '150px' });
+                //}
+            });
+        }
+    });
+    </script>
 {% endblock %}

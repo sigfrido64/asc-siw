@@ -21,7 +21,7 @@ class SiwPermessi(object):
     """
     Anagrafe
     """
-    ANAGRAFE_DETTAGLIO_PERSONA = 'anagrafe_dettaglio_persona_view'
+    ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA = 'anagrafe_dettaglio_persona_view'
 
     """
     Collaboratori
