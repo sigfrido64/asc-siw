@@ -1,4 +1,5 @@
-<p><strong>Dettaglio Persona</strong></p>
+<div id='dettaglio_anagrafica_persona'>
+<p><strong>Dettaglio Anagrafica Persona</strong></p>
 {{ persona.titolo }} {{ persona.cognome }}, {{ persona.nome }}<br>
 Vip : {{ persona.vip }}<br>
 Nato a : {{ persona.comune_nascita }} ({{ persona.provincia_nascita }}) [{{ persona.stato_nascita }}]<br>
@@ -21,3 +22,4 @@ Note : {{ persona.note }}<br>
 <br>
 {% include "includes/form_systemdata.html" with form=persona %}
 
+</div>

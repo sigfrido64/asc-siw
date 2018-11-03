@@ -20,7 +20,8 @@
 <br>
 {% if user|can:siwperms.ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA %}
     <div align="right">
-      <a href="{% url 'anagrafe:ajax_dettaglio_persona' collaboratore.persona.pk %}" onclick='return carica_dettaglio_collaboratore()' id="ciccio">
+      <a href="{% url 'anagrafe:ajax_dettaglio_persona' collaboratore.persona.pk %}"
+         onclick='return mostra_dettaglio_collaboratore()' id="dettaglio_collaboratore">
         <span class="fa fa-search-plus" aria-hidden="true" style="color:blue"></span>Visualizza Dettaglio Anagrafica
       </a>
     </div>
@@ -71,8 +72,8 @@
 
 {% block javascript %}
 <script type="text/javascript">
-  function carica_dettaglio_collaboratore() {
-    let url = $("#ciccio").attr("href");  // recupera l'url del dettaglio collaboratore
+  function mostra_dettaglio_collaboratore() {
+    let url = $("#dettaglio_collaboratore").attr("href");  // recupera l'url del dettaglio collaboratore
     $.ajax({
       url: url,
       success: function(dettaglio_collaboratore){
