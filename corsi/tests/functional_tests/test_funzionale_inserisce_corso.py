@@ -67,18 +67,16 @@ class LoginTest(FunctionalTest):
         # Confermo la selezione.
         ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('do_select')).click().perform()
 
-        # Setto lo stato del corso.
-        ActionChains(self.browser).move_to_element(self.browser.find_element_by_id('id_stato_corso')).\
-            click().send_keys(Keys.ARROW_DOWN).perform()
+        # Setto lo stato del corso usando il suo valore e non l'etichetta.
+        self.browser.execute_script("$('#id_stato_corso').val('50')")
+        
         # Date di inizio e di fine corso.
         scrive_data(self.browser, 'id_data_inizio', '13111964')
         scrive_data(self.browser, 'id_data_fine', '13111965')
         
         # Note
         scrive_nota(self.browser, 'id_note', 'Ciao')
-
-        time.sleep(10)
-
+        
         # Faccio l'insert
         self.browser.find_element_by_id('do_insert').click()
         
