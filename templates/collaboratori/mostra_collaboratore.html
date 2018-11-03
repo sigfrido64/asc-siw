@@ -20,7 +20,7 @@
 <br>
 {% if user|can:siwperms.ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA %}
     <div align="right">
-      <a href="{% url 'collaboratori:modifica_esistente' collaboratore.pk %}">
+      <a href="{% url 'anagrafe:ajax_dettaglio_persona' collaboratore.persona.pk %}" onclick='return check()' id="ciccio">
         <span class="fa fa-search-plus" aria-hidden="true" style="color:blue"></span>Visualizza Dettaglio Anagrafica
       </a>
     </div>
@@ -71,20 +71,25 @@
 
 {% block javascript %}
     <script type="text/javascript">
-    $(document).ready(function () {
+            function check()
+            {
+                window.alert("Ciao");
+                carica_dettaglio_collaboratore(12);
+                return false;
+            }
+
+        var dettaglio_collaboratore = "";
         function carica_dettaglio_collaboratore(id_collaboratore) {
-            var url = $("#ciccio").attr("detail-collaboratore-url");  // recupera l'url del dettaglio collaboratore
-            var dettaglio_collaboratore = "";
+            var url = $("#ciccio").attr("href");  // recupera l'url del dettaglio collaboratore
             $.ajax({                       // Inizializza la richiesta AJAX
                 url: url,                    // Imposta l'url della richiesta
-                data: {
-                    'id_collaboratore': id_collaboratore               // Mette l'id collaboratore nel parametro GET
-                },
                 success: function (data) {   // `data` è il risultato della funzione della vista `load_corsi`
                     dettaglio_collaboratore = data;  // rimpiazza il contenuto del combo box della lista dei corsi con quello
+                    window.alert(dettaglio_collaboratore);
                     // arrivato dal server !
                 }
             });
+            window.alert(dettaglio_collaboratore);
             $('#window_detail').jqxWindow({
                 width: 400,
                 height: 120, resizable: false,
@@ -97,7 +102,7 @@
                 //    $('#matchCaseCheckBox').jqxCheckBox({ width: '150px' });
                 //}
             });
-        }
-    });
+            window.alert(dettaglio_collaboratore);
+    };
     </script>
 {% endblock %}
