@@ -8,11 +8,9 @@ from selenium.webdriver.support import expected_conditions
 from accounts.models import User, SiwPermessi
 from functional_tests.base import FunctionalTest
 
-import time
-
 """
 TODO
-Bisogna creare anche tutti gli altri test funzionali.
+Bisogna creare anche tutti gli altri test funzionali per inserimento e modifica di un elemento.
 """
 
 
