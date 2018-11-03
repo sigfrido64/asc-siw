@@ -19,6 +19,11 @@ class SiwPermessi(object):
     AMM_CDC_READ = 'amm_cdc_read'
 
     """
+    Anagrafe
+    """
+    ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA = 'anagrafe_dettaglio_persona_view'
+
+    """
     Collaboratori
     """
     COLLABORATORI_LISTA_READ = 'coll_lista_view'

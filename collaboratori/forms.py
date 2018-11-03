@@ -69,13 +69,14 @@ class NewCollaboratoreForm(forms.ModelForm):
 
     class Meta:
         model = Collaboratore
-        fields = ['tel1', 'tel2', 'tel3', 'tel4', 'doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4', 'mail1', 'mail2',
+        fields = ['persona', 'tel1', 'tel2', 'tel3', 'tel4', 'doc_tel1', 'doc_tel2', 'doc_tel3', 'doc_tel4', 'mail1', 'mail2',
                   'doc_mail1', 'doc_mail2', 'note']
+        widgets = {'persona': forms.HiddenInput()}
 
 
 class UpdateCollaboratoreForm(NewCollaboratoreForm):
 
-    in_uso = forms.BooleanField(required=True, widget=JqxCheckBox(jqxattrs={'height': 30, 'width': 150}))
+    in_uso = forms.BooleanField(widget=JqxCheckBox(jqxattrs={'height': 30, 'width': 150}))
 
     class Meta:
         model = Collaboratore

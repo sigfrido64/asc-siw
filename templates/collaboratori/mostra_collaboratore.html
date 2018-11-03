@@ -18,6 +18,15 @@
     </div>
 {% endif %}
 <br>
+{% if user|can:siwperms.ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA %}
+    <div align="right">
+      <a href="{% url 'anagrafe:ajax_dettaglio_persona' collaboratore.persona.pk %}"
+         onclick='return mostra_dettaglio_collaboratore()' id="dettaglio_collaboratore">
+        <span class="fa fa-search-plus" aria-hidden="true" style="color:blue"></span>Visualizza Dettaglio Anagrafica
+      </a>
+    </div>
+{% endif %}
+<br>
 <table border="1" width="100%">
     <tr>
         <td colspan="2">Dettagli Collaboratore
@@ -52,10 +61,38 @@
         <td colspan="2">{{ collaboratore.note }}</td>
     </tr>
 </table>
-
 {% include "includes/form_systemdata.html" with form=collaboratore %}
+
+<div id="window_detail">
+    <div id="window_detail_header"></div>
+    <div id="window_detail_content"></div>
+</div>
 
 {% endblock %}
 
 {% block javascript %}
+<script type="text/javascript">
+  function mostra_dettaglio_collaboratore() {
+    let url = $("#dettaglio_collaboratore").attr("href");  // recupera l'url del dettaglio collaboratore
+    $.ajax({
+      url: url,
+      success: function(dettaglio_collaboratore){
+          apre_finestra(dettaglio_collaboratore);
+      }
+    });
+    return false  // Così fermo l'apertura del link dell'href !
+  }
+
+  function apre_finestra(dettaglio_collaboratore) {
+    let finestra = $('#window_detail');
+    finestra.jqxWindow({
+      width: '80%', height: '80%',
+      resizable: false,
+      isModal: true,
+      content: dettaglio_collaboratore
+    });
+    finestra.jqxWindow({ title: 'Dettaglio Anagrafica Collaboratore' });
+    finestra.jqxWindow('open');
+  }
+</script>
 {% endblock %}

@@ -86,9 +86,22 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def test_page_not_contains_edit_link_without_permission(self):
         self.assertNotContains(self.response, '/collaboratori/anagrafica/modifica/')
 
+
+class FormTestsForSpecialPermissions(MyAccountTestCase):
+    # Adesso controllo che ci siano i pulsanti che vengono abilitati con permessi speciali.
+    fixtures = ['collaboratori.json']
+    
     def test_page_contains_edit_link_when_allowed(self):
         self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_MOSTRA, SiwPermessi.COLLABORATORE_MODIFICA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
         self.response = self.client.get(URL)
         self.assertContains(self.response, '/collaboratori/anagrafica/modifica/')
+
+    def test_page_contains_show_anagrafica_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_MOSTRA, SiwPermessi.ANAGRAFE_DETTAGLIO_PERSONA_MOSTRA}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, '/collaboratori/anagrafica/modifica/')
+        self.fail("Vai a finire i test !")

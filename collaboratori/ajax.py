@@ -1,6 +1,5 @@
 # coding=utf-8
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from collaboratori.models import Collaboratore

@@ -45,7 +45,13 @@ def inserisce_nuovo_collaboratore_view(request, pk_persona):
             collaboratore.save()
             return redirect('collaboratori:lista_collaboratori')
     else:
-        form = NewCollaboratoreForm()
+        form = NewCollaboratoreForm(initial={'tel1': persona.tel1, 'tel2': persona.tel2, 'tel3': persona.tel3,
+                                             'tel4': persona.tel4, 'doc_tel1': persona.doc_tel1,
+                                             'doc_tel2': persona.doc_tel2, 'doc_tel3': persona.doc_tel3,
+                                             'doc_tel4': persona.doc_tel4, 'mail1': persona.mail1,
+                                             'mail2': persona.mail2, 'doc_mail1': persona.doc_mail1,
+                                             'doc_mail2': persona.doc_mail2,
+                                             'persona': persona})
     return render(request, 'collaboratori/inserisce_collaboratore.html', {'persona': persona, 'form': form})
 
 

@@ -4,35 +4,35 @@ from siw.siwmodels import SiwGeneralModel
 
 """
 --
-	-- Se la stringa è nulla riporto NULL.
-	--
-	IF @Ragione_Sociale IS NULL
-		RETURN NULL
+-- Se la stringa è nulla riporto NULL.
+--
+IF @Ragione_Sociale IS NULL
+    RETURN NULL
 
-	--
-	-- Porto la Ragione Sociale in maiuscolo.
-	--
-	SET @V1 = UPPER(@Ragione_Sociale)
+--
+-- Porto la Ragione Sociale in maiuscolo.
+--
+SET @V1 = UPPER(@Ragione_Sociale)
 
-	--
-	-- Elimino i segni come . ; , & ' ' - " ( ) / \
-	--
-	SET @V1 = REPLACE (@V1, '.', '')
-	SET @V1 = REPLACE (@V1, ';', '')
-	SET @V1 = REPLACE (@V1, ',', '')
-	SET @V1 = REPLACE (@V1, '&', '')
-	SET @V1 = REPLACE (@V1, '-', '')
-	SET @V1 = REPLACE (@V1, '"', '')
-	SET @V1 = REPLACE (@V1, '(', '')
-	SET @V1 = REPLACE (@V1, ')', '')
-	SET @V1 = REPLACE (@V1, '/', '')
-	SET @V1 = REPLACE (@V1, '\', '')
-	SET @V1 = REPLACE (@V1, ' ', '')
+--
+-- Elimino i segni come . ; , & ' ' - " ( ) / \
+--
+SET @V1 = REPLACE (@V1, '.', '')
+SET @V1 = REPLACE (@V1, ';', '')
+SET @V1 = REPLACE (@V1, ',', '')
+SET @V1 = REPLACE (@V1, '&', '')
+SET @V1 = REPLACE (@V1, '-', '')
+SET @V1 = REPLACE (@V1, '"', '')
+SET @V1 = REPLACE (@V1, '(', '')
+SET @V1 = REPLACE (@V1, ')', '')
+SET @V1 = REPLACE (@V1, '/', '')
+SET @V1 = REPLACE (@V1, '\', '')
+SET @V1 = REPLACE (@V1, ' ', '')
 
-	--
-	-- Riporto il risultato.
-	--
-	RETURN @V1
+--
+-- Riporto il risultato.
+--
+RETURN @V1
 """
 
 

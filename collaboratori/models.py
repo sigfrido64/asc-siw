@@ -145,6 +145,10 @@ class Collaboratore(SiwGeneralModel):
         if self.persona and self.dipendente:
             raise ValidationError('Il collaboratore non può essere contemporaneamente una persona ed un dipendente.')
         # Ma almeno uno dei due deve essere valorizzato.
-        if (self.persona or self.dipendente) is None :
+        """
+        TODO : Devo rivedere tutta la maschera per l'inserimento perchè questa parte di controllo richiede la modifica
+               del modelForm.
+        """
+        if (self.persona or self.dipendente) is None:
             raise ValidationError({'persona': 'Il collaboratore deve essere una persona o un dipendente.',
                                    'dipendente': 'Il collaboratore deve essere una persona o un dipendente.'})
