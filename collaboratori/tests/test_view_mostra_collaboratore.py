@@ -103,5 +103,4 @@ class FormTestsForSpecialPermissions(MyAccountTestCase):
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
         self.response = self.client.get(URL)
-        self.assertContains(self.response, '/collaboratori/anagrafica/modifica/')
-        self.fail("Vai a finire i test !")
+        self.assertContains(self.response, '/anagrafe/ajax/dettaglio-persona/')
