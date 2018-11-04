@@ -76,6 +76,6 @@ class IncaricoDocenzaAdmin(ImportExportModelAdmin):
     # read only che mi garantisce anche che non possano essere modificate.
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione', 'importo_incarico_previsto',
                        'importo_incarico_effettivo', 'costo_incarico_previsto', 'costo_incarico_effettivo',
-                       'ore_effettive')
+                       'ore_effettive', 'rimborso_spese_effettivo')
     list_select_related = True
     exclude = None
