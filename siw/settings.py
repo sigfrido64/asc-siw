@@ -213,3 +213,9 @@ LOGIN_URL = 'login'
 # Settaggi specifici per Django import-export che garantiscono l'incapsulamento delle operazioni.
 #
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+#
+# Settaggi per Celery.
+#
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_APP_NAME = config('CELERY_APP_NAME')
