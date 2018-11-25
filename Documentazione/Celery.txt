@@ -1,0 +1,10 @@
+ATTENZIONE
+
+La versione 4 di Celery non funziona con Windows se non install eventlet
+
+# pip install eventlet
+
+Poi lancio i worker con l'opzione -P eventlet
+
+# celery -A siw worker -l info -P eventlet
+

@@ -1,9 +1,5 @@
-amqp==1.4.9
-anyjson==0.3.3
 asn1crypto==0.24.0
 bcrypt==3.1.4
-billiard==3.3.0.23
-celery==3.1.25
 cffi==1.11.4
 cryptography==2.1.4
 diff-match-patch==20121119
@@ -18,7 +14,6 @@ Fabric==1.14.0
 idna==2.6
 jdcal==1.4
 Jinja2==2.10
-kombu==3.0.37
 lxml==4.2.4
 Markdown==2.6.11
 MarkupSafe==1.0
