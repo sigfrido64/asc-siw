@@ -9,12 +9,12 @@ from django.contrib import messages
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from .forms import GenerateRandomUserForm
-from .tasks import prova
+from .tasks import prova, allinea_aziende_task
 
 
 def allinea_prova(request):
     # Vado a leggere gli elementi dal data base SQL Server.
-    prova.delay(10)
+    allinea_aziende_task.delay()
     return HttpResponse("E questa è la risposta per il browser !")
 
 
@@ -397,6 +397,34 @@ def allinea_aziende_view(request):
     # Compongo la risposta.
     return HttpResponse(f"Allineate Aziende !, processate : {totali}, aggiornate : {aggiornati}, inserite : {inseriti}")
 
+
+def allinea_aziende_view_old(request):
+    # Vado a leggere gli elementi dal data base SQL Server.
+    # query = "SELECT * from [Assocam].[dbo].[Anagrafica Aziende] "
+    aziende_asc = sqlserverinterface(QUERY_SELECT_AZIENDE)
+
+    count = totali = aggiornati = inseriti = 0
+    print("Si parte !")
+    for azienda_asc in aziende_asc:
+        try:
+            azienda = Azienda.objects.get(asc_id=azienda_asc['Id Azienda'])
+        except ObjectDoesNotExist:
+            _compila_e_salva_record_azienda(azienda_asc)
+            inseriti += 1
+        else:
+            if azienda_asc['TsAggiornamento'] > azienda.asc_data_elemento:
+                _compila_e_salva_record_azienda(azienda_asc, azienda)
+                aggiornati += 1
+
+        count = count + 1
+        totali = totali + 1
+        if count > 50:
+            print(__name__ + "Processate altre 50 alle " + datetime.datetime.now().__str__() + " per un totale di " +
+                  totali.__str__())
+            count = 0
+
+    # Compongo la risposta.
+    return HttpResponse(f"Allineate Aziende !, processate : {totali}, aggiornate : {aggiornati}, inserite : {inseriti}")
 
 def allinea_contatti_aziende_view(request):
     # Vado a leggere gli elementi dal data base SQL Server.
