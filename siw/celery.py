@@ -8,7 +8,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'siw.settings')
 
 app = Celery(settings.CELERY_APP_NAME)
 
-# Using a string here means the worker will not have to
-# pickle the object when using Windows.
-app.config_from_object('django.conf:settings')
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()

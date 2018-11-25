@@ -1,6 +1,7 @@
 ATTENZIONE
 
-La versione 4 di Celery non funziona con Windows se non install eventlet
+La versione 4 di Celery non funziona con Windows se non install eventlet !!!
+Per cui sotto Windows devo usare i seguenti comandi a cui aggiungo '-P eventlet'
 
 # pip install eventlet
 
@@ -8,3 +9,10 @@ Poi lancio i worker con l'opzione -P eventlet
 
 # celery -A siw worker -l info -P eventlet
 
+Per lanciare i vari worker uso :
+
+# celery -A siw worker -l info -P eventlet -E -n worker1@%h
+
+N.B.
+1) worker1, .. workerN : Uno diverso per ogni worker altrimenti fa casino nell'assegnazione dei task ai worker
+2) Lanciare i worker dal venv allo stesso livello di manage.py
