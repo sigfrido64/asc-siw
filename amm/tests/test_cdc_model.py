@@ -5,7 +5,7 @@ from django.urls import reverse, resolve
 from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
-from siw.sig_debug import response_debug
+from siw.sig_utils import response_debug
 __author__ = "Pilone Ing. Sigfrido"
 
 """

@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
-from siw.sig_debug import response_debug
+from siw.sig_utils import response_debug
 
 from ..views import lista_collaboratori_view
 __author__ = "Pilone Ing. Sigfrido"

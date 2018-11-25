@@ -1,10 +1,21 @@
 # coding=utf-8
-import time
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from .models import Persona, Azienda, PersonaInAzienda
 from siw.sqlserverinterface import sqlserverinterface
+
+from django.contrib import messages
+from django.views.generic.edit import FormView
+from django.shortcuts import redirect
+from .forms import GenerateRandomUserForm
+from .tasks import prova
+
+
+def allinea_prova(request):
+    # Vado a leggere gli elementi dal data base SQL Server.
+    prova.delay(10)
+    return HttpResponse("E questa è la risposta per il browser !")
 
 
 QUERY_SELECT_PERSONE = """
@@ -388,6 +399,38 @@ def allinea_aziende_view(request):
 
 
 def allinea_contatti_aziende_view(request):
+    # Vado a leggere gli elementi dal data base SQL Server.
+    # query = "SELECT * from [Assocam].[dbo].[Anagrafica Persone] "
+    contatti_in_azienda_asc = sqlserverinterface(QUERY_SELECT_CONTATTI_AZIENDE)
+
+    count = totali = aggiornati = inseriti = 0
+    print("Si parte !")
+    for contatto_in_azienda_asc in contatti_in_azienda_asc:
+        try:
+            persona = Persona.objects.get(asc_ca_id=contatto_in_azienda_asc['Id Contatto'])
+        except ObjectDoesNotExist:
+            _salva_contatto_azienda_come_persona(contatto_in_azienda_asc)
+            persona = Persona.objects.get(asc_ca_id=contatto_in_azienda_asc['Id Contatto'])
+            _salva_contatto_azienda(contatto_in_azienda_asc, persona)
+            inseriti += 1
+        else:
+            if contatto_in_azienda_asc['TsAggiornamento'] > persona.asc_ca_data_elemento:
+                _salva_contatto_azienda_come_persona(contatto_in_azienda_asc, persona)
+                _salva_contatto_azienda(contatto_in_azienda_asc, persona)
+                aggiornati += 1
+
+        count = count + 1
+        totali = totali + 1
+        if count > 50:
+            print(__name__ + "Processati altri 50 alle " + datetime.datetime.now().__str__() + " per un totale di " +
+                  totali.__str__())
+            count = 0
+
+    # Compongo la risposta.
+    return HttpResponse(f"Allineato Contatti Aziende !, processati : {totali}, aggiornati : {aggiornati}, inseriti : {inseriti}")
+
+
+def allinea_tutto_view(request):
     # Vado a leggere gli elementi dal data base SQL Server.
     # query = "SELECT * from [Assocam].[dbo].[Anagrafica Persone] "
     contatti_in_azienda_asc = sqlserverinterface(QUERY_SELECT_CONTATTI_AZIENDE)

@@ -208,6 +208,7 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 #
 LOGIN_URL = 'login'
 
+
 #
 # Settaggi specifici per Django import-export che garantiscono l'incapsulamento delle operazioni.
 #
