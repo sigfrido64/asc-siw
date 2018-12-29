@@ -43,7 +43,51 @@
         $(function() { $.jqx.theme = 'orange'; });
       </script>
 
-      <a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a>
+      <table width="100%">
+        <tr>
+          <td align="left" width="50%"><a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a></td>
+          <td align="right" width="50%"><div id="id_anno_formativo"></div></td>
+        </tr>
+      </table>
+      <script type="text/javascript">
+      $(document).ready(function () {
+          let source_af = {
+             datatype: "json",
+             datafields: [
+                 {name: 'pk'},
+                 {name: 'anno_formativo'}
+             ],
+             url: "{% url 'amm:ajax_load_af' %}"
+          };
+          let dataAdapter_af = new $.jqx.dataAdapter(source_af);
+
+          $("#id_anno_formativo").jqxComboBox({placeHolder: 'Anno Formativo', source: dataAdapter_af,
+            displayMember: "anno_formativo", valueMember: "pk"});
+          $("#id_anno_formativo").on('bindingComplete', function (event) {
+            $("#id_anno_formativo").val('{{ anno_formativo }}');
+            });
+          $("#id_anno_formativo").on('change', function (event)
+           {
+              var args = event.args;
+              if (args) {
+              // index represents the item's index.
+              var index = args.index;
+              var item = args.item;
+              // get item's label and value.
+              var label = item.label;
+              var value = item.value;
+              var type = args.type; // keyboard, mouse or null depending on how the item was selected.
+
+              $.ajax({                       // Inizializza la richiesta AJAX
+                  url: "{% url 'amm:ajax_set_af' %}",                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+                  data: {
+                    'anno_formativo': label
+                  }
+              });
+           }
+           });
+      });
+      </script>
 
       {# Include il menù principale #}
       {% include "includes/menu.html" %}

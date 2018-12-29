@@ -8,10 +8,13 @@ from accounts.models import SiwPermessi
 from siw.sig_utils import response_debug
 __author__ = "Pilone Ing. Sigfrido"
 
+# TODO
 """
 TODO
 !! A T T E N Z I O N E !! 
 Questa è tutta da rivedere !
+perchè devo mettere tutti i test che voglio che si provino prima di salvare un oggetto con il modello
+mi servirà per controllare che i meccanismi funzionino !
 """
 URL = '/amm/cdc/'  # Questo è il link che ho scritto nelle urls per arrivare a questa vista.
 REVERSE_URL = 'amm:cdc_home'  # Questa è la stringa che uso per il reverse per vedere che link genera.

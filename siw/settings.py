@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import sys
+import sys
 from decouple import config
 from unipath import Path
 import dj_database_url
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'anagrafe',
     'collaboratori',
     'corsi',
+    'acquisti'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +86,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'siw.context_processor.siwperms',
+                'siw.context_processor.si_special_dicts',
             ],
         },
     },
@@ -219,3 +221,8 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 #
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_APP_NAME = config('CELERY_APP_NAME')
+
+#
+# Mi dice se non in modalità di test o meno.
+#
+TESTING = sys.argv[1:2] == ['test']
