@@ -46,18 +46,26 @@
       <table width="100%">
         <tr>
           <td align="left" width="50%"><a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a></td>
-          <td align="right" width="50%"><div id="id_anno_formativo"></div></td>
+          <td align="right" width="50%">
+            <div id="id_anno_formativo"
+                 load-af-url="{% url 'amm:ajax_load_af' %}"
+                 set-af-url="{% url 'amm:ajax_set_af' %}">
+            </div>
+          </td>
         </tr>
       </table>
       <script type="text/javascript">
       $(document).ready(function () {
+          var load_af_url = $("#id_anno_formativo").attr("load-af-url");
+          var set_af_url = $("#id_anno_formativo").attr("set-af-url");
+
           let source_af = {
              datatype: "json",
              datafields: [
                  {name: 'pk'},
                  {name: 'anno_formativo'}
              ],
-             url: "{% url 'amm:ajax_load_af' %}"
+             url: load_af_url
           };
           let dataAdapter_af = new $.jqx.dataAdapter(source_af);
 
@@ -79,7 +87,7 @@
               var type = args.type; // keyboard, mouse or null depending on how the item was selected.
 
               $.ajax({                       // Inizializza la richiesta AJAX
-                  url: "{% url 'amm:ajax_set_af' %}",                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+                  url: set_af_url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
                   data: {
                     'anno_formativo': label
                   }
