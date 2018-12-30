@@ -45,13 +45,14 @@ class SiwPermessi(object):
     TODO : Da verificare se questa impostazione può o meno funzionare in generale e se non crea più problemi di quanti
     ne risolve nel mismatch tra permessi sulle viste e permessi per i menù
     """
-    MENU_AMM = 'menu_amm'
+    MENU_AMM = 'menu_amm'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_AMM_CDC = 'menu_cdc'
+    MENU_AMM_ACQUISTI = 'menu_acquisti'
 
-    MENU_COLLABORATORI = 'menu_collaboratori'
+    MENU_COLLABORATORI = 'menu_collaboratori'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
     
-    MENU_CORSI = 'menu_corsi'
+    MENU_CORSI = 'menu_corsi'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_CORSI_LISTA = 'menu_corsi_lista'
 
     @staticmethod

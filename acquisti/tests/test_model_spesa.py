@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from amm.models.mixins import AnnoFormativo
@@ -6,7 +7,6 @@ from amm.models.centri_di_costo import CentroDiCosto
 from acquisti.models import Spesa, RipartizioneSpesaPerCDC
 from anagrafe.models import Fornitore
 
-__author__ = "Pilone Ing. Sigfrido"
 
 """
 Ripeto il test per una delle altre voci. La differenza è che qui non ho un fornitore !!!!

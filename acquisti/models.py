@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
@@ -18,6 +19,7 @@ class Spesa(SiwGeneralModel):
     STATO_CONFORME = 50
     STATO_LIQUIDATO = 60
     STATO_CHIUSO = 1000
+    STATO_ANNULLATO = 900
     ACQUISTO_CHOICES = (
         (STATO_BOZZA, 'Bozza'),
         (STATO_DA_AUTORIZZARE, 'Da Autorizzare'),
@@ -26,7 +28,8 @@ class Spesa(SiwGeneralModel):
         (STATO_EVASO, 'Evaso'),
         (STATO_CONFORME, 'Conforme'),
         (STATO_LIQUIDATO, 'Liquidato'),
-        (STATO_CHIUSO, 'Chiuso')
+        (STATO_CHIUSO, 'Chiuso'),
+        (STATO_ANNULLATO, 'ANNULLATO'),
     )
     
     # Definizione del tipo di acquisto
@@ -75,6 +78,7 @@ class Spesa(SiwGeneralModel):
     dirty = models.BooleanField(default=True)
     iva_comunque_indetraibile = models.DecimalField(max_digits=7, decimal_places=2)
     iva_potenzialmente_detraibile = models.DecimalField(max_digits=7, decimal_places=2)
+    cdc_verbose = models.CharField(null=True, max_length=50)
 
     class Meta:
         verbose_name = "Spesa"
@@ -114,6 +118,13 @@ class Spesa(SiwGeneralModel):
         ripartizioni = RipartizioneSpesaPerCDC.objects.filter(spesa=self.pk)
         ripartizioni = ripartizioni.aggregate(Sum('costo_totale'))
         self.costo = ripartizioni['costo_totale__sum']
+        # Infine compilo la stringa dei centri di costo.
+        ripartizioni = RipartizioneSpesaPerCDC.objects.filter(spesa=self.pk)
+        linea = ''
+        for ripartizione in ripartizioni:
+            token = str(ripartizione.percentuale_di_competenza) + '% ' + ripartizione.cdc.nome
+            linea = linea + ', ' + token if linea else token
+        self.cdc_verbose = linea
         self.dirty = False
         self.save()
 

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista Spese{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% block content %}
+<br>
+{% if user|can:siwperms.COLLABORATORE_INSERISCE %}
+    <div align="right">
+    DA MODIFICARE SU SPESE NUOVE !!!!
+      <a href="{% url 'collaboratori:propone-inserimento-collaboratore' %}">
+        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
+      </a>
+    </div>
+{% endif %}
+<br>
+
+<table style="width:100%" border="1">
+  <thead>
+    <tr>
+      <th>Prot.</th>
+      <th>Data</th>
+      <th>Stato</th>
+      <th>Tipo</th>
+      <th>Fornitore</th>
+      <th>Descrizione</th>
+      <th>Costo</th>
+      <th>CDC</th>
+      <th>Azione</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for spesa in spese %}
+    <tr>
+      <td>{{ spesa.numero_protocollo }}</td>
+      <td>{{ spesa.data_ordine|date:"SHORT_DATE_FORMAT" }}</td>
+      <td>{{ spesa.get_stato_display }}</td>
+      <td>{{ spesa.get_tipo_display }}</td>
+      <td>{{ spesa.fornitore }}</td>
+      <td>{{ spesa.descrizione }}</td>
+      <td>{{ spesa.costo }}</td>
+      <td>{{ spesa.cdc_verbose }}</td>
+      <td>
+        {% if user|can:siwperms.COLLABORATORE_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
+          DA SISTEMARE
+          <a href="">
+            <span class="fa fa-id-card" aria-hidden="true"></span>
+          </a>
+        {% else %}
+          <i class="fa fa-id-card" aria-hidden="true"></i>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

@@ -85,6 +85,7 @@ urlpatterns = [
     path('anagrafe/', include('anagrafe.urls', 'anagrafe')),
     path('collaboratori/', include('collaboratori.urls', 'collaboratori')),
     path('corsi/', include('corsi.urls', 'corsi')),
+    path('acquisti/', include('acquisti.urls', 'acquisti')),
 ]
 
 """

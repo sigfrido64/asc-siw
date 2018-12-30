@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import Spesa, RipartizioneSpesaPerCDC
