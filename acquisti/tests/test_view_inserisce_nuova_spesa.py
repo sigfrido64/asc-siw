@@ -4,27 +4,23 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
-from ..views import inserisce_nuovo_collaboratore_view
+from ..views import inserisce_spesa
+from unittest import skip
 
-# TODO Bisogna creare i test per la parte di inserimento vero e proprio mettendo i valori nei campi e verificando che
-# vada a buon fine.
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-ID_PRESENTE = 52639
-ID_NUOVO = 52640
-URL_PRESENTE = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_PRESENTE}/"
-URL_NUOVO = f"/collaboratori/anagrafica/inserisce-nuovo/{ID_NUOVO}/"
-REVERSE_URL = 'collaboratori:inserisce_nuovo'
+URL = f"/acquisti/inserisce_nuovo/"
+REVERSE_URL = 'acquisti:inserisce_spesa'
 
 
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
-        url = reverse(REVERSE_URL, kwargs={'pk_persona': ID_PRESENTE})
-        self.assertEquals(url, URL_PRESENTE)
+        url = reverse(REVERSE_URL)
+        self.assertEquals(url, URL)
 
     def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
-        view = resolve(URL_PRESENTE)
-        self.assertEquals(view.func, inserisce_nuovo_collaboratore_view)
+        view = resolve(URL)
+        self.assertEquals(view.func, inserisce_spesa)
 
 
 class MyAccountTestCase(TestCase):
@@ -47,42 +43,38 @@ class MyAccountTestCase(TestCase):
 class LoginRequiredTests(MyAccountTestCase):
     def test_redirection_to_login_for_not_logged_in_user(self):
         login_url = reverse('login')
-        response = self.client.get(URL_PRESENTE)
-        self.assertRedirects(response, f'{login_url}?next={URL_PRESENTE}')
+        response = self.client.get(URL)
+        self.assertRedirects(response, f'{login_url}?next={URL}')
 
 
 class PermissionRequiredTests(MyAccountTestCase):
     def test_deny_for_logged_in_user_not_authorized_on_app(self):
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL_PRESENTE)
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
+@skip
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori', 'af']
+    fixtures = ['collaboratori.json']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_INSERISCE}
+        self.myuser.profile.permessi = {SiwPermessi.SPESE_INSERISCE_NUOVA}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
     def test_server_serve_page_without_errors(self):
-        self.response = self.client.get(URL_PRESENTE)
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_render_error_collaborator_already_present_with_error_templates(self):
-        self.response = self.client.get(URL_PRESENTE)
-        self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_gia_presente.html')
-        self.assertTemplateUsed(self.response, 'base.html')
-        self.assertTemplateUsed(self.response, 'includes/menu.html')
-
     def test_render_new_collaborator_with_correct_templates(self):
-        self.response = self.client.get(URL_NUOVO)
+        self.response = self.client.get(URL)
+        self.fail("Questa parte è da rivedere con i template corretti")
         self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')

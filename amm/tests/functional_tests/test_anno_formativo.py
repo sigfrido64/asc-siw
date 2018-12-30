@@ -6,7 +6,7 @@ from functional_tests.base import FunctionalTest
 
 class LoginTest(FunctionalTest):
     # Crea l'utente per le prove.
-    fixtures = ['af.json']
+    fixtures = ['af']
     
     def setUp(self):
         super().setUp()

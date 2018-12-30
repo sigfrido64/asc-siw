@@ -17,6 +17,11 @@ class SiwPermessi(object):
     Sezione Amministrazione
     """
     AMM_CDC_READ = 'amm_cdc_read'
+    
+    """
+    Sezione Spese
+    """
+    SPESE_INSERISCE_NUOVA = 'spese_inserisce_nuova'
 
     """
     Anagrafe

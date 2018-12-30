@@ -8,6 +8,8 @@ from ..views import UserUpdateView
 
 
 class MyAccountTestCase(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         self.username = 'john'
         self.password = 'secret123'
@@ -45,6 +47,8 @@ class MyAccountTests(MyAccountTestCase):
 
 
 class LoginRequiredMyAccountTests(TestCase):
+    fixtures = ['af']
+    
     def test_redirection(self):
         url = reverse('my_account')
         login_url = reverse('login')

@@ -54,7 +54,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.

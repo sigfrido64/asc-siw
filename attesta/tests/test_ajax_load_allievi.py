@@ -11,6 +11,8 @@ class MyAccountTestCase(TestCase):
     """
     Qui metto le informazioni di base per i test successivi
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.username = 'john'

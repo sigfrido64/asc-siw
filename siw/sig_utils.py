@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from django.http import JsonResponse
 
 
 def response_debug(response):
@@ -30,3 +31,17 @@ def get_total_directory_size(start_path='.'):
             total_size += os.path.getsize(fp)
     return total_size
 
+
+def from_choices_to_list(choices):
+    """
+    Data le choices di un modello riporta in formato lista per esportazione in Json
+    :param choices: Le scelte come le ho impostate nel modello.
+    :return: La sorgente Json da riportare per il controllo ComboBox.
+    """
+    choices_list = list()
+    for choice in choices:
+        stato = dict()
+        stato['id'] = choice[0]
+        stato['descrizione'] = choice[1]
+        choices_list.append(stato)
+    return JsonResponse(choices_list, safe=False)

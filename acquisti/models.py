@@ -20,7 +20,7 @@ class Spesa(SiwGeneralModel):
     STATO_LIQUIDATO = 60
     STATO_CHIUSO = 1000
     STATO_ANNULLATO = 900
-    ACQUISTO_CHOICES = (
+    STATO_SPESA_CHOICES = (
         (STATO_BOZZA, 'Bozza'),
         (STATO_DA_AUTORIZZARE, 'Da Autorizzare'),
         (STATO_AUTORIZZATO, 'Autorizzato'),
@@ -33,15 +33,16 @@ class Spesa(SiwGeneralModel):
     )
     
     # Definizione del tipo di acquisto
+    # Se l'intero è < 100 ho tipo 1, se compreso tra 100 e 300 ho tipo 2, altrimenti ho tipo 3
     TIPO_ACQUISTO_CON_ORDINE_A_FORNITORE = 10
-    TIPO_ACQUISTO_WEB = 20
-    TIPO_ACQUISTO_SENZA_ORDINE = 30
-    TIPO_SPESE_DI_CASSA = 40
-    TIPO_SPESE_CON_PREPAGATA = 50
-    TIPO_SPESE_CON_VISA = 60
-    TIPO_NOTE_SPESE = 70
-    TIPO_CARTA_CARBURANTE = 80
-    SPESE_CHOISES = (
+    TIPO_ACQUISTO_WEB = 100
+    TIPO_ACQUISTO_SENZA_ORDINE = 110
+    TIPO_SPESE_DI_CASSA = 120
+    TIPO_SPESE_CON_PREPAGATA = 130
+    TIPO_SPESE_CON_VISA = 140
+    TIPO_NOTE_SPESE = 150
+    TIPO_CARTA_CARBURANTE = 160
+    TIPO_SPESA_CHOICES = (
         (TIPO_ACQUISTO_CON_ORDINE_A_FORNITORE, 'Acquisto con Ordine a Fornitore'),
         (TIPO_ACQUISTO_WEB, 'Acquisto Web'),
         (TIPO_ACQUISTO_SENZA_ORDINE, 'Acquisto senza ordine'),
@@ -54,10 +55,10 @@ class Spesa(SiwGeneralModel):
 
     anno_formativo = models.ForeignKey(AnnoFormativo, on_delete=models.PROTECT)
     numero_protocollo = models.CharField(max_length=10)
-    data_ordine = models.DateField(auto_now=True)
+    data_ordine = models.DateField()
     
-    stato = models.IntegerField(choices=ACQUISTO_CHOICES, default=STATO_BOZZA)
-    tipo = models.IntegerField(choices=SPESE_CHOISES)
+    stato = models.IntegerField(choices=STATO_SPESA_CHOICES, default=STATO_BOZZA)
+    tipo = models.IntegerField(choices=TIPO_SPESA_CHOICES)
     
     # Descrizione e fornitore
     fornitore = models.ForeignKey(Fornitore, on_delete=models.PROTECT)
@@ -127,7 +128,7 @@ class Spesa(SiwGeneralModel):
         self.cdc_verbose = linea
         self.dirty = False
         self.save()
-
+        
 
 class RipartizioneSpesaPerCDC(SiwGeneralModel):
     spesa = models.ForeignKey(Spesa, on_delete=models.PROTECT)

@@ -27,7 +27,7 @@ class GeneralTests(TestCase):
 
 
 class TestsCorrectResponseLoginIndipendent(TestCase):
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
 
     def setUp(self):
         self.response = self.client.get(URL)

@@ -26,7 +26,7 @@ class ModelloSpeseTests(TestCase):
         self.cdc2 = CentroDiCosto.objects.get(pk=10)    # Aziendali, IVA indetraibile
         
         # Carico un acquisto con ordine a fornitore.
-        self.spesa = Spesa(anno_formativo=self.anno_formativo, numero_protocollo='123', data_ordine='13/11/1964',
+        self.spesa = Spesa(anno_formativo=self.anno_formativo, numero_protocollo='123', data_ordine='1964-11-13',
                            stato=Spesa.STATO_BOZZA, tipo=Spesa.TIPO_ACQUISTO_CON_ORDINE_A_FORNITORE,
                            fornitore=self.fornitore, descrizione='Ordine di Prova', imponibile=1000, aliquota_IVA=22,
                            percentuale_IVA_indetraibile=20)
