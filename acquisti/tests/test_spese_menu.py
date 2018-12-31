@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from accounts.models import SiwPermessi
-from unittest import skip
 
 
 URL = '/'  # Link alla home dell'applicazione, qui devo vedere un menù se sono autorizzato.

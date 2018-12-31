@@ -35,13 +35,13 @@ class Spesa(SiwGeneralModel):
     # Definizione del tipo di acquisto
     # Se l'intero è < 100 ho tipo 1, se compreso tra 100 e 300 ho tipo 2, altrimenti ho tipo 3
     TIPO_ACQUISTO_CON_ORDINE_A_FORNITORE = 10
-    TIPO_ACQUISTO_WEB = 100
-    TIPO_ACQUISTO_SENZA_ORDINE = 110
-    TIPO_SPESE_DI_CASSA = 120
-    TIPO_SPESE_CON_PREPAGATA = 130
-    TIPO_SPESE_CON_VISA = 140
-    TIPO_NOTE_SPESE = 150
-    TIPO_CARTA_CARBURANTE = 160
+    TIPO_ACQUISTO_WEB = 110
+    TIPO_ACQUISTO_SENZA_ORDINE = 120
+    TIPO_SPESE_DI_CASSA = 130
+    TIPO_SPESE_CON_PREPAGATA = 140
+    TIPO_SPESE_CON_VISA = 150
+    TIPO_NOTE_SPESE = 160
+    TIPO_CARTA_CARBURANTE = 170
     TIPO_SPESA_CHOICES = (
         (TIPO_ACQUISTO_CON_ORDINE_A_FORNITORE, 'Acquisto con Ordine a Fornitore'),
         (TIPO_ACQUISTO_WEB, 'Acquisto Web'),
@@ -61,7 +61,7 @@ class Spesa(SiwGeneralModel):
     tipo = models.IntegerField(choices=TIPO_SPESA_CHOICES)
     
     # Descrizione e fornitore
-    fornitore = models.ForeignKey(Fornitore, on_delete=models.PROTECT)
+    fornitore = models.ForeignKey(Fornitore, on_delete=models.PROTECT, null=True)
     descrizione = models.TextField()
     
     # Costo acquisto in funzione dei cdc cui si riferisce.
@@ -95,11 +95,14 @@ class Spesa(SiwGeneralModel):
         # Calcola l'IVA potenzialmente detraibile e quella comunque indetraibile.
         self.iva_comunque_indetraibile = self.imponibile * self.aliquota_IVA * self.percentuale_IVA_indetraibile / 10000
         self.iva_potenzialmente_detraibile = self.imponibile * self.aliquota_IVA / 100 - self.iva_comunque_indetraibile
+        self.dirty = True
+        self.controlla_fornitore_se_necessario()
+        self.impone_descrizione_se_necessario()
         super().save(*args, **kwargs)
+
         # Se ci sono già delle ripartizioni le aggiorna con i nuovi valori.
         # TODO : Anche questo lo dovrei fare solo se ho aggiornato qualche cosa che tocca questi campi. Da vedere dopo.
         self._aggiorna_ripartizioni_se_presenti(self.pk)
-        self.dirty = True
         
     @staticmethod
     def _aggiorna_ripartizioni_se_presenti(pk):
@@ -129,6 +132,14 @@ class Spesa(SiwGeneralModel):
         self.dirty = False
         self.save()
         
+    def controlla_fornitore_se_necessario(self):
+        if self.tipo < 100 and self.fornitore is None:
+            raise ValidationError({'fornitore': "Per questo tipo di spesa il Fornitore è obbligatorio !"})
+    
+    def impone_descrizione_se_necessario(self):
+        if 100 < self.tipo < 300:
+            self.descrizione = self.get_tipo_display()
+            
 
 class RipartizioneSpesaPerCDC(SiwGeneralModel):
     spesa = models.ForeignKey(Spesa, on_delete=models.PROTECT)

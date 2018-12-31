@@ -1,16 +1,16 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
-from ..views import inserisce_spesa
-from unittest import skip
+from ..views import inserisce_altra_spesa
 
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/acquisti/inserisce_nuovo/"
-REVERSE_URL = 'acquisti:inserisce_spesa'
+URL = f"/acquisti/inserisce_altra_spesa/"
+REVERSE_URL = 'acquisti:inserisce_altra_spesa'
 
 
 class GeneralTests(TestCase):
@@ -20,7 +20,7 @@ class GeneralTests(TestCase):
 
     def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, inserisce_spesa)
+        self.assertEquals(view.func, inserisce_altra_spesa)
 
 
 class MyAccountTestCase(TestCase):
@@ -54,13 +54,11 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.assertEquals(self.response.status_code, HTTP_403_FORBIDDEN)
 
 
-@skip
 class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
-
+    
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
@@ -72,9 +70,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_render_new_collaborator_with_correct_templates(self):
+    def test_render_with_correct_templates(self):
         self.response = self.client.get(URL)
-        self.fail("Questa parte è da rivedere con i template corretti")
-        self.assertTemplateUsed(self.response, 'collaboratori/inserisce_collaboratore.html')
-        self.assertTemplateUsed(self.response, 'base.html')
-        self.assertTemplateUsed(self.response, 'includes/menu.html')
+        self.assertTemplateUsed(self.response, 'spese/inserisce_altra_spesa.html')

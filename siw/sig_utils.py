@@ -1,6 +1,9 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 import os
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from amm.models.mixins import AnnoFormativo
 
 
 def response_debug(response):
@@ -45,3 +48,7 @@ def from_choices_to_list(choices):
         stato['descrizione'] = choice[1]
         choices_list.append(stato)
     return JsonResponse(choices_list, safe=False)
+
+
+def get_anno_formativo(request):
+    return get_object_or_404(AnnoFormativo, pk=request.session['anno_formativo_pk'])

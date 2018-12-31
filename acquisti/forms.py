@@ -7,7 +7,7 @@ from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox
 
 class NewSpesaTipo2Form(forms.ModelForm):
     url_stato_spesa = 'acquisti:ajax_lista_stati_spesa'
-    url_tipo_spesa = 'acquisti:ajax_lista_tipo_spesa'
+    url_tipo_spesa = 'acquisti:ajax_lista_tipo_spesa_2'
     
     numero_protocollo = forms.CharField(required=True,
                                         widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
@@ -22,12 +22,9 @@ class NewSpesaTipo2Form(forms.ModelForm):
 
     tipo = forms.ComboField(
         fields=[forms.CharField(), ], required=True, widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 300, 'minLength': 5, 'displayMember': 'descrizione', 'valueMember': "id",
+            jqxattrs={'height': 30, 'width': 300, 'minLength': 6, 'displayMember': 'descrizione', 'valueMember': "id",
                       'data_adapter_url': url_tipo_spesa},
             attrs={'style': 'float: left; margin-right: 5px;'}))
-
-    descrizione = forms.CharField(required=True,
-                                  widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
 
     imponibile = forms.CharField(required=True,
                                  widget=JqxTextInput(jqxattrs={'height': 30, 'width': 200, 'minLength': 6}))
@@ -43,6 +40,23 @@ class NewSpesaTipo2Form(forms.ModelForm):
 
     class Meta:
         model = Spesa
-        fields = ['anno_formativo', 'numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'imponibile',
-                  'aliquota_IVA', 'percentuale_IVA_indetraibile', 'note']
-        widgets = {'anno_formativo': forms.HiddenInput()}
+        fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'imponibile', 'aliquota_IVA',
+                  'percentuale_IVA_indetraibile', 'note']
+
+
+class NewSpesaTipo1Form(NewSpesaTipo2Form):
+    url_tipo_spesa = 'acquisti:ajax_lista_tipo_spesa_1'
+    
+    tipo = forms.ComboField(
+        fields=[forms.CharField(), ], required=True, widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 300, 'minLength': 3, 'displayMember': 'descrizione', 'valueMember': "id",
+                      'data_adapter_url': url_tipo_spesa},
+            attrs={'style': 'float: left; margin-right: 5px;'}))
+    
+    descrizione = forms.CharField(required=True,
+                                  widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
+    
+    class Meta:
+        model = Spesa
+        fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'imponibile', 'aliquota_IVA',
+                  'percentuale_IVA_indetraibile', 'note']

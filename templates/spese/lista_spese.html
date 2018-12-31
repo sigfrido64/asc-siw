@@ -14,13 +14,32 @@
 
 {% block content %}
 <br>
-{% if user|can:siwperms.COLLABORATORE_INSERISCE %}
-    <div align="right">
-    DA MODIFICARE SU SPESE NUOVE !!!!
-      <a href="{% url 'collaboratori:propone-inserimento-collaboratore' %}">
-        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo
-      </a>
-    </div>
+{% if user|can:siwperms.SPESE_INSERISCE_NUOVA %}
+  <table style="width:100%">
+    <tr>
+      <td width="33%">
+        <div align="center">
+          <a href="{% url 'acquisti:inserisce_ordine_a_fornitore' %}">
+            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Ordine a Fornitore
+          </a>
+        </div>
+      </td>
+      <td width="33%">
+        <div align="center">
+          <a href="{% url 'acquisti:inserisce_altra_spesa' %}">
+            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Utenza/Abbonamento
+          </a>
+        </div>
+      </td>
+      <td width="33%">
+        <div align="center">
+          <a href="{% url 'acquisti:inserisce_altra_spesa' %}">
+            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Altra Spesa
+          </a>
+        </div>
+      </td>
+    </tr>
+  </table>
 {% endif %}
 <br>
 
