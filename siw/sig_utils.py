@@ -52,3 +52,10 @@ def from_choices_to_list(choices):
 
 def get_anno_formativo(request):
     return get_object_or_404(AnnoFormativo, pk=request.session['anno_formativo_pk'])
+
+
+def set_anno_formativo_default(request):
+    if 'anno_formativo' not in request.session:
+        anno_formativo_obj = AnnoFormativo.objects.get(default=True)
+        request.session['anno_formativo'] = anno_formativo_obj.anno_formativo
+        request.session['anno_formativo_pk'] = anno_formativo_obj.pk

@@ -1,13 +1,14 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from django import forms
-from .models import Spesa
+from .models import AcquistoConOrdine
+from anagrafe.models import Fornitore
 from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxDateInput
 
 
 class NewSpesaTipo2Form(forms.ModelForm):
-    url_stato_spesa = 'acquisti:ajax_lista_stati_spesa'
-    url_tipo_spesa = 'acquisti:ajax_lista_tipo_spesa_2'
+    url_stato_spesa = 'acquisti:ajax_lista_stati_ordine'
+    url_tipo_spesa = 'acquisti:ajax_lista_tipo_ordini'
     
     numero_protocollo = forms.CharField(required=True,
                                         widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
@@ -39,24 +40,31 @@ class NewSpesaTipo2Form(forms.ModelForm):
                            widget=JqxTextArea(jqxattrs={'height': 200, 'width': 500, 'minLength': 1}))
 
     class Meta:
-        model = Spesa
+        model = AcquistoConOrdine
         fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'imponibile', 'aliquota_IVA',
                   'percentuale_IVA_indetraibile', 'note']
 
 
-class NewSpesaTipo1Form(NewSpesaTipo2Form):
-    url_tipo_spesa = 'acquisti:ajax_lista_tipo_spesa_1'
+class AcquistoConOrdineForm(NewSpesaTipo2Form):
+    url_tipo_ordini = 'acquisti:ajax_lista_tipo_ordini'
+    url_lista_fornitori = 'acquisti:ajax_lista_fornitori'
     
     tipo = forms.ComboField(
         fields=[forms.CharField(), ], required=True, widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 300, 'minLength': 3, 'displayMember': 'descrizione', 'valueMember': "id",
-                      'data_adapter_url': url_tipo_spesa},
+                      'data_adapter_url': url_tipo_ordini},
+            attrs={'style': 'float: left; margin-right: 5px;'}))
+    
+    fornitore = forms.ModelChoiceField(queryset=Fornitore.objects.all(),
+        required=True, widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 300, 'minLength': 3, 'displayMember': 'azienda__ragione_sociale', 'valueMember': 'pk',
+                      'data_adapter_url': url_lista_fornitori},
             attrs={'style': 'float: left; margin-right: 5px;'}))
     
     descrizione = forms.CharField(required=True,
                                   widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
     
     class Meta:
-        model = Spesa
-        fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'imponibile', 'aliquota_IVA',
-                  'percentuale_IVA_indetraibile', 'note']
+        model = AcquistoConOrdine
+        fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'fornitore',
+                  'imponibile', 'aliquota_IVA', 'percentuale_IVA_indetraibile', 'note']

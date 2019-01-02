@@ -13,33 +13,14 @@
 {% endcomment %}
 
 {% block content %}
+<h3>Lista Ordini</h3>
 <br>
-{% if user|can:siwperms.SPESE_INSERISCE_NUOVA %}
-  <table style="width:100%">
-    <tr>
-      <td width="33%">
-        <div align="center">
-          <a href="{% url 'acquisti:inserisce_ordine_a_fornitore' %}">
-            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Ordine a Fornitore
-          </a>
-        </div>
-      </td>
-      <td width="33%">
-        <div align="center">
-          <a href="{% url 'acquisti:inserisce_altra_spesa' %}">
-            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Utenza/Abbonamento
-          </a>
-        </div>
-      </td>
-      <td width="33%">
-        <div align="center">
-          <a href="{% url 'acquisti:inserisce_altra_spesa' %}">
-            <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Altra Spesa
-          </a>
-        </div>
-      </td>
-    </tr>
-  </table>
+{% if user|can:siwperms.ACQUISTI_ORDINI_INSERISCE %}
+  <div align="right">
+    <a href="{% url 'acquisti:ordine_inserisce' %}">
+      <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo Ordine
+    </a>
+  </div>
 {% endif %}
 <br>
 
@@ -70,13 +51,12 @@
       <td>{{ spesa.costo }}</td>
       <td>{{ spesa.cdc_verbose }}</td>
       <td>
-        {% if user|can:siwperms.COLLABORATORE_MOSTRA %}     {# Vedi nota sopra per spiegazione #}
-          DA SISTEMARE
-          <a href="">
-            <span class="fa fa-id-card" aria-hidden="true"></span>
+        {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
+          <a href="{% url 'acquisti:ordine_modifica' spesa.pk %}" id="modifica_ordine">
+            <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
           </a>
         {% else %}
-          <i class="fa fa-id-card" aria-hidden="true"></i>
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         {% endif %}
       </td>
     </tr>

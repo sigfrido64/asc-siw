@@ -2,10 +2,10 @@
 __author__ = "Pilone Ing. Sigfrido"
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Spesa, RipartizioneSpesaPerCDC
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
 
 
-@admin.register(Spesa)
+@admin.register(AcquistoConOrdine)
 class SpesaAdmin(ImportExportModelAdmin):
     # Mostro in readonly l'utente che ha fatto l'ultima modifica
     # Metto in readonly anche le due date perchè per loro natura ereditano Editable = False. Così invece le vedo in

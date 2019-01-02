@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist

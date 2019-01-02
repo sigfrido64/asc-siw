@@ -5,12 +5,15 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
-from ..views import inserisce_altra_spesa
+from ..views import ordini
+from ..forms import AcquistoConOrdineForm
+from ..models import AcquistoConOrdine
+from unittest import skip
 
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/acquisti/inserisce_altra_spesa/"
-REVERSE_URL = 'acquisti:inserisce_altra_spesa'
+URL = f"/acquisti/ordini/"
+REVERSE_URL = 'acquisti:ordini'
 
 
 class GeneralTests(TestCase):
@@ -18,9 +21,9 @@ class GeneralTests(TestCase):
         url = reverse(REVERSE_URL)
         self.assertEquals(url, URL)
 
-    def test_inserisce_collaboratore_url_resolves_inserisce_collaboratore_view(self):
+    def test_ordini_url_resolves_ordini_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, inserisce_altra_spesa)
+        self.assertEquals(view.func, ordini)
 
 
 class MyAccountTestCase(TestCase):
@@ -58,18 +61,31 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
+    fixtures = ['af', 'azienda', 'fornitore']
     
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.SPESE_INSERISCE_NUOVA}
+        self.myuser.profile.permessi = {SiwPermessi.ACQUISTI_ORDINI_VIEW}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
     def test_server_serve_page_without_errors(self):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
-
+        
     def test_render_with_correct_templates(self):
         self.response = self.client.get(URL)
-        self.assertTemplateUsed(self.response, 'spese/inserisce_altra_spesa.html')
+        self.assertTemplateUsed(self.response, 'acquisti/ordini.html')
+
+    def test_correct_title(self):
+        self.response = self.client.get(URL)
+        self.assertContains(self.response, 'Lista Ordini')
+
+    def test_find_insert_button_when_allowed(self):
+        self.myuser.profile.permessi = {SiwPermessi.ACQUISTI_ORDINI_VIEW, SiwPermessi.ACQUISTI_ORDINI_INSERISCE}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+        self.response = self.client.get(URL)
+        url = reverse('acquisti:ordine_inserisce')
+        self.assertContains(self.response, url)

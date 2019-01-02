@@ -4,12 +4,11 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from accounts.models import SiwPermessi
-from unittest import skip
 
 
 URL = '/'  # Link alla home dell'applicazione, qui devo vedere un menù se sono autorizzato.
 REVERSE_URL = 'home'  # Reverse della home page !
-MENU_ITEM_LINK = '/acquisti/'     # Il link che voglio trovare per capire che quel menù è presente.
+MENU_ITEM_LINK = '/acquisti/ordini/'     # Il link che voglio trovare per capire che quel menù è presente.
 
 
 class MyAccountTestCase(TestCase):
@@ -51,7 +50,7 @@ class PermissionRequiredTests(MyAccountTestCase):
         self.response = self.client.get(self.url)
         self.assertNotContains(self.response, MENU_ITEM_LINK)
 
-@skip
+
 class FormGeneralTests(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
@@ -59,7 +58,8 @@ class FormGeneralTests(MyAccountTestCase):
     def setUp(self):
         # Seup della classe dando i permessi all'utente.
         super().setUp()
-        self.myuser.profile.permessi = {SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_ACQUISTI}
+        self.myuser.profile.permessi = {SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_ACQUISTI,
+                                        SiwPermessi.MENU_AMM_ACQUISTI_ORDINI}
         self.myuser.save(force_update=True)
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)

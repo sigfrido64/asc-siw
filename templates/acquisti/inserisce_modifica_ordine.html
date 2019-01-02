@@ -12,44 +12,48 @@
 <form method="post" novalidate>
 
   {% csrf_token %}
-  {% include "includes/form_head.html" with form=spesa %}
+  {% include "includes/form_head.html" with form=ordine %}
 
   <table width="100%" border="1">
       <tr>
         <td>Tipo di Spesa</td>
-        <td>{% siw_field spesa.tipo %}</td>
+        <td>{% siw_field ordine.tipo %}</td>
       </tr>
       <tr>
         <td>Stato</td>
-        <td>{% siw_field spesa.stato %}</td>
+        <td>{% siw_field ordine.stato %}</td>
       </tr>
       <tr>
           <td>Numero Protocollo</td>
-          <td>{% siw_field spesa.numero_protocollo %}</td>
+          <td>{% siw_field ordine.numero_protocollo %}</td>
       </tr>
       <tr>
           <td>Data Ordine</td>
-          <td>{% siw_field spesa.data_ordine %}</td>
+          <td>{% siw_field ordine.data_ordine %}</td>
+      </tr>
+      <tr>
+          <td>Fornitore</td>
+          <td>{% siw_field ordine.fornitore %}</td>
       </tr>
       <tr>
           <td>Descrizione</td>
-          <td>{% siw_field spesa.descrizione %}</td>
+          <td>{% siw_field ordine.descrizione %}</td>
       </tr>
       <tr>
           <td>Imponibile</td>
-          <td>{% siw_field spesa.imponibile %}</td>
+          <td>{% siw_field ordine.imponibile %}</td>
       </tr>
       <tr>
           <td>Aliquota IVA (%)</td>
-          <td>{% siw_field spesa.aliquota_IVA %}</td>
+          <td>{% siw_field ordine.aliquota_IVA %}</td>
       </tr>
       <tr>
           <td>IVA Comunque Indetraibile (%)</td>
-          <td>{% siw_field spesa.percentuale_IVA_indetraibile %}</td>
+          <td>{% siw_field ordine.percentuale_IVA_indetraibile %}</td>
       </tr>
       <tr>
         <td>Note : </td>
-        <td>{% siw_field spesa.note %}</td>
+        <td>{% siw_field ordine.note %}</td>
       </tr>
   </table>
 

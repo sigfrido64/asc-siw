@@ -17,7 +17,13 @@
           <li><a href="{% url 'amm:cdc_home' %}">Centri di Costo</a></li>
           {% endif %}
           {% if user|can:siwperms.MENU_AMM_ACQUISTI %}
-          <li><a href="{% url 'acquisti:home' %}">Acquisti</a></li>
+          <li>Acquisti
+            <ul>
+              {% if user|can:siwperms.MENU_AMM_ACQUISTI_ORDINI %}
+                <li><a href="{% url 'acquisti:ordini' %}">Ordini</a></li>
+              {% endif %}
+            </ul>
+          </li>
           {% endif %}
         </ul>
       </li>

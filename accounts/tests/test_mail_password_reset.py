@@ -6,6 +6,8 @@ from django.urls import reverse
 
 
 class PasswordResetMailTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         User.objects.create_user(username='john', email='john@doe.com', password='123')
         self.response = self.client.post(reverse('password_reset'), {'email': 'john@doe.com'})

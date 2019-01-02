@@ -19,9 +19,11 @@ class SiwPermessi(object):
     AMM_CDC_READ = 'amm_cdc_read'
     
     """
-    Sezione Spese
+    Sezione Acquisti
     """
-    SPESE_INSERISCE_NUOVA = 'spese_inserisce_nuova'
+    ACQUISTI_ORDINI_VIEW = 'acquisti_ordini_view'
+    ACQUISTI_ORDINI_INSERISCE = 'acquisti_ordini_inserisce'
+    ACQUISTI_ORDINI_MODIFICA = 'acquisti_ordini_modifica'
 
     """
     Anagrafe
@@ -52,8 +54,11 @@ class SiwPermessi(object):
     """
     MENU_AMM = 'menu_amm'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_AMM_CDC = 'menu_cdc'
-    MENU_AMM_ACQUISTI = 'menu_acquisti'
 
+    # Questo è un sotto menù per cui ci deve essere se voglio una voce di quelle che gli stanno sotto.
+    MENU_AMM_ACQUISTI = 'menu_acquisti'
+    MENU_AMM_ACQUISTI_ORDINI = 'menu_acquisti_ordini'
+    
     MENU_COLLABORATORI = 'menu_collaboratori'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
     

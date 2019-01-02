@@ -51,7 +51,7 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
-    fixtures = ['reports']  # Carico il database di esempio dei report.
+    fixtures = ['reports', 'af']  # Carico il database di esempio dei report.
     
     def setUp(self):
         # Fake user

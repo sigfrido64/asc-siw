@@ -4,7 +4,8 @@ from accounts.models import get_real_perms, SiwPermessi
 from django.core.exceptions import FieldDoesNotExist
 from threading import local
 from django.conf import settings
-from amm.models.mixins import AnnoFormativo
+from siw.sig_utils import set_anno_formativo_default
+
 
 # Crea un'istanza di _user diversa per ogni thread.
 # Così aggiungendo un valore il valore sarà diverso per ogni thread e sarà sempre sincronizzato con lui.
@@ -30,18 +31,13 @@ def si_special_dicts(request):
     ATTENZIONE che questo è un template context processor (il cui nome viene registato in settings.py) e non un
       middleware context processor per cui quello che aggiunge lo trovo solo nei templates.
     """
-    # Se lo trovo nella sessione non devo fare altro.
+    # Se lo trovo nella sessione non devo fare altro, altrimenti lo leggo e lo setto.
     if 'anno_formativo' in request.session:
         anno_formativo = request.session['anno_formativo']
         anno_formativo_pk = request.session['anno_formativo_pk']
     else:
-        # Altrimenti recupero quello di default.
-        anno_formativo_obj = AnnoFormativo.objects.get(default=True)
-        anno_formativo = anno_formativo_obj.anno_formativo
-        anno_formativo_pk = anno_formativo_obj.pk
-        # E lo salvo nella sessione.
-        request.session['anno_formativo'] = anno_formativo
-        request.session['anno_formativo_pk'] = anno_formativo_pk
+        anno_formativo = '-'
+        anno_formativo_pk = -1
     
     # Riporto i dizionari per i template
     return {'siwperms': SiwPermessi.as_dict(), 'anno_formativo': anno_formativo, 'anno_formativo_pk': anno_formativo_pk}
@@ -62,6 +58,8 @@ def si_middleware(get_response):
               re.match(r'^/settings/password/?', request.path):
             return HttpResponseRedirect('/settings/password/')
         """
+        # Imposta l'anno formativo se necessario.
+        set_anno_formativo_default(request)
         # Legge e compone la lista dei permessi.
         if not request.user.is_authenticated:
             request.user.si_perms = None
