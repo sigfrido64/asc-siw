@@ -5,6 +5,7 @@ from django.core.exceptions import FieldDoesNotExist
 from threading import local
 from django.conf import settings
 from siw.sig_utils import set_anno_formativo_default
+import sys
 
 
 # Crea un'istanza di _user diversa per ogni thread.
@@ -13,10 +14,19 @@ _user = local()
 
 
 def get_current_username():
+    # TODO : Attenzione che devo anche dire quale utente ha lanciato i worker se non voglio perdere l'informazione
+    #  negli aggiornamenti
+    # A T T E N Z I O N E
+    in_celery_worker_process = False
+    if len(sys.argv) > 0 and sys.argv[0].endswith('celery') and 'worker' in sys.argv:
+        in_celery_worker_process = True
+
     if hasattr(_user, 'value'):
         return _user.value
     elif settings.TESTING:
         return 'User non presente in questa fase di test'
+    elif in_celery_worker_process:
+        return 'Worker di Celery'
     else:
         raise FieldDoesNotExist("La variabile _user non ha atttributo value")
 
