@@ -1,7 +1,7 @@
 # coding=utf-8
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Azienda, Persona
+from .models import Azienda, Persona, Fornitore
 from siw.sqlserverinterface import sqlserverinterface
 from .sqlserveranagrafe import QUERY_SELECT_AZIENDE, compila_e_salva_record_azienda
 from .sqlserveranagrafe import QUERY_SELECT_PERSONE, compila_e_salva_record_persona

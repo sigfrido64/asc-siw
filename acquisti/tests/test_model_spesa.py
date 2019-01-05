@@ -56,14 +56,14 @@ class ModelloSpeseTests(TestCase):
         # Poi provo con cdc con IVA indetraibile ma metto percentuale maggiore del 100%.
         ripartizione2 = RipartizioneSpesaPerCDC(acquisto=self.spesa, cdc=self.cdc2, percentuale_di_competenza=160)
         with self.assertRaises(ValidationError):
-            ripartizione2.save()
+            ripartizione2.clean()
 
     def test_massima_percentuale_della_somma_di_tutte_le_ripartizioni(self):
         # Poi provo con cdc con IVA indetraibile ma metto percentuale troppo alta sommata alla prima.
         self.carica_ripartizione_indetraibile()
         ripartizione2 = RipartizioneSpesaPerCDC(acquisto=self.spesa, cdc=self.cdc2, percentuale_di_competenza=60)
         with self.assertRaises(ValidationError):
-            ripartizione2.save()
+            ripartizione2.clean()
 
     def test_calcolo_corretto_del_costo_di_ripartizione_detraibile(self):
         self.carica_ripartizione_detraibile()

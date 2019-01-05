@@ -1,7 +1,7 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from django import forms
-from .models import AcquistoConOrdine
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
 from anagrafe.models import Fornitore
 from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxDateInput
 
@@ -68,3 +68,18 @@ class AcquistoConOrdineForm(NewSpesaTipo2Form):
         model = AcquistoConOrdine
         fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'fornitore',
                   'imponibile', 'aliquota_IVA', 'percentuale_IVA_indetraibile', 'note']
+
+
+class RipartizioneForm(forms.ModelForm):
+    cdc_txt = forms.CharField(required=True, widget=forms.TextInput(attrs={'readonly': 'True'}))
+
+    percentuale_di_competenza = \
+        forms.CharField(required=True, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    
+    class Meta:
+        model = RipartizioneSpesaPerCDC
+        fields = ['acquisto', 'cdc', 'percentuale_di_competenza']
+        
+        widgets = {
+            'acquisto':forms.HiddenInput(), 'cdc': forms.HiddenInput(),
+        }

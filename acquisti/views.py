@@ -4,8 +4,8 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from siw.sig_utils import get_anno_formativo
-from .models import AcquistoConOrdine
-from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
+from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm, RipartizioneForm
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
@@ -46,7 +46,7 @@ def ordine_inserisce(request):
             ordine = form.save(commit=False)
             ordine.anno_formativo = get_anno_formativo(request)
             ordine.save()
-            return redirect('acquisti:ordini')
+            return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
         form = AcquistoConOrdineForm(initial={'aliquota_IVA': 22, 'percentuale_IVA_indetraibile': 0,
                                               'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
@@ -67,3 +67,19 @@ def ordine_modifica(request, pk):
     else:
         form = AcquistoConOrdineForm(instance=ordine)
     return render(request, 'acquisti/inserisce_modifica_ordine.html', {'ordine': form})
+
+
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
+def inserimento_cdc(request, pk):
+    ordine = AcquistoConOrdine.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = RipartizioneForm(request.POST, initial={'acquisto': ordine})
+        if form.is_valid():
+            ripartizione = form.save(commit=False)
+            ripartizione.save()
+            return redirect('acquisti:inserimento_cdc', pk=ordine.id)
+    else:
+        form = RipartizioneForm(initial={'percentuale_di_competenza': 100, 'acquisto': ordine})
+    lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
+    return render(request, 'acquisti/inserisce_cdc.html',
+                  {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})

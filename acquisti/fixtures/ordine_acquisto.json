@@ -1,0 +1,58 @@
+[
+{
+  "model": "acquisti.acquistoconordine",
+  "pk": 1,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-01-01T19:06:05.036",
+    "data_creazione": "2019-01-01T19:06:05.036",
+    "last_user": "Pilone Sigfrido",
+    "anno_formativo": 3,
+    "numero_protocollo": "111",
+    "data_ordine": "2019-01-01",
+    "stato": 0,
+    "tipo": 10,
+    "fornitore": 1,
+    "descrizione": "Ordine di Prova",
+    "imponibile": "1000.00",
+    "aliquota_IVA": "22.00",
+    "percentuale_IVA_indetraibile": "0.00",
+    "protocollo_fattura_fornitore": "",
+    "conforme": false,
+    "note": "",
+    "dirty": true,
+    "iva_comunque_indetraibile": "0.00",
+    "iva_potenzialmente_detraibile": "220.00",
+    "cdc_verbose": null,
+    "costo": null
+  }
+},
+{
+  "model": "acquisti.acquistoconordine",
+  "pk": 2,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-01-01T19:07:14.418",
+    "data_creazione": "2019-01-01T19:07:14.418",
+    "last_user": "Pilone Sigfrido",
+    "anno_formativo": 3,
+    "numero_protocollo": "222",
+    "data_ordine": "2019-01-01",
+    "stato": 0,
+    "tipo": 10,
+    "fornitore": 1,
+    "descrizione": "Secondo Ordine di Prova",
+    "imponibile": "2000.00",
+    "aliquota_IVA": "22.00",
+    "percentuale_IVA_indetraibile": "50.00",
+    "protocollo_fattura_fornitore": "",
+    "conforme": false,
+    "note": "",
+    "dirty": true,
+    "iva_comunque_indetraibile": "0.00",
+    "iva_potenzialmente_detraibile": "220.00",
+    "cdc_verbose": null,
+    "costo": null
+  }
+}
+]

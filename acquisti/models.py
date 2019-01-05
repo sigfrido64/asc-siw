@@ -293,20 +293,8 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
     
     def __str__(self):
         return 'Quotaparte di ' + self.acquisto.descrizione + ' su ' + self.cdc.descrizione
-    
-    @staticmethod
-    def _verifica_se_percentuali_eccedute(spesa, percentuale, pk):
-        percentuali = RipartizioneSpesaPerCDC.objects.filter(acquisto=spesa)
-        if pk:
-            percentuali = percentuali.exclude(pk=pk)
-        percentuali = percentuali.only('percentuale_di_competenza')
-        percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
-        valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
-        return True if valore + percentuale > 100 else False
 
-    # Override Save.
-    # Calcola il costo totale della voce di ordine in funzione della detraibilità del singolo cdc
-    def save(self, *args, **kwargs):
+    def clean(self):
         # Il valore della singola ripartizione non può eccedere il 100%
         if int(self.percentuale_di_competenza) > 100:
             raise ValidationError(
@@ -316,10 +304,24 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         if self._verifica_se_percentuali_eccedute(self.acquisto, self.percentuale_di_competenza, self.pk):
             raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
                                                                 "per questo acquisto eccede il 100%"})
-        
+
+    # Override Save.
+    # Calcola il costo totale della voce di ordine in funzione della detraibilità del singolo cdc
+    def save(self, *args, **kwargs):
         # Calcola il costo della ripartizione.
         base_imponibile = self.acquisto.imponibile + self.acquisto.iva_comunque_indetraibile
         if not self.cdc.iva_detraibile:
             base_imponibile += self.acquisto.iva_potenzialmente_detraibile
         self.costo_totale = base_imponibile * self.percentuale_di_competenza / 100
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def _verifica_se_percentuali_eccedute(acquisto, percentuale, pk):
+        percentuali = RipartizioneSpesaPerCDC.objects.filter(acquisto=acquisto)
+        if pk:
+            percentuali = percentuali.exclude(pk=pk)
+        percentuali = percentuali.only('percentuale_di_competenza')
+        percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
+        valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
+        return True if valore + percentuale > 100 else False
+
