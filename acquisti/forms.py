@@ -81,5 +81,5 @@ class RipartizioneForm(forms.ModelForm):
         fields = ['acquisto', 'cdc', 'percentuale_di_competenza']
         
         widgets = {
-            'acquisto':forms.HiddenInput(), 'cdc': forms.HiddenInput(),
+            'acquisto': forms.HiddenInput(), 'cdc': forms.HiddenInput(),
         }

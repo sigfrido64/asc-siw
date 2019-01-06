@@ -8,16 +8,6 @@ from acquisti.models import AcquistoConOrdine, RipartizioneSpesaPerCDC
 from anagrafe.models import Fornitore
 
 
-"""
-Ripeto il test per una delle altre voci. La differenza è che qui non ho un fornitore !!!!
-Setto le ripartizioni
-Controllo il costo totale che sia quello giusto
-
-TODO
-1) Devo controllare che una spesa di tipo 2 si trovi la descrizione forzata nel caso la metta diversa.
-"""
-
-
 class ModelloSpeseTests(TestCase):
     fixtures = ['cdc', 'af', 'azienda', 'fornitore']
 

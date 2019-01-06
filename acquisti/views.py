@@ -4,7 +4,7 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from siw.sig_utils import get_anno_formativo
-from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, somma_delle_ripartizioni
 from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm, RipartizioneForm
 
 
@@ -75,9 +75,12 @@ def inserimento_cdc(request, pk):
     if request.method == 'POST':
         form = RipartizioneForm(request.POST, initial={'acquisto': ordine})
         if form.is_valid():
-            ripartizione = form.save(commit=False)
-            ripartizione.save()
-            return redirect('acquisti:inserimento_cdc', pk=ordine.id)
+            form.save()
+            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+                ordine.calcola_costo_totale()
+                return redirect('acquisti:ordini')
+            else:
+                return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
         form = RipartizioneForm(initial={'percentuale_di_competenza': 100, 'acquisto': ordine})
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)

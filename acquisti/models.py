@@ -43,12 +43,7 @@ def _calcola_costo_totale(chiave, tipo):
     :return: None
     """
     base = _base(chiave, tipo)
-    # Controllo che le percentuali delle ripartizioni facciano 100 altrimenti esco con falso.
-    percentuali = base
-    percentuali = percentuali.only('percentuale_di_competenza')
-    percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
-    valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
-    if valore != 100:
+    if somma_delle_ripartizioni(chiave, tipo) != 100:
         return True, None, None
     # Sommo i costi delle ripartizioni per fare il conto di quanto costa la singola spesa
     ripartizioni = base
@@ -61,6 +56,14 @@ def _calcola_costo_totale(chiave, tipo):
         token = str(ripartizione.percentuale_di_competenza) + '% ' + ripartizione.cdc.nome
         linea = linea + ', ' + token if linea else token
     return False, costo, linea
+
+
+def somma_delle_ripartizioni(chiave, tipo):
+    # Calcolo la somma delle ripartizioni di una data spesa.
+    percentuali = _base(chiave, tipo)
+    percentuali = percentuali.only('percentuale_di_competenza')
+    percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
+    return percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
 
 
 class AcquistoConOrdine(SiwGeneralModel):
@@ -299,6 +302,10 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         if int(self.percentuale_di_competenza) > 100:
             raise ValidationError(
                 {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
+        # Il valore delle singola ripartizione non può essere 0 o negativo
+        if int(self.percentuale_di_competenza) <= 0:
+            raise ValidationError(
+                {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
         
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         if self._verifica_se_percentuali_eccedute(self.acquisto, self.percentuale_di_competenza, self.pk):
