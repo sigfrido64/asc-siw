@@ -49,7 +49,11 @@
       <td>{{ spesa.fornitore }}</td>
       <td>{{ spesa.descrizione }}</td>
       <td>{{ spesa.costo }}</td>
-      <td>{{ spesa.cdc_verbose }}</td>
+      <td>
+        <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
+            {{ spesa.cdc_verbose }}
+        </a>
+      </td>
       <td>
         {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
           <a href="{% url 'acquisti:ordine_modifica' spesa.pk %}" id="modifica_ordine">

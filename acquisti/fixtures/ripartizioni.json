@@ -1,0 +1,30 @@
+[
+{
+  "model": "acquisti.ripartizionespesapercdc",
+  "pk": 1,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-01-05T18:27:08.261",
+    "data_creazione": "2019-01-05T18:27:08.261",
+    "last_user": "Pilone Sigfrido",
+    "acquisto": 1,
+    "cdc": 14,
+    "percentuale_di_competenza": "50.00",
+    "costo_totale": "610.00"
+  }
+},
+{
+  "model": "acquisti.ripartizionespesapercdc",
+  "pk": 2,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-01-06T10:47:12.916",
+    "data_creazione": "2019-01-06T10:47:12.916",
+    "last_user": "Pilone Sigfrido",
+    "acquisto": 1,
+    "cdc": 15,
+    "percentuale_di_competenza": "50.00",
+    "costo_totale": "610.00"
+  }
+}
+]

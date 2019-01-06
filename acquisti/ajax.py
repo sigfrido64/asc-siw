@@ -3,6 +3,8 @@ __author__ = "Pilone Ing. Sigfrido"
 from django.http import JsonResponse
 from .models import AcquistoConOrdine
 from siw.sig_utils import from_choices_to_list
+from siw.decorators import ajax_has_permission_decorator
+from accounts.models import SiwPermessi
 from anagrafe.models import Fornitore
 
 
@@ -28,3 +30,8 @@ def ajax_lista_fornitori(request):
     # Per convertire in Json devo prima convertire in lista.
     fornitori_list = list(fornitori)
     return JsonResponse(fornitori_list, safe=False)
+
+
+@ajax_has_permission_decorator(SiwPermessi.ACQUISTI_CDC_ERASE)
+def ajax_elimina_ripartizione_su_cdc(request):
+    pass
