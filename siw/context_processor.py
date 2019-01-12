@@ -21,6 +21,29 @@ def get_current_username():
     if len(sys.argv) > 0 and sys.argv[0].endswith('celery') and 'worker' in sys.argv:
         in_celery_worker_process = True
 
+    if settings.TESTING:
+        return 'User non presente in questa fase di test'
+    elif hasattr(_user, 'value'):
+        if in_celery_worker_process:
+            return 'Worker di Celery per : ' + _user.value
+        else:
+            return _user.value
+    else:
+        raise FieldDoesNotExist("La variabile _user non ha atttributo value")
+
+
+def set_current_username(user):
+    _user.value = user
+
+
+def old_get_current_username():
+    # TODO : Attenzione che devo anche dire quale utente ha lanciato i worker se non voglio perdere l'informazione
+    #  negli aggiornamenti
+    # A T T E N Z I O N E
+    in_celery_worker_process = False
+    if len(sys.argv) > 0 and sys.argv[0].endswith('celery') and 'worker' in sys.argv:
+        in_celery_worker_process = True
+
     if hasattr(_user, 'value'):
         return _user.value
     elif settings.TESTING:

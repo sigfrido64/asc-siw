@@ -1,9 +1,17 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 import os
+from threading import local
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from amm.models.mixins import AnnoFormativo
+from django.core.exceptions import FieldDoesNotExist
+from django.conf import settings
+import sys
+
+# Crea un'istanza di _user diversa per ogni thread.
+# Così aggiungendo un valore il valore sarà diverso per ogni thread e sarà sempre sincronizzato con lui.
+_user = local()
 
 
 def response_debug(response):
@@ -59,3 +67,6 @@ def set_anno_formativo_default(request):
         anno_formativo_obj = AnnoFormativo.objects.get(default=True)
         request.session['anno_formativo'] = anno_formativo_obj.anno_formativo
         request.session['anno_formativo_pk'] = anno_formativo_obj.pk
+
+
+
