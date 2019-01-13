@@ -20,11 +20,11 @@
     "protocollo_fattura_fornitore": "",
     "conforme": false,
     "note": "",
-    "dirty": true,
+    "dirty": false,
     "iva_comunque_indetraibile": "0.00",
     "iva_potenzialmente_detraibile": "220.00",
-    "cdc_verbose": null,
-    "costo": null
+    "cdc_verbose": "Compilato",
+    "costo": "1000.00"
   }
 },
 {

@@ -1,0 +1,37 @@
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% if lista_ripartizioni %}
+  Ripartizioni già presenti<br>
+  <table style="width:100%" border="1">
+    <thead>
+      <tr>
+        <th>CDC</th>
+        <th>Percentuale di Competenza</th>
+        <th>Azione</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item_ripartizione in lista_ripartizioni %}
+      <tr>
+        <td>{{ item_ripartizione.cdc.nome }}</td>
+        <td>{{ item_ripartizione.percentuale_di_competenza }}</td>
+        <td>
+          {% if user|can:siwperms.ACQUISTI_CDC_ERASE %}     {# Vedi nota sopra per spiegazione #}
+            <a href="javascript:sig_1('{% url 'acquisti:ajax_elimina_ripartizione_su_cdc' item_ripartizione.pk %}')">
+              <span class="fa fa-trash-o" aria-hidden="true"></span>
+            </a>
+          {% else %}
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+    Nessun CDC ancora assegnato.
+{% endif %}

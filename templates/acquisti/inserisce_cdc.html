@@ -30,37 +30,6 @@
 </div>
 <hr>
 <div id="id_lista_cdc_ripartizioni">
-  {% if lista_ripartizioni %}
-    Ripartizioni già presenti<br>
-    <table style="width:100%" border="1">
-      <thead>
-        <tr>
-          <th>CDC</th>
-          <th>Percentuale di Competenza</th>
-          <th>Azione</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for item_ripartizione in lista_ripartizioni %}
-        <tr>
-          <td>{{ item_ripartizione.cdc.nome }}</td>
-          <td>{{ item_ripartizione.percentuale_di_competenza }}</td>
-          <td>
-            {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
-              <a href="{% url 'acquisti:ordine_modifica' item_ripartizione.pk %}" id="modifica_ordine">
-                <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
-              </a>
-            {% else %}
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-      Nessun CDC ancora assegnato.
-  {% endif %}
 </div>
   <hr>
 <form method="post" novalidate>
@@ -100,8 +69,36 @@
 
 {% block javascript %}
   <script type="text/javascript">
+    function sig_1(url) {
+          // chiama erase e se ok refresh di html
+        $.ajax({                       // Inizializza la richiesta AJAX
+          url: url,                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+          success: function (data) {
+            rinfresca();
+          }
+        });
+    };
+
+       function rinfresca(){
+        $.ajax({                       // Inizializza la richiesta AJAX
+          url: "{% url 'acquisti:ajax_lista_ripartizioni_per_ordine' ordine.pk %}",                    // Imposta l'url della richiesta (= localhost:8000/attesta/ajax/load-corsi/)
+          data: {
+            'pk': {{ ordine.pk }}             // Mette il corso nei parametri di GET
+          },
+          success: function (data) {
+            $("#id_lista_cdc_ripartizioni").html(data.html);
+          }
+        });
+        };
+
+
     $(document).ready(function () {
         $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+
+
+        rinfresca();
+
+
 
         $("#choose_cdc").jqxButton({ width: '100', height: '30', template: "success"});
         $("#choose_cdc").on('click', function () {

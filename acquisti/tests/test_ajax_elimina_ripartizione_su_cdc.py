@@ -1,12 +1,13 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
 from ..ajax import ajax_elimina_ripartizione_su_cdc
+from ..models import RipartizioneSpesaPerCDC, AcquistoConOrdine
 
-from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_PRESENTE = 1
@@ -65,12 +66,27 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.profile.permessi = {SiwPermessi.ACQUISTI_CDC_ERASE}
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
-        self.response = self.client.get(URL, {'cdcId': 1})
 
     def test_server_serve_page_without_errors(self):
+        self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
 
-    def test_lista_cdc_dati_in_fixtures(self):
-        self.fail("Vai a finire i test")
+    def test_elimina_ripartizione_su_cdc(self):
+        # Prima di eliminare le ripartizioni devono essere due.
+        numero_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=1).count()
+        self.assertEqual(numero_ripartizioni, 2)
+        # E l'acquisto non deve essere dirty.
+        acquisto = AcquistoConOrdine.objects.get(id=1)
+        self.assertEqual(acquisto.dirty, False)
         
-
+        # Elimino una ripartizione
+        self.response = self.client.get(URL)
+        # Verifico che risponda con ok.
+        self.assertJSONEqual(self.response.content, {'risultato': 'ok'})
+        
+        # Dopo la cancellazione della prima ne dovrebbe restare esattamente solo una.
+        numero_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=1).count()
+        self.assertEqual(numero_ripartizioni, 1)
+        # Controllo che l'acquisto adesso sia dirty e che non ci sia più un cdc_txt
+        acquisto = AcquistoConOrdine.objects.get(id=1)
+        self.assertEqual(acquisto.dirty, True)

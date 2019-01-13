@@ -7,8 +7,7 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
 from ..views import inserimento_cdc
 from ..forms import RipartizioneForm
-from ..models import AcquistoConOrdine, RipartizioneSpesaPerCDC
-from siw.sig_utils import response_debug
+from ..models import RipartizioneSpesaPerCDC
 
 from unittest import skip
 
@@ -138,7 +137,6 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.get(url)
         self.assertContains(response, 'FAP')
         
-    @skip
     def test_new_acquisto_senza_dati(self):
         """
         Invalid post data should not redirect
