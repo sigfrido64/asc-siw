@@ -50,3 +50,22 @@ def ajax_set_af(request):
     request.session['anno_formativo'] = anno_formativo
     request.session['anno_formativo_pk'] = anno_formativo_pk
     return JsonResponse({'risultato': 'ok'}, safe=False)
+
+
+def ajax_insert_cdc_figlio(request):
+    cdc_padre = request.GET.get('pk_cdc_padre', 0)
+    print("CIao Pirla !", cdc_padre)
+
+    """
+    try:
+        collaboratore = Collaboratore.objects.get(persona__pk=pk_persona)
+    except ObjectDoesNotExist:
+        persona = Persona.objects.get(pk=pk_persona)
+        risposta = render_to_string("collaboratori/includes/informa_collaboratore_inseribile.html",
+                                    {'persona': persona})
+        return JsonResponse({'html': risposta}, safe=False)
+    risposta = render_to_string("collaboratori/includes/errore_collaboratore_gia_presente.html",
+                                {'collaboratore': collaboratore})
+    """
+    
+    return JsonResponse({'risultato': 1, 'html_header': 'Titolo', 'html_body': 'Koglione'}, safe=False)

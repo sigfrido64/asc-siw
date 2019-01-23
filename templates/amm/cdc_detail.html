@@ -1,11 +1,67 @@
 <p><strong>Cdc : {{ cdc.nome }}</strong></p>
+
 <div id="dettaglio_cdc">Descrizione : {{ cdc.descrizione }} <br>
-CUP : {{ cdc.cup }} <br>
-CIG : {{ cdc.cig }} <br>
-Iva Detraibile : {{ cdc.iva_detraibile }} <br>
-Note : {{ cdc.note }} <br>
-<br>
-Data Inizio Validità : {{ cdc.valido_dal }} <br>
-Data Fine Validità : {{ cdc.valido_al }} <br>
+  CUP : {{ cdc.cup }} <br>
+  CIG : {{ cdc.cig }} <br>
+  Iva Detraibile : {{ cdc.iva_detraibile }} <br>
+  Note : {{ cdc.note }} <br>
+  <br>
+  Data Inizio Validità : {{ cdc.valido_dal }} <br>
+  Data Fine Validità : {{ cdc.valido_al }} <br>
 </div>
+
 {% include "includes/form_systemdata.html" with form=cdc %}
+
+<p>
+<div>
+  <input type="button" value="Inserisce Figlio" id="do_insert" href="{% url 'amm:ajax_insert_cdc_figlio' %}"/>
+</div>
+</p>
+
+<div id="window">
+  <div id="windowHeader">
+  </div>
+  <div id="windowContent">
+  </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+
+        $('#do_insert').on('click', function () {
+          // apre_finestra_modale('#window', 'Ciao', 'Coglione')
+          let url = $(this).attr("href");  // recupera l'url dell'inserimento
+          $.ajax({
+            url: url,
+            data: {
+              'pk_cdc_padre': {{ cdc.id }}
+            },
+            success: function(risposta){
+              /** @namespace risposta.risultato **/
+              /** @namespace risposta.html_header **/
+              /** @namespace risposta.html_body **/
+              if (risposta.risultato > 0) {
+                apre_finestra_modale ('#window', risposta.html_header, risposta.html_body);
+              }
+            }
+          });
+          return false  // Così fermo l'apertura del link dell'href !
+        });
+
+    });
+
+    function apre_finestra_modale(id, html_header, html_body) {
+      let finestra = $(id);
+      finestra.jqxWindow({
+        width: '80%', height: '80%',
+        resizable: false,
+        isModal: true,
+        content: html_body
+      });
+      finestra.jqxWindow({ title: html_header });
+      finestra.jqxWindow('open');
+    }
+
+</script>
+

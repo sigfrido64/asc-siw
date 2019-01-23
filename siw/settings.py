@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'siw.wsgi.application'
 
 
 DATABASES = {
-    'default_old_cambiareperPostegres': {
+    'default_old_cambiareperPostgres': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
@@ -112,7 +112,7 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'NAME': config('DB_SQLITE_NAME'),
     },
 }
 
