@@ -10,7 +10,7 @@ from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm, RipartizioneForm
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
 def ordini(request):
-    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
+    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk']).order_by('data_ordine', 'numero_protocollo')
     return render(request, 'acquisti/ordini.html', {'spese': spese})
 
 
@@ -82,7 +82,9 @@ def inserimento_cdc(request, pk):
             else:
                 return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
-        form = RipartizioneForm(initial={'percentuale_di_competenza': 100, 'acquisto': ordine})
+        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, 1)
+        form = RipartizioneForm(initial={'percentuale_di_competenza': percentuale_massima_ammissibile,
+                                         'acquisto': ordine})
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
     return render(request, 'acquisti/inserisce_cdc.html',
                   {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})

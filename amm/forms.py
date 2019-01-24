@@ -10,11 +10,11 @@ class CdcForm(forms.ModelForm):
                            widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
     descrizione = forms.CharField(required=True,
                                   widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
-    cup = forms.CharField(required=True,
+    cup = forms.CharField(required=False,
                           widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
-    cig = forms.CharField(required=True,
+    cig = forms.CharField(required=False,
                           widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
-    iva_detraibile = forms.BooleanField(widget=JqxCheckBox(jqxattrs={'height': 30, 'width': 150}))
+    iva_detraibile = forms.BooleanField(required=False, widget=JqxCheckBox(jqxattrs={'height': 30, 'width': 150}))
     note = forms.CharField(required=False,
                            widget=JqxTextArea(jqxattrs={'height': 200, 'width': 500, 'minLength': 1}))
     valido_dal = forms.DateField(required=True,

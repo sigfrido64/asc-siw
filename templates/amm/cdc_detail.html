@@ -19,47 +19,52 @@
 </p>
 
 <div id="window">
-  <div id="windowHeader">
-  </div>
-  <div id="windowContent">
-  </div>
+  <div id="windowHeader"></div>
+  <div id="windowContent"></div>
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+  $(document).ready(function () {
+    init_detail();
+  });
 
-        $('#do_insert').on('click', function () {
-          // apre_finestra_modale('#window', 'Ciao', 'Coglione')
-          let url = $(this).attr("href");  // recupera l'url dell'inserimento
-          $.ajax({
-            url: url,
-            success: function(risposta){gestisce_risposta(risposta)}
-          });
-          return false  // Così fermo l'apertura del link dell'href !
-        });
-
-    });
-
-    function apre_finestra_modale(id, html_header, html_body) {
-      let finestra = $(id);
-      finestra.jqxWindow({
-        width: '80%', height: '80%',
-        resizable: false,
-        isModal: true,
-        content: html_body
+  function init_detail(){
+    let button_handle = $("#do_insert");
+    let url = button_handle.attr("href");  // recupera l'url dell'inserimento
+    button_handle.jqxButton({ width: '200', height: '30', template: "success"});
+    button_handle.on('click', function () {
+      $.ajax({
+        url: url,
+        success: function(risposta){gestisce_risposta(risposta)}
       });
-      finestra.jqxWindow({ title: html_header });
-      finestra.jqxWindow('open');
-    }
+      return false  // Così fermo l'apertura del link dell'href !
+    });
+  }
 
-    function gestisce_risposta (risposta){
-      /** @namespace risposta.risultato **/
-      /** @namespace risposta.html_header **/
-      /** @namespace risposta.html_body **/
-      if (risposta.risultato > 0) {
-        apre_finestra_modale ('#window', risposta.html_header, risposta.html_body);
-      }
+  function gestisce_risposta (risposta){
+    /** @namespace risposta.risultato **/
+    /** @namespace risposta.html_header **/
+    /** @namespace risposta.html_body **/
+    let ws = $("#window");
+    if (risposta.risultato === 1) {
+      apre_finestra_modale (ws, risposta.html_header, risposta.html_body);
     }
+    else if (risposta.risultato === 2) {
+      ws.jqxWindow('close');
+      sig_vince();
+    }
+  }
+
+  function apre_finestra_modale(ws, html_header, html_body) {
+    /** ws -> window selector */
+    ws.jqxWindow({
+      width: 'auto', height: 'auto',
+      resizable: false,
+      isModal: true,
+      content: html_body
+    });
+    ws.jqxWindow({ title: html_header });
+    ws.jqxWindow('open');
+  }
 </script>
 

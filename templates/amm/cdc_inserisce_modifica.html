@@ -11,7 +11,7 @@
   </p>
 </div>
 <hr>
-<form method="post" novalidate>
+<form method="post" novalidate id="sega">
 
   {% csrf_token %}
   {% include "includes/form_head.html" with form=cdc %}
@@ -59,7 +59,21 @@
 </form>
 
 <script type="text/javascript">
- $(document).ready(function () {
+  $(document).ready(function () {
      $("#cdc_do_insert").jqxButton({width: '200', height: '30', template: "success"});
- });
+  });
+
+  // this is the id of the form
+  $("#sega").submit(function(e) {
+    var form = $(this);
+    var url = $("#do_insert").attr("href");
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(risposta){gestisce_risposta(risposta)}
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+  });
 </script>

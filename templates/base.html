@@ -37,6 +37,8 @@
     <!-- add support for localization -->
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.js' %}"></script>
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.culture.it-IT.js' %}"></script>
+    <!-- Specifici dell'App -->
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
   </head>
   <body>
     {% block body %}
@@ -57,7 +59,6 @@
           </td>
         </tr>
       </table>
-      <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
 
       {# Include il menù principale #}
       {% include "includes/menu.html" %}

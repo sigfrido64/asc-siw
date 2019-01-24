@@ -22,8 +22,8 @@ class CentroDiCostoAdmin(ImportExportModelAdmin):
     readonly_fields = ('last_user', 'data_aggiornamento', 'data_creazione')
     exclude = None
 
-    def get_queryset(self, request):
-        return CentroDiCosto.objects.all()
+    # def get_queryset(self, request):
+    #     return CentroDiCosto.objects.all()
 
 
 @admin.register(Occasionale)

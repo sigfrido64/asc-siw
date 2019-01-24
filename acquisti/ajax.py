@@ -33,7 +33,8 @@ def ajax_lista_tipo_ordini(request):
 
 @login_required()
 def ajax_lista_fornitori(request):
-    fornitori = Fornitore.objects.filter(in_uso=True)
+    # TODO mettere i test e verificare che siano in ordine alfabetico.
+    fornitori = Fornitore.objects.filter(in_uso=True).order_by('azienda__ragione_sociale')
     fornitori = fornitori.values('azienda__ragione_sociale', 'pk')
     # Per convertire in Json devo prima convertire in lista.
     fornitori_list = list(fornitori)
