@@ -2,10 +2,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.loader import render_to_string
 from siw.decorators import ajax_has_permission_decorator
 from accounts.models import SiwPermessi
-from .models.centri_di_costo import CentroDiCosto
 from .models.mixins import AnnoFormativo
+from .models.centri_di_costo import CentroDiCosto
+from .forms import CdcForm
 
 
 @ajax_has_permission_decorator((SiwPermessi.AMM_CDC_READ, SiwPermessi.CORSI_INSERISCE, SiwPermessi.CORSI_MODIFICA))
@@ -52,20 +54,18 @@ def ajax_set_af(request):
     return JsonResponse({'risultato': 'ok'}, safe=False)
 
 
-def ajax_insert_cdc_figlio(request):
-    cdc_padre = request.GET.get('pk_cdc_padre', 0)
-    print("CIao Pirla !", cdc_padre)
-
-    """
-    try:
-        collaboratore = Collaboratore.objects.get(persona__pk=pk_persona)
-    except ObjectDoesNotExist:
-        persona = Persona.objects.get(pk=pk_persona)
-        risposta = render_to_string("collaboratori/includes/informa_collaboratore_inseribile.html",
-                                    {'persona': persona})
-        return JsonResponse({'html': risposta}, safe=False)
-    risposta = render_to_string("collaboratori/includes/errore_collaboratore_gia_presente.html",
-                                {'collaboratore': collaboratore})
-    """
-    
-    return JsonResponse({'risultato': 1, 'html_header': 'Titolo', 'html_body': 'Koglione'}, safe=False)
+def ajax_insert_cdc_figlio(request, pk_parent):
+    cdc_padre = CentroDiCosto.objects.get(id=pk_parent)
+    print("Trovato centro di costo padre !", cdc_padre)
+    if request.method == 'POST':
+        form = CdcForm(request.POST, initial={'parent': cdc_padre})
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'risultato': 2}, safe=False)
+    else:
+        form = CdcForm(initial={'parent': pk_parent, 'valido_dal': cdc_padre.valido_dal,
+                                'valido_al': cdc_padre.valido_al})
+    html_body = render_to_string("amm/cdc_inserisce_modifica.html",
+                                 context={'parent': cdc_padre, 'cdc': form}, request=request)
+    return JsonResponse({'risultato': 1, 'html_header': 'Inserimento Centro di Costo figlio',
+                         'html_body': html_body}, safe=False)

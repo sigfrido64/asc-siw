@@ -14,7 +14,7 @@
 
 <p>
 <div>
-  <input type="button" value="Inserisce Figlio" id="do_insert" href="{% url 'amm:ajax_insert_cdc_figlio' %}"/>
+  <input type="button" value="Inserisce Figlio" id="do_insert" href="{% url 'amm:ajax_insert_cdc_figlio' cdc.id %}"/>
 </div>
 </p>
 
@@ -34,17 +34,7 @@
           let url = $(this).attr("href");  // recupera l'url dell'inserimento
           $.ajax({
             url: url,
-            data: {
-              'pk_cdc_padre': {{ cdc.id }}
-            },
-            success: function(risposta){
-              /** @namespace risposta.risultato **/
-              /** @namespace risposta.html_header **/
-              /** @namespace risposta.html_body **/
-              if (risposta.risultato > 0) {
-                apre_finestra_modale ('#window', risposta.html_header, risposta.html_body);
-              }
-            }
+            success: function(risposta){gestisce_risposta(risposta)}
           });
           return false  // Così fermo l'apertura del link dell'href !
         });
@@ -63,5 +53,13 @@
       finestra.jqxWindow('open');
     }
 
+    function gestisce_risposta (risposta){
+      /** @namespace risposta.risultato **/
+      /** @namespace risposta.html_header **/
+      /** @namespace risposta.html_body **/
+      if (risposta.risultato > 0) {
+        apre_finestra_modale ('#window', risposta.html_header, risposta.html_body);
+      }
+    }
 </script>
 
