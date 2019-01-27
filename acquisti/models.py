@@ -298,19 +298,22 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         return 'Quotaparte di ' + self.acquisto.descrizione + ' su ' + self.cdc.descrizione
 
     def clean(self):
-        # Il valore della singola ripartizione non può eccedere il 100%
-        if int(self.percentuale_di_competenza) > 100:
-            raise ValidationError(
-                {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
-        # Il valore delle singola ripartizione non può essere 0 o negativo
-        if int(self.percentuale_di_competenza) <= 0:
-            raise ValidationError(
-                {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
+        # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
+        if self.percentuale_di_competenza:
+            if int(self.percentuale_di_competenza) > 100:
+                raise ValidationError(
+                    {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
+            # Il valore delle singola ripartizione non può essere 0 o negativo
+            if int(self.percentuale_di_competenza) <= 0:
+                raise ValidationError(
+                    {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
         
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
-        if self._verifica_se_percentuali_eccedute(self.acquisto, self.percentuale_di_competenza, self.pk):
-            raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
-                                                                "per questo acquisto eccede il 100%"})
+        # Se non ho un acquisto di riferimento non posso fare il controllo.
+        if hasattr(self, 'acquisto'):
+            if self._verifica_se_percentuali_eccedute(self.acquisto, self.percentuale_di_competenza, self.pk):
+                raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
+                                                                    "per questo acquisto eccede il 100%"})
 
     # Override Save.
     # Calcola il costo totale della voce di ordine in funzione della detraibilità del singolo cdc

@@ -86,5 +86,5 @@ def inserimento_cdc(request, pk):
         form = RipartizioneForm(initial={'percentuale_di_competenza': percentuale_massima_ammissibile,
                                          'acquisto': ordine})
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
-    return render(request, 'acquisti/inserisce_cdc.html',
+    return render(request, 'acquisti/inserisce_ripartizione_su_cdc.html',
                   {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})

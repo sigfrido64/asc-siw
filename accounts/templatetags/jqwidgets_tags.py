@@ -57,7 +57,5 @@ def siw_field(field):
     else:
         class_nuova = class_da_appendere + ' ' + class_da_appendere
     field.field.widget.attrs['class'] = class_nuova
-    print("Qui ho :", field.__str__())
     ris = mark_safe(field.__str__() + field.errors.__str__())
-    print("Ma riporto : ", ris)
     return ris

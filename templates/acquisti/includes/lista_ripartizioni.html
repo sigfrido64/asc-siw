@@ -21,7 +21,7 @@
         <td>{{ item_ripartizione.percentuale_di_competenza }}</td>
         <td>
           {% if user|can:siwperms.ACQUISTI_CDC_ERASE %}     {# Vedi nota sopra per spiegazione #}
-            <a href="javascript:sig_1('{% url 'acquisti:ajax_elimina_ripartizione_su_cdc' item_ripartizione.pk %}')">
+            <a href="javascript:elimina_ripartizione_su_cdc('{% url 'acquisti:ajax_elimina_ripartizione_su_cdc' item_ripartizione.pk %}')">
               <span class="fa fa-trash-o" aria-hidden="true"></span>
             </a>
           {% else %}
@@ -35,3 +35,16 @@
 {% else %}
     Nessun CDC ancora assegnato.
 {% endif %}
+
+
+<script type="text/javascript">
+    function elimina_ripartizione_su_cdc(url) {
+      // Chiama url per erase con la giusta chiave e se ok fa il refresh della lista delle ripartizioni.
+      $.ajax({
+        url: url,
+        success: function () {
+          rinfresca_ripartizioni_su_cdc();  // Definita nel template principale
+        }
+      });
+    }
+</script>

@@ -29,9 +29,10 @@
   });
 
   function init_detail(){
+    $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
     let button_handle = $("#do_insert");
     let url = button_handle.attr("href");  // recupera l'url dell'inserimento
-    button_handle.jqxButton({ width: '200', height: '30', template: "success"});
+
     button_handle.on('click', function () {
       $.ajax({
         url: url,

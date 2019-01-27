@@ -7,7 +7,7 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
 from ..views import inserimento_cdc
 from ..forms import RipartizioneForm
-from ..models import RipartizioneSpesaPerCDC
+from ..models import RipartizioneSpesaPerCDC, AcquistoConOrdine
 
 from unittest import skip
 
@@ -92,7 +92,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     
     def test_render_with_correct_templates(self):
         response = self.client.get(URL)
-        self.assertTemplateUsed(response, 'acquisti/inserisce_cdc.html')
+        self.assertTemplateUsed(response, 'acquisti/inserisce_ripartizione_su_cdc.html')
     
     def test_new_ripartizione_100_con_dati_validi(self):
         # Inserisce una ripartizione. Uso dummy per il campo testuale che non viene usato in quanto setto direttamente
@@ -108,7 +108,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
         ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=1)
         self.assertIsInstance(ordine, RipartizioneSpesaPerCDC)
-        # Controlla il redirect alla pagina di inserimento dei CDC.
+        # Controlla il redirect alla pagina ordini in quanto 100% implica no altri CDC.
         self.assertRedirects(response, reverse('acquisti:ordini'), HTTP_302_FOUND, HTTP_200_OK)
         # Apro la pagina della lista ordini e lo dovrei trovare.
         url = reverse('acquisti:ordini')
@@ -116,18 +116,20 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertContains(response, 'FAP')
         
     def test_new_ripartizione_50_con_dati_validi(self):
-        # Inserisce una ripartizione. Uso dummy per il campo testuale che non viene usato in quanto setto direttamente
-        # il cdc senza passare del controllo JQWidgets.
+        # Inserisce una ripartizione. Uso dummy per il campo testuale (cdc_txt) che non viene usato in quanto
+        # setto direttamente il cdc senza passare del controllo JQWidgets.
         # Impostando il 50% mi aspetto che rimanga sulla pagina di inserimento.
         data = {'cdc': 4,
                 'cdc_txt': 'dummy',
-                'acquisto': 1,
+                'acquisto': 2,
                 'percentuale_di_competenza': 50, }
-        response = self.client.post(URL, data)
+        # Faccio riferimento ad un ordine che non ha ancora CDC assegnati.
+        N_URL = f"/acquisti/inserimento_cdc/2/"
+        response = self.client.post(N_URL, data)
         # Controlla che sia stato inserito un record.
         self.assertTrue(RipartizioneSpesaPerCDC.objects.exists())
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=1)
+        ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=2)
         self.assertIsInstance(ordine, RipartizioneSpesaPerCDC)
         # Controlla il redirect alla pagina di inserimento dei CDC.
         self.assertRedirects(response, reverse('acquisti:inserimento_cdc',
