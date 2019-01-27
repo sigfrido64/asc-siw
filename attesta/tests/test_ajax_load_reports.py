@@ -12,6 +12,8 @@ class MyAccountTestCase(TestCase):
     """
     Qui metto le informazioni di base per i test successivi
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.username = 'john'
@@ -43,7 +45,7 @@ class NoPermsTests(MyAccountTestCase):
 class AjaxGeneralTests(MyAccountTestCase):
     # Utente loggato e con permessi.
     # Carico il database di esempio per i report
-    fixtures = ['reports']
+    fixtures = ['reports', 'af']
 
     def setUp(self):
         # Inizializzazioni generali per utente che si logga con permessi.

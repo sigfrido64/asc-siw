@@ -1,11 +1,71 @@
 <p><strong>Cdc : {{ cdc.nome }}</strong></p>
+
 <div id="dettaglio_cdc">Descrizione : {{ cdc.descrizione }} <br>
-CUP : {{ cdc.cup }} <br>
-CIG : {{ cdc.cig }} <br>
-Iva Detraibile : {{ cdc.iva_detraibile }} <br>
-Note : {{ cdc.note }} <br>
-<br>
-Data Inizio Validità : {{ cdc.valido_dal }} <br>
-Data Fine Validità : {{ cdc.valido_al }} <br>
+  CUP : {{ cdc.cup }} <br>
+  CIG : {{ cdc.cig }} <br>
+  Iva Detraibile : {{ cdc.iva_detraibile }} <br>
+  Note : {{ cdc.note }} <br>
+  <br>
+  Data Inizio Validità : {{ cdc.valido_dal }} <br>
+  Data Fine Validità : {{ cdc.valido_al }} <br>
 </div>
+
 {% include "includes/form_systemdata.html" with form=cdc %}
+
+<p>
+<div>
+  <input type="button" value="Inserisce Figlio" id="do_insert" href="{% url 'amm:ajax_insert_cdc_figlio' cdc.id %}"/>
+</div>
+</p>
+
+<div id="window">
+  <div id="windowHeader"></div>
+  <div id="windowContent"></div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    init_detail();
+  });
+
+  function init_detail(){
+    $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+    let button_handle = $("#do_insert");
+    let url = button_handle.attr("href");  // recupera l'url dell'inserimento
+
+    button_handle.on('click', function () {
+      $.ajax({
+        url: url,
+        success: function(risposta){gestisce_risposta(risposta)}
+      });
+      return false  // Così fermo l'apertura del link dell'href !
+    });
+  }
+
+  function gestisce_risposta (risposta){
+    /** @namespace risposta.risultato **/
+    /** @namespace risposta.html_header **/
+    /** @namespace risposta.html_body **/
+    let ws = $("#window");
+    if (risposta.risultato === 1) {
+      apre_finestra_modale (ws, risposta.html_header, risposta.html_body);
+    }
+    else if (risposta.risultato === 2) {
+      ws.jqxWindow('close');
+      sig_vince();
+    }
+  }
+
+  function apre_finestra_modale(ws, html_header, html_body) {
+    /** ws -> window selector */
+    ws.jqxWindow({
+      width: 'auto', height: 'auto',
+      resizable: false,
+      isModal: true,
+      content: html_body
+    });
+    ws.jqxWindow({ title: html_header });
+    ws.jqxWindow('open');
+  }
+</script>
+

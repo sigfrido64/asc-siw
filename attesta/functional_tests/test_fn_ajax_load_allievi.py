@@ -8,6 +8,8 @@ from functional_tests.base import FunctionalTest
 class AjaxLoadAllieviTest(FunctionalTest):
     # Crea l'utente per le prove.
     # La parte di SQL Server non va caricata perchè è esterna al mio DB.
+    fixtures = ['af']
+    
     def setUp(self):
         # Chiamo subito il costruttore della classe madre così poi posso operare su tutte le variabili che crea.
         super().setUp()

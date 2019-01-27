@@ -11,7 +11,7 @@ from functional_tests.base import FunctionalTest
 
 class LoginTest(FunctionalTest):
     # Crea l'utente per le prove.
-    fixtures = ['cdc.json']
+    fixtures = ['cdc', 'af']
     
     def setUp(self):
         super().setUp()

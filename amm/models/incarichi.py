@@ -3,8 +3,8 @@ from django.db import models
 
 from siw.siwmodels import SiwGeneralModel
 from collaboratori.models import Collaboratore
-from anagrafe.models import PersonaInAzienda
 from corsi.models import Corso
+from amm.models.mixins import AnnoFormativo
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -35,6 +35,7 @@ class IncaricoDocenza(SiwGeneralModel):
         (LIQUIDATO, 'Liquidato')
     )
 
+    anno_formativo = models.ForeignKey(AnnoFormativo, on_delete=models.PROTECT)
     stato_incarico = models.IntegerField(choices=STATO_INCARICO_CHOICES, default=BOZZA)
     numero = models.CharField(max_length=10, unique=True)
 
@@ -53,7 +54,10 @@ class IncaricoDocenza(SiwGeneralModel):
     ore_effettive = models.FloatField(default=0)
 
     parametro_orario = models.FloatField()
-    aggiuntivo_corso = models.FloatField()
+    aggiuntivo_corso = models.FloatField(default=0)
+    
+    rimborso_spese_previsto = models.FloatField(default=0)
+    rimborso_spese_effettivo = models.FloatField(default=0)
 
     importo_incarico_previsto = models.FloatField()
     importo_incarico_effettivo = models.FloatField(default=0)
@@ -75,13 +79,23 @@ class IncaricoDocenza(SiwGeneralModel):
     def save(self, *args, **kwargs):
         self.importo_incarico_previsto = self.ore_previste * self.parametro_orario + self.aggiuntivo_corso
         # TODO qui devo usare il calcolo del costo da tipo di incarico amministrativo !
-        self.costo_incarico_previsto = self.importo_incarico_previsto * 1.2
+        self.costo_incarico_previsto = self.importo_incarico_previsto * 1.2 + self.rimborso_spese_previsto
         super().save(*args, **kwargs)
 
 
 class RilevamentoDocenza(SiwGeneralModel):
+    """
+    TODO La rilevazione delle ore deve dire solo le ore ed il periodo i in cui sono state effettuate. Meglio se puntuale ?
+    
+    Dopo devo convertire la rilevazione in una parte amministrativa in cui metto anche la parte di rimborso aggiuntibo
+    ed eventualmente le spese sostenute.
+    
+    """
     incarico_docenza = models.ForeignKey(IncaricoDocenza, on_delete=models.PROTECT)
     ore_rilevate = models.IntegerField()
+    # importo_aggiuntivo = models.FloatField(default=0)
+    # rimborso_spese = models.FloatField(default=0)
+    
     data_rilevazione = models.DateField(auto_now=True)
 
     importo_da_liquidare = models.FloatField()

@@ -26,6 +26,26 @@
 
 {% block javascript %}
 <script type="text/javascript">
+  function sig_vince() {
+     let cdcUrl = $("#jqxTreeView").attr("lista-cdc-url");
+     let source = {
+       datatype: "json",
+       datafields: [
+         {name: 'parent'},
+         {name: 'nome'},
+         {name: 'id'}],
+       url: cdcUrl,
+       async: true
+     };
+     let dataAdapter = new $.jqx.dataAdapter(source, {
+       loadComplete: function () {
+         var records = dataAdapter.getRecordsHierarchy('id', 'parent', 'items', [{name: 'nome', map: 'label'}]);
+         $("#jqxTreeView").jqxTree({source: records, width: '300px'})
+       }
+     });
+     dataAdapter.dataBind();
+  };
+
   $(document).ready(function () {
     // the 'layout' JSON array defines the internal structure of the layout
     var layout = [{
@@ -73,7 +93,7 @@
        sig_detail(item.id);
     });
 
-  function sig_vince() {
+  function sig_vince_old() {
      let cdcUrl = $("#jqxTreeView").attr("lista-cdc-url");
      let source = {
        datatype: "json",

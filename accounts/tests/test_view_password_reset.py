@@ -11,6 +11,8 @@ from django.utils.http import urlsafe_base64_encode
 
 
 class PasswordResetTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('password_reset')
         self.response = self.client.get(url)
@@ -38,6 +40,8 @@ class PasswordResetTests(TestCase):
 
 
 class SuccessfulPasswordResetTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         email = 'john@doe.com'
         User.objects.create_user(username='john', email=email, password='123abcdef')
@@ -56,6 +60,8 @@ class SuccessfulPasswordResetTests(TestCase):
 
 
 class InvalidPasswordResetTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('password_reset')
         self.response = self.client.post(url, {'email': 'donotexist@email.com'})
@@ -73,6 +79,8 @@ class InvalidPasswordResetTests(TestCase):
 
 
 class PasswordResetDoneTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('password_reset_done')
         self.response = self.client.get(url)
@@ -86,6 +94,8 @@ class PasswordResetDoneTests(TestCase):
 
 
 class PasswordResetConfirmTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         user = User.objects.create_user(username='john', email='john@doe.com', password='123abcdef')
 
@@ -123,6 +133,8 @@ class PasswordResetConfirmTests(TestCase):
 
 
 class InvalidPasswordResetConfirmTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         user = User.objects.create_user(username='john', email='john@doe.com', password='123abcdef')
         uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
@@ -147,6 +159,8 @@ class InvalidPasswordResetConfirmTests(TestCase):
 
 
 class PasswordResetCompleteTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('password_reset_complete')
         self.response = self.client.get(url)

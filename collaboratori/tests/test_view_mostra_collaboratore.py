@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from unittest import skip
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
-from siw.sig_debug import response_debug
+from siw.sig_utils import response_debug
 
 from ..views import mostra_collaboratore_view
 __author__ = "Pilone Ing. Sigfrido"
@@ -33,6 +33,8 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.fake_user_username = 'john'
@@ -61,7 +63,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -89,7 +91,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
 class FormTestsForSpecialPermissions(MyAccountTestCase):
     # Adesso controllo che ci siano i pulsanti che vengono abilitati con permessi speciali.
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
     
     def test_page_contains_edit_link_when_allowed(self):
         self.myuser.profile.permessi = {SiwPermessi.COLLABORATORE_MOSTRA, SiwPermessi.COLLABORATORE_MODIFICA}

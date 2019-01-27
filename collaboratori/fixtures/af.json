@@ -1,0 +1,26 @@
+[
+{
+  "model": "amm.annoformativo",
+  "pk": 1,
+  "fields": {
+    "anno_formativo": "AF 2018-2019",
+    "default": true
+  }
+},
+{
+  "model": "amm.annoformativo",
+  "pk": 2,
+  "fields": {
+    "anno_formativo": "AF 2017-2018",
+    "default": false
+  }
+},
+{
+  "model": "amm.annoformativo",
+  "pk": 3,
+  "fields": {
+    "anno_formativo": "AF 2016-2017",
+    "default": false
+  }
+}
+]

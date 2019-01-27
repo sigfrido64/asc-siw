@@ -16,7 +16,7 @@ Bisogna creare anche tutti gli altri test funzionali per inserimento e modifica 
 
 class LoginTest(FunctionalTest):
     # Crea l'utente per le prove.
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
     
     def setUp(self):
         super().setUp()

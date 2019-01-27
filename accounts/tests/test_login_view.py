@@ -11,6 +11,7 @@ class LoginViewTest(TestCase):
     In questo test case controllo che il login venga richiesto per accedere alla home page se non sono loggato e che
     il logout mi riporti alla pagina di login con il next alla home.
     """
+    fixtures = ['af']
     
     # Crea l'utente per le prove.
     def setUp(self):

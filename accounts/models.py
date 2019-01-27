@@ -17,6 +17,14 @@ class SiwPermessi(object):
     Sezione Amministrazione
     """
     AMM_CDC_READ = 'amm_cdc_read'
+    
+    """
+    Sezione Acquisti
+    """
+    ACQUISTI_ORDINI_VIEW = 'acquisti_ordini_view'
+    ACQUISTI_ORDINI_INSERISCE = 'acquisti_ordini_inserisce'
+    ACQUISTI_ORDINI_MODIFICA = 'acquisti_ordini_modifica'
+    ACQUISTI_CDC_ERASE = 'acquisti_cdc_erase'
 
     """
     Anagrafe
@@ -45,13 +53,17 @@ class SiwPermessi(object):
     TODO : Da verificare se questa impostazione può o meno funzionare in generale e se non crea più problemi di quanti
     ne risolve nel mismatch tra permessi sulle viste e permessi per i menù
     """
-    MENU_AMM = 'menu_amm'
+    MENU_AMM = 'menu_amm'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_AMM_CDC = 'menu_cdc'
 
-    MENU_COLLABORATORI = 'menu_collaboratori'
+    # Questo è un sotto menù per cui ci deve essere se voglio una voce di quelle che gli stanno sotto.
+    MENU_AMM_ACQUISTI = 'menu_acquisti'
+    MENU_AMM_ACQUISTI_ORDINI = 'menu_acquisti_ordini'
+    
+    MENU_COLLABORATORI = 'menu_collaboratori'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_COLLABORATORI_LISTA = 'menu_collaboratori_lista'
     
-    MENU_CORSI = 'menu_corsi'
+    MENU_CORSI = 'menu_corsi'       # Questo deve essere sempre presente per visualizzare gli altri.
     MENU_CORSI_LISTA = 'menu_corsi_lista'
 
     @staticmethod

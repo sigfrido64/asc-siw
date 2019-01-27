@@ -1,0 +1,79 @@
+{% load jqwidgets_tags %}
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+<div id="id_cdc_padre">
+  <p>
+    CDC Padre : {{ parent.nome }}
+  </p>
+</div>
+<hr>
+<form method="post" novalidate id="sega">
+
+  {% csrf_token %}
+  {% include "includes/form_head.html" with form=cdc %}
+
+  <table width="100%" border="1">
+    <tr>
+      <td>Nome : </td>
+      <td>{% siw_field cdc.nome %}</td>
+    </tr>
+    <tr>
+      <td>Descrizione : </td>
+      <td>{% siw_field cdc.descrizione %}</td>
+    </tr>
+    <tr>
+      <td>CUP : </td>
+      <td>{% siw_field cdc.cup %}</td>
+    </tr>
+    <tr>
+      <td>CIG : </td>
+      <td>{% siw_field cdc.cig %}</td>
+    </tr>
+    <tr>
+      <td>IVA Detraibile : </td>
+      <td>{% siw_field cdc.iva_detraibile %}</td>
+    </tr>
+    <tr>
+      <td>Valido Dal : </td>
+      <td>{% siw_field cdc.valido_dal %}</td>
+    </tr>
+    <tr>
+      <td>Valido al : </td>
+      <td>{% siw_field cdc.valido_al %}</td>
+    </tr>
+    <tr>
+      <td>Note : </td>
+      <td>{% siw_field cdc.note %}</td>
+    </tr>
+  </table>
+
+  <p>
+  <div align="center">
+    <button id="cdc_do_insert" type="submit">Salva</button>
+  </div>
+  </p>
+</form>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+     $("#cdc_do_insert").jqxButton({width: '200', height: '30', template: "success"});
+  });
+
+  // this is the id of the form
+  $("#sega").submit(function(e) {
+    var form = $(this);
+    var url = $("#do_insert").attr("href");
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(risposta){gestisce_risposta(risposta)}
+         });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+  });
+</script>

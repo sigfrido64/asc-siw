@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import sys
+import sys
 from decouple import config
 from unipath import Path
 import dj_database_url
@@ -37,6 +38,7 @@ DEBUG_PRINT = config('DEBUG_PRINT', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
+INTERNAL_IPS = config('INTERNAL_IPS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 # Application definition
 
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'debug_toolbar',
     'widget_tweaks',
     'import_export',
     'accounts',
@@ -56,6 +59,7 @@ INSTALLED_APPS = [
     'anagrafe',
     'collaboratori',
     'corsi',
+    'acquisti'
 ]
 
 MIDDLEWARE = [
@@ -66,7 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'siw.context_processor.si_middleware',
     'django_cprofile_middleware.middleware.ProfilerMiddleware',
 ]
@@ -84,7 +88,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'siw.context_processor.siwperms',
+                'siw.context_processor.si_special_dicts',
             ],
         },
     },
@@ -98,7 +102,7 @@ WSGI_APPLICATION = 'siw.wsgi.application'
 
 
 DATABASES = {
-    'default_old_cambiareperPostegres': {
+    'default_old_cambiareperPostgres': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
@@ -108,7 +112,7 @@ DATABASES = {
     },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'NAME': config('DB_SQLITE_NAME'),
     },
 }
 
@@ -142,6 +146,7 @@ TIME_ZONE = 'CET'
 USE_I18N = True
 
 USE_L10N = True
+USE_THOUSAND_SEPARATOR = True
 
 USE_TZ = False
 
@@ -208,7 +213,19 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 #
 LOGIN_URL = 'login'
 
+
 #
 # Settaggi specifici per Django import-export che garantiscono l'incapsulamento delle operazioni.
 #
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+#
+# Settaggi per Celery.
+#
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_APP_NAME = config('CELERY_APP_NAME')
+
+#
+# Mi dice se non in modalità di test o meno.
+#
+TESTING = sys.argv[1:2] == ['test']

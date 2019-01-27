@@ -34,6 +34,8 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.fake_user_username = 'john'
@@ -62,7 +64,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['collaboratori.json']
+    fixtures = ['collaboratori', 'af']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -80,6 +82,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertTemplateUsed(self.response, 'collaboratori/errore_collaboratore_non_esiste.html')
         self.assertTemplateUsed(self.response, 'base.html')
         self.assertTemplateUsed(self.response, 'includes/menu.html')
+    
     @skip
     def test_render_new_collaborator_with_correct_templates(self):
         self.response = self.client.get(URL_NUOVO)

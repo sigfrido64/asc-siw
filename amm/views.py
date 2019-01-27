@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.shortcuts import render
 from siw.decorators import has_permission_decorator
 from accounts.models import SiwPermessi
