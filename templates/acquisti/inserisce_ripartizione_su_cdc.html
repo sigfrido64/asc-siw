@@ -69,6 +69,8 @@
 
 {% block javascript %}
   <script type="text/javascript">
+      var prima, adesso;
+
       function rinfresca_ripartizioni_su_cdc(){
         let div_handle = $("#id_lista_cdc_ripartizioni");
         let url = div_handle.attr("href");  // recupera l'url
@@ -82,9 +84,8 @@
 
       function show_cdc_treeview(){
         let cdc_window = $('#choose_cdc_window');
-        cdc_window.jqxWindow({ width: 400,
-          height: 600, resizable: false, position: 'center', isModal: true, initContent : init_cdc_treeview(),
-          title: 'Scegli Centro di Costo'
+        cdc_window.jqxWindow({ width: '80%', height: '80%', resizable: false, position: 'center', isModal: true,
+          initContent : init_cdc_treeview(), title: 'Scegli Centro di Costo'
         });
 
         $("#button_cdc_select").jqxButton({ width: '200', height: '30', template: "success", value: "Conferma Selezione"});
@@ -106,34 +107,29 @@
           }
         });
         dataAdapter.dataBind();
-        treeView.on('select',function (event) {
-          let args = event.args;
-          let item = $('#jqxTreeView').jqxTree('getItem', args.element);
-          $("#id_cdc_txt").val(item.label);
-          $("#id_cdc").val(item.id);
-        });
+        treeView.on('itemClick', function(event) {setta_risultato_treeview_nel_form(event)});
       }
 
       function setta_risultato_treeview_nel_form (event) {
+        // Setto la scelta nel form principale e se doppio click chiudo in quanto considero terminata la scelta.
         let args = event.args;
         let item = $('#jqxTreeView').jqxTree('getItem', args.element);
         $("#id_cdc_txt").val(item.label);
         $("#id_cdc").val(item.id);
+        adesso = new Date();
+        let diff = adesso - prima;
+        if (diff < 500) { $('#choose_cdc_window').jqxWindow('close'); }
+        prima = adesso;
       }
 
     $(document).ready(function () {
-        $("#button_ripartizione_su_cdc_save").jqxButton({ width: '200', height: '30', template: "success"});
+      $("#button_ripartizione_su_cdc_save").jqxButton({ width: '200', height: '30', template: "success"});
 
-        rinfresca_ripartizioni_su_cdc();
+      $("#choose_cdc").jqxButton({ width: '100', height: '30', template: "success"});
+      $("#choose_cdc").on('click', function () {show_cdc_treeview();});
 
-
-
-
-        $("#choose_cdc").jqxButton({ width: '100', height: '30', template: "success"});
-        $("#choose_cdc").on('click', function () {
-          show_cdc_treeview();
-        });
-
+      rinfresca_ripartizioni_su_cdc();
+      prima = 1000;
     });
 </script>
 
