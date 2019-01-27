@@ -9,9 +9,19 @@ If you use this database dump to load the fresh database(in another django proje
 
 To fix this problem, make sure to backup the database by excluding contenttypes and auth.permissions tables
 
-./manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
+#) python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
 
 Now you can use loaddata command with a fresh database
 
-./manage.py loaddata db.json
+#) python manage.py loaddata db.json
 
+********************************************************************
+
+TIPS
+1) Posso esportare anche solo un modello e chiedere indentazione di 2 caratteri per rendere il tutto più leggibile !
+
+    #) python manage.py dumpdata --indent 2 amm.CentroDiCosto
+
+2) Se esporto solo un modello posso anche esportare solo alcuni record mettendo le loro pk dopo -pks
+
+    #) python manage.py dumpdata --indent 2 --pks 13387 anagrafe.azienda

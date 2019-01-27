@@ -1,9 +1,9 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from accounts.models import SiwPermessi
-__author__ = "Pilone Ing. Sigfrido"
 
 
 URL = '/'  # Link alla home dell'applicazione, qui devo vedere un menù se sono autorizzato.
@@ -16,6 +16,8 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.username = 'john'

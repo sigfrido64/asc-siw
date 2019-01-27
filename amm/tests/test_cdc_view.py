@@ -26,6 +26,8 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.username = 'john'
@@ -56,7 +58,7 @@ class PermissionRequiredTests(MyAccountTestCase):
 
 class FormGeneralTests(MyAccountTestCase):
     # Utente che si logga e che ha i permessi per accedere in lettura.
-    fixtures = ['cdc']
+    fixtures = ['cdc', 'af']
     
     def setUp(self):
         # Seup della classe dando i permessi all'utente.

@@ -1,0 +1,2 @@
+1) Provare ad eliminare base_accounts dai template di account in quanto non sembra che serva più.
+2) Resettare tutte le migrazioni su quella iniziale in area lavoro di casa, al lavoro e su quello di produzione.

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load jqwidgets_tags %}
+
+{% block title %}Inserisce Corso{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+<form method="post" novalidate>
+
+  {% csrf_token %}
+  {% include "includes/form_head.html" with form=ordine %}
+
+  <table width="100%" border="1">
+      <tr>
+        <td>Tipo di Spesa</td>
+        <td>{% siw_field ordine.tipo %}</td>
+      </tr>
+      <tr>
+        <td>Stato</td>
+        <td>{% siw_field ordine.stato %}</td>
+      </tr>
+      <tr>
+          <td>Numero Protocollo</td>
+          <td>{% siw_field ordine.numero_protocollo %}</td>
+      </tr>
+      <tr>
+          <td>Data Ordine</td>
+          <td>{% siw_field ordine.data_ordine %}</td>
+      </tr>
+      <tr>
+          <td>Fornitore</td>
+          <td>{% siw_field ordine.fornitore %}</td>
+      </tr>
+      <tr>
+          <td>Descrizione</td>
+          <td>{% siw_field ordine.descrizione %}</td>
+      </tr>
+      <tr>
+          <td>Imponibile</td>
+          <td>{% siw_field ordine.imponibile %}</td>
+      </tr>
+      <tr>
+          <td>Aliquota IVA (%)</td>
+          <td>{% siw_field ordine.aliquota_IVA %}</td>
+      </tr>
+      <tr>
+          <td>IVA Comunque Indetraibile (%)</td>
+          <td>{% siw_field ordine.percentuale_IVA_indetraibile %}</td>
+      </tr>
+      <tr>
+        <td>Note : </td>
+        <td>{% siw_field ordine.note %}</td>
+      </tr>
+  </table>
+
+  <p>
+  <div align="center">
+    <button id="do_insert" type="submit">Salva</button>
+  </div>
+  </p>
+
+</form>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#do_insert").jqxButton({ width: '200', height: '30', template: "success"});
+
+    });
+</script>
+{% endblock %}
+
+
+

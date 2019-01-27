@@ -205,3 +205,11 @@ class FunctionalTest(StaticLiveServerTestCase):
             value=session_key,
             path='/',
         ))
+
+    def wait_for_ajax(self):
+        # TODO Devo gestire un eventuale timeout !
+        while True:
+            ajax_is_complete = self.browser.execute_script("return jQuery.active == 0")
+            if ajax_is_complete:
+                break
+            time.sleep(0.1)

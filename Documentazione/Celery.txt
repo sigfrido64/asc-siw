@@ -5,9 +5,6 @@ Per cui sotto Windows devo usare i seguenti comandi a cui aggiungo '-P eventlet'
 
 # pip install eventlet
 
-Poi lancio i worker con l'opzione -P eventlet
-
-# celery -A siw worker -l info -P eventlet
 
 Per lanciare i vari worker uso :
 

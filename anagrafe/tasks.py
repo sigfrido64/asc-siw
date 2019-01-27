@@ -1,17 +1,19 @@
 # coding=utf-8
 import datetime
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Azienda, Persona
+from .models import Azienda, Persona, Fornitore
 from siw.sqlserverinterface import sqlserverinterface
 from .sqlserveranagrafe import QUERY_SELECT_AZIENDE, compila_e_salva_record_azienda
 from .sqlserveranagrafe import QUERY_SELECT_PERSONE, compila_e_salva_record_persona
 from .sqlserveranagrafe import QUERY_SELECT_CONTATTI_AZIENDE, salva_contatto_azienda_come_persona, \
     salva_contatto_azienda
 from celery import shared_task
+from siw.context_processor import set_current_username
 
 
 @shared_task
-def allinea_aziende_task():
+def allinea_aziende_task(user):
+    set_current_username(user)
     # Recupera la lista delle aziende.
     aziende_asc = sqlserverinterface(QUERY_SELECT_AZIENDE)
 
@@ -40,7 +42,8 @@ def allinea_aziende_task():
 
 
 @shared_task
-def allinea_persone_task():
+def allinea_persone_task(user):
+    set_current_username(user)
     # Recupera la lista delle persone.
     persone_asc = sqlserverinterface(QUERY_SELECT_PERSONE)
 
@@ -69,7 +72,8 @@ def allinea_persone_task():
 
 
 @shared_task
-def allinea_contatti_aziende_task():
+def allinea_contatti_aziende_task(user):
+    set_current_username(user)
     # Vado a leggere gli elementi dal data base SQL Server.
     # query = "SELECT * from [Assocam].[dbo].[Anagrafica Persone] "
     contatti_in_azienda_asc = sqlserverinterface(QUERY_SELECT_CONTATTI_AZIENDE)

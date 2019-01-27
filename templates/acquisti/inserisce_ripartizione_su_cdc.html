@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load jqwidgets_tags %}
+{% load si_template_tags %}
+{% comment %}
+    La funzione 'can' è definita come template tag nel modulo accounts/templatetags/si_template_tags.py
+    Il dizionario 'siwperms' è definito nel template processor nel modulo siw/context_processor.py
+{% endcomment %}
+
+{% block title %}Inserisce Ripartizione su Centri di Costo{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+{% endblock %}
+
+{% block content %}
+
+<div id="id_dettaglio_ordine">
+  <p>
+    Tipo di Ordine : {{ ordine.get_tipo_display }}<br>
+    Stato : {{ ordine.get_stato_display }}<br>
+    Numero Protocollo : {{ ordine.numero_protocollo }}<br>
+    Data Ordine : {{ ordine.data_ordine|date:"SHORT_DATE_FORMAT" }}<br>
+    Fornitore : {{ ordine.fornitore }}<br>
+    Descrizione : {{ ordine.descrizione }}<br>
+    Imponibile : {{ ordine.imponibile }}<br>
+    Aliquota IVA : {{ ordine.aliquota_IVA }} %<br>
+    IVA Comunque Indetraibile : {{ ordine.percentuale_IVA_indetraibile }} %<br>
+    Note : {{ ordine.note }}<br>
+  </p>
+</div>
+<hr>
+<div id="id_lista_cdc_ripartizioni" href="{% url 'acquisti:ajax_lista_ripartizioni_per_ordine' ordine.pk %}">
+</div>
+<hr>
+<form method="post" novalidate>
+
+  {% csrf_token %}
+  {% include "includes/form_head.html" with form=ripartizione %}
+
+  <table width="100%" border="1">
+      <tr>
+        <td align="center"><button type="button" id="choose_cdc">Scegli CDC</button></td>
+        <td>{% siw_field ripartizione.cdc_txt %}</td>
+      </tr>
+      <tr>
+        <td>Percentuale di competenza : </td>
+        <td>{% siw_field ripartizione.percentuale_di_competenza %}</td>
+      </tr>
+  </table>
+
+  <p>
+  <div align="center">
+    <button id="button_ripartizione_su_cdc_save" type="submit">Salva</button>
+  </div>
+  </p>
+
+</form>
+
+  <div id="choose_cdc_window">
+    <div></div>
+    <div align="center">
+        <div id='jqxTreeView' lista-cdc-url="{% url 'amm:ajax_centri_di_costo_per_treeview' %}"></div>
+        <div id="button_cdc_select"></div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block javascript %}
+  <script type="text/javascript">
+      var prima, adesso;
+
+      function rinfresca_ripartizioni_su_cdc(){
+        let div_handle = $("#id_lista_cdc_ripartizioni");
+        let url = div_handle.attr("href");  // recupera l'url
+        $.ajax({
+          url: url,
+          success: function (data) {
+            div_handle.html(data.html);
+          }
+        });
+      }
+
+      function show_cdc_treeview(){
+        let cdc_window = $('#choose_cdc_window');
+        cdc_window.jqxWindow({ width: '80%', height: '80%', resizable: false, position: 'center', isModal: true,
+          initContent : init_cdc_treeview(), title: 'Scegli Centro di Costo'
+        });
+
+        $("#button_cdc_select").jqxButton({ width: '200', height: '30', template: "success", value: "Conferma Selezione"});
+        $("#button_cdc_select").on('click', function () {
+          cdc_window.jqxWindow('close');
+        });
+        cdc_window.jqxWindow('open');
+      }
+
+      function init_cdc_treeview() {
+        let treeView = $("#jqxTreeView");
+        let cdcUrl = treeView.attr("lista-cdc-url");
+        let source = {datatype: "json", datafields: [{name: 'parent'}, {name: 'nome'}, {name: 'id'}],
+                      url: cdcUrl, async: true };
+        let dataAdapter = new $.jqx.dataAdapter(source,
+          {loadComplete: function () {
+               let records = dataAdapter.getRecordsHierarchy('id', 'parent', 'items', [{name: 'nome', map: 'label'}]);
+               treeView.jqxTree({source: records, width: '300px'})
+          }
+        });
+        dataAdapter.dataBind();
+        treeView.on('itemClick', function(event) {setta_risultato_treeview_nel_form(event)});
+      }
+
+      function setta_risultato_treeview_nel_form (event) {
+        // Setto la scelta nel form principale e se doppio click chiudo in quanto considero terminata la scelta.
+        let args = event.args;
+        let item = $('#jqxTreeView').jqxTree('getItem', args.element);
+        $("#id_cdc_txt").val(item.label);
+        $("#id_cdc").val(item.id);
+        adesso = new Date();
+        let diff = adesso - prima;
+        if (diff < 500) { $('#choose_cdc_window').jqxWindow('close'); }
+        prima = adesso;
+      }
+
+    $(document).ready(function () {
+      $("#button_ripartizione_su_cdc_save").jqxButton({ width: '200', height: '30', template: "success"});
+
+      $("#choose_cdc").jqxButton({ width: '100', height: '30', template: "success"});
+      $("#choose_cdc").on('click', function () {show_cdc_treeview();});
+
+      rinfresca_ripartizioni_su_cdc();
+      prima = 1000;
+    });
+</script>
+
+{% endblock %}
+
+
+

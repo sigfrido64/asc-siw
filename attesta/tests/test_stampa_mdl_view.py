@@ -20,6 +20,8 @@ class MyAccountTestCase(TestCase):
     Qui metto le informazioni di base per i test successivi.
     Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
     """
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user
         self.username = 'john'
@@ -35,6 +37,8 @@ class MyAccountTestCase(TestCase):
 class LoginRequiredTests(TestCase):
     # Test che faccio per un utente non loggato, un utente guest.
     # Quindi eredito da TestCase e non da MyAccount in quanto non ho informazioni di Login.
+    fixtures = ['af']
+    
     def test_redirection(self):
         # Un utente non loggato deve essere rediretto alla pagina di login.
         self.url = reverse(REVERSE_URL, kwargs={'reportname': 'iscrizione_mdl', 'corso': 'PLCC19', 'matricola': 926,
@@ -47,6 +51,8 @@ class LoginRequiredTests(TestCase):
 class PermissionRequiredTests(TestCase):
     # Qui metto i test per un utente che si logga ma che non ha i permessi per accedere all'app.
     # Anche qui eredito da TestCase e non da MyAccount in quanto testo solo il login e non i permessi.
+    fixtures = ['af']
+    
     def setUp(self):
         # Fake user & login
         self.username = 'john'

@@ -8,6 +8,8 @@ from ..views import signup
 
 
 class SignUpTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('signup')
         self.response = self.client.get(url)
@@ -37,6 +39,8 @@ class SignUpTests(TestCase):
 
 
 class SuccessfulSignUpTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('signup')
         data = {
@@ -68,6 +72,8 @@ class SuccessfulSignUpTests(TestCase):
 
 
 class InvalidSignUpTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         url = reverse('signup')
         self.response = self.client.post(url, {})  # submit an empty dictionary

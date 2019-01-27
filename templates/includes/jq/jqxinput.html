@@ -3,7 +3,7 @@
 <script type="text/javascript">
   $(document).ready(function () {
     $("#{{ widget.attrs.id }}").jqxInput({placeHolder: '{{ widget.name }}', {{ widget.jqxattrs|generic_jqxattrs }} });
-    {% if widget.value != None %} $("#{{ widget.attrs.id }}").val('{{ widget.value|stringformat:'s' }}'); {% endif %}
+    {% if widget.value != None %} $("#{{ widget.attrs.id }}").val(HTMLDecode('{{ widget.value|stringformat:'s' }}')); {% endif %}
   });
 </script>
 <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "includes/jq/attrs.html" %} />

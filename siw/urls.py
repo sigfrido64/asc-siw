@@ -1,22 +1,8 @@
 # coding=utf-8
-"""siw URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+__author__ = "Pilone Ing. Sigfrido"
 from django.contrib import admin
 from django.urls import path, re_path, include
-# from boards import views
+from django.conf import settings
 from accounts import views as accounts_views
 from django.contrib.auth import views as auth_views
 from accounts.forms import LoginForm, MyPasswordResetForm, MySetPasswordForm, MyPasswordChangeForm
@@ -85,7 +71,14 @@ urlpatterns = [
     path('anagrafe/', include('anagrafe.urls', 'anagrafe')),
     path('collaboratori/', include('collaboratori.urls', 'collaboratori')),
     path('corsi/', include('corsi.urls', 'corsi')),
+    path('acquisti/', include('acquisti.urls', 'acquisti')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
 
 """
 # path('', views.BoardListView.as_view(), name='home'),

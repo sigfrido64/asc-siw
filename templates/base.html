@@ -1,4 +1,6 @@
 {% load static %}
+{% load l10n %}
+
 <!DOCTYPE html>
 <html lang="it">
   <head>
@@ -35,6 +37,8 @@
     <!-- add support for localization -->
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.js' %}"></script>
     <script type="text/javascript" src="{% static 'jqwidgets/globalization/globalize.culture.it-IT.js' %}"></script>
+    <!-- Specifici dell'App -->
+    <script type="text/javascript" src="{% static 'js/base.js' %}"></script>
   </head>
   <body>
     {% block body %}
@@ -43,7 +47,18 @@
         $(function() { $.jqx.theme = 'orange'; });
       </script>
 
-      <a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a>
+      <table width="100%">
+        <tr>
+          <td align="left" width="50%"><a class="brand" href="{% url 'home' %}">SI Scuola Camerana</a></td>
+          <td align="right" width="50%">
+            <div id="id_anno_formativo"
+                 load-af-url="{% url 'amm:ajax_load_af' %}"
+                 set-af-url="{% url 'amm:ajax_set_af' %}"
+                 af="{{ anno_formativo }}" >
+            </div>
+          </td>
+        </tr>
+      </table>
 
       {# Include il menù principale #}
       {% include "includes/menu.html" %}

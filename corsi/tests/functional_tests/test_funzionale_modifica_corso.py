@@ -13,7 +13,7 @@ import time
 
 
 class LoginTest(FunctionalTest):
-    fixtures = ['cdc.json', 'corsi.json']
+    fixtures = ['cdc', 'corsi', 'af']
     
     def setUp(self):
         # Crea l'utente per le prove.

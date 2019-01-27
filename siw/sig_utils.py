@@ -1,5 +1,17 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 import os
+from threading import local
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from amm.models.mixins import AnnoFormativo
+from django.core.exceptions import FieldDoesNotExist
+from django.conf import settings
+import sys
+
+# Crea un'istanza di _user diversa per ogni thread.
+# Così aggiungendo un valore il valore sarà diverso per ogni thread e sarà sempre sincronizzato con lui.
+_user = local()
 
 
 def response_debug(response):
@@ -29,4 +41,32 @@ def get_total_directory_size(start_path='.'):
             fp = os.path.join(dirpath, f)
             total_size += os.path.getsize(fp)
     return total_size
+
+
+def from_choices_to_list(choices):
+    """
+    Data le choices di un modello riporta in formato lista per esportazione in Json
+    :param choices: Le scelte come le ho impostate nel modello.
+    :return: La sorgente Json da riportare per il controllo ComboBox.
+    """
+    choices_list = list()
+    for choice in choices:
+        stato = dict()
+        stato['id'] = choice[0]
+        stato['descrizione'] = choice[1]
+        choices_list.append(stato)
+    return JsonResponse(choices_list, safe=False)
+
+
+def get_anno_formativo(request):
+    return get_object_or_404(AnnoFormativo, pk=request.session['anno_formativo_pk'])
+
+
+def set_anno_formativo_default(request):
+    if 'anno_formativo' not in request.session:
+        anno_formativo_obj = AnnoFormativo.objects.get(default=True)
+        request.session['anno_formativo'] = anno_formativo_obj.anno_formativo
+        request.session['anno_formativo_pk'] = anno_formativo_obj.pk
+
+
 

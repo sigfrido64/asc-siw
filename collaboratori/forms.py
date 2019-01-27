@@ -1,4 +1,5 @@
 # coding=utf-8
+__author__ = "Pilone Ing. Sigfrido"
 from django import forms
 from .models import Collaboratore
 from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox

@@ -7,6 +7,8 @@ from django.urls import resolve, reverse
 
 
 class PasswordChangeTests(TestCase):
+    fixtures = ['af']
+    
     def setUp(self):
         username = 'john'
         password = 'secret123'
@@ -38,6 +40,8 @@ class PasswordChangeTests(TestCase):
 
 
 class LoginRequiredPasswordChangeTests(TestCase):
+    fixtures = ['af']
+    
     def test_redirection(self):
         url = reverse('password_change')
         login_url = reverse('login')
@@ -50,6 +54,8 @@ class PasswordChangeTestCase(TestCase):
     Base test case for form processing
     accepts a `data` dict to POST to the view.
     """
+    fixtures = ['af']
+    
     def setUp(self, data={}):
         self.user = User.objects.create_user(username='john', email='john@doe.com', password='old_password')
         self.url = reverse('password_change')

@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.db import models
-from siw.context_processor import get_current_username
+from siw.context_processor import get_current_username, set_current_username
 
 
 class SiwGeneralModel(models.Model):
@@ -18,6 +18,9 @@ class SiwGeneralModel(models.Model):
 
     class Meta:
         abstract = True
+
+    def clean(self):
+        set_current_username('pippo')
 
     # Override Save.
     # Set actual user for last_user.

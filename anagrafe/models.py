@@ -253,3 +253,19 @@ class TipoMailPersone(models.Model):
     # To String.
     def __str__(self):
         return self.descrizione_mail
+
+
+class Fornitore(SiwGeneralModel):
+    """
+    Fornitore : Anagrafica Fornitori.
+
+    """
+    azienda = models.ForeignKey(Azienda, on_delete=models.PROTECT)
+    
+    # META Class.
+    class Meta:
+        verbose_name = "Fornitore"
+        verbose_name_plural = "Fornitori"
+
+    def __str__(self):
+        return self.azienda.ragione_sociale
