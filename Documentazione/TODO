@@ -1,9 +1,10 @@
-1) Provare ad eliminare base_accounts dai template di account in quanto non sembra che serva più.
-2) Resettare tutte le migrazioni su quella iniziale in area lavoro di casa, al lavoro e su quello di produzione.
-3) Siwruoli viene usata da qualche parte ? Credo sia inutile in quanto l'ho poi messa nel db.
+4) In modifica ordine se modifico imponibile deve aggiornare le ripartizioni ed il costo totale se c'è.
+4) In modifica ordine se la ripartizioni non arrivano al 100% devo riaprire la maschera delle ripartizioni.
 
 
 
-4) A casa pulire le migrazioni nel db di tutte le app che ho.
-poi lanciare il migrate con --fake-initial così non la esegue ma allinea il db.
+
+4) Su versione di produzione, quando andrò ad aggiornare con la versione di sviluppo, devo pulire le migrazioni
+nel db di tutte le app che ho.
+Poi lanciare il migrate con --fake-initial così non la esegue ma allinea il db.
 5) Il resto è storia !

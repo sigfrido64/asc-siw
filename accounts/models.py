@@ -77,16 +77,6 @@ class SiwPermessi(object):
         return const
 
 
-class SiwRuoli(object):
-    """
-    Helper Classe per la definizione dei Ruoli in modo centrale ed univoco.
-    """
-    MDL = {SiwPermessi.STAMPE_MDL}
-    AMM = {SiwPermessi.AMM_CDC_READ, SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_CDC}
-    COLL = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_MOSTRA,
-            SiwPermessi.COLLABORATORE_INSERISCE, SiwPermessi.COLLABORATORE_MODIFICA}
-    
-
 class Profile(models.Model):
     """
     Estende il modello dell'Utente di Sistema andando ad aggiungere i peressi ed i ruoli per la protezioe dei dati.
