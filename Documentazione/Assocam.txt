@@ -1,4 +1,9 @@
 Stati delle segnalazioni di interesse :
 
+0 : Normale
+1 : Prossima edizione
 -1 : Rinuncia al corso
-6 : Da Conferma
+3 : Anche a pagamento
+4 : Si iscrive
+5 : Viene a fare il test
+6 : Darà Conferma

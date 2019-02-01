@@ -24,8 +24,4 @@ class CdcForm(forms.ModelForm):
 
     class Meta:
         model = CentroDiCosto
-        fields = ['parent', 'nome', 'descrizione', 'cup', 'cig', 'iva_detraibile', 'note', 'valido_dal', 'valido_al']
-        
-        widgets = {
-            'parent': forms.HiddenInput(),
-        }
+        fields = ['nome', 'descrizione', 'cup', 'cig', 'iva_detraibile', 'note', 'valido_dal', 'valido_al']
