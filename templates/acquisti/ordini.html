@@ -15,24 +15,22 @@
 {% block content %}
 <h3>Lista Ordini</h3>
 <br>
-{% if user|can:siwperms.ACQUISTI_ORDINI_INSERISCE %}
-  <div align="right">
-    <a href="{% url 'acquisti:ordine_inserisce' %}">
-      <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo Ordine
-    </a>
-  </div>
-{% endif %}
-<br>
-
-  {% regroup events by date as events_by_date %}
-{% for date in events_by_date %}
-    <div class="content">
-    <h1>{{ date.grouper|date:"d F Y" }}</h1>
-    {% for event in date.list %}
-        {% include "partials/event.html" %}
-    {% endfor %}
+  {% if user|can:siwperms.ACQUISTI_ORDINI_RICALCOLA_TUTTO %}
+    <div align="right">
+      <a href="{% url 'acquisti:ordini_ricalcola_tutto' %}">
+        <span class="fa fa-calculator" aria-hidden="true" style="color:blue"></span>Ricalcola tutto
+      </a>
     </div>
-{% endfor %}
+  {% endif %}
+<br>
+  {% if user|can:siwperms.ACQUISTI_ORDINI_INSERISCE %}
+    <div align="right">
+      <a href="{% url 'acquisti:ordine_inserisce' %}">
+        <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo Ordine
+      </a>
+    </div>
+  {% endif %}
+<br>
 
 {% regroup spese by stato as spese_by_stato %}
 

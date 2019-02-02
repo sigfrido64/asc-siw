@@ -25,5 +25,5 @@ urlpatterns = [
     path('inserisce_altra_spesa/', views.inserisce_altra_spesa, name='inserisce_altra_spesa'),
     path('inserisce_ordine/', views.ordine_inserisce, name='ordine_inserisce'),
     path('modifica_ordine/<str:pk>/', views.ordine_modifica, name='ordine_modifica'),
-    path('aggiorna/', views.aggiorna_spese, name='aggiorna'),
+    path('ricalcola_tutto/', views.ricalcola_tutte_spese, name='ordini_ricalcola_tutto'),
 ]

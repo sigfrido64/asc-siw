@@ -15,11 +15,12 @@ def ordini(request):
     return render(request, 'acquisti/ordini.html', {'spese': spese})
 
 
-def aggiorna_spese(request):
-    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'], dirty=True)
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
+def ricalcola_tutte_spese(request):
+    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
     for spesa in spese:
         spesa.calcola_costo_totale()
-    return HttpResponse("Fatto !")
+    return redirect('acquisti:ordini')
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)

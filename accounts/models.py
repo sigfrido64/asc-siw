@@ -25,6 +25,7 @@ class SiwPermessi(object):
     ACQUISTI_ORDINI_INSERISCE = 'acquisti_ordini_inserisce'
     ACQUISTI_ORDINI_MODIFICA = 'acquisti_ordini_modifica'
     ACQUISTI_CDC_ERASE = 'acquisti_cdc_erase'
+    ACQUISTI_ORDINI_RICALCOLA_TUTTO = 'acquisti_ordini_ricalcola_tutto'
 
     """
     Anagrafe
