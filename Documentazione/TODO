@@ -1,8 +1,4 @@
 
-4) In modifica ordine se la ripartizioni non arrivano al 100% devo riaprire la maschera delle ripartizioni.
-
-
-
 4) Su versione di produzione, quando andrò ad aggiornare con la versione di sviluppo, devo pulire le migrazioni
 nel db di tutte le app che ho.
 Poi lanciare il migrate con --fake-initial così non la esegue ma allinea il db.

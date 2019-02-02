@@ -63,10 +63,15 @@ def ordine_modifica(request, pk):
             ordine = form.save(commit=False)
             ordine.anno_formativo = get_anno_formativo(request)
             ordine.save()
-            # DOPO aver salvato aggiorno i costi delle ripartizioni ed il costo totale.
+            # DOPO aver salvato aggiorno i costi delle ripartizioni.
             ordine.aggiorna_ripartizioni()
-            ordine.calcola_costo_totale()
-            return redirect('acquisti:ordini')
+            # Se ho tutte le ripartizioni calcolo il costo totale e ritorno alla maschera principale, altrimenti
+            # ritorno all'inserimento delle ripartizioni.
+            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+                ordine.calcola_costo_totale()
+                return redirect('acquisti:ordini')
+            else:
+                return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
         form = AcquistoConOrdineForm(instance=ordine)
     return render(request, 'acquisti/inserisce_modifica_ordine.html', {'ordine': form})

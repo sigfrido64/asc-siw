@@ -10,8 +10,6 @@ from ..views import ordine_modifica
 from ..forms import AcquistoConOrdineForm
 from ..models import AcquistoConOrdine
 
-from unittest import skip
-
 # Url della vista scritto sia in modo diretto che in modo interno.
 URL = f"/acquisti/modifica_ordine/"
 REVERSE_URL = 'acquisti:ordine_modifica'
@@ -95,28 +93,51 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'acquisti/inserisce_modifica_ordine.html')
         
+
+class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
+    # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
+    # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
+    # garantire che non si acceda senza permessi.
+    fixtures = ['af', 'cdc', 'azienda', 'fornitore', 'ordine_acquisto', 'ripartizioni']
+    
+    def setUp(self):
+        # Chiamo il setup della classe madre così evito duplicazioni di codice.
+        super().setUp()
+        self.myuser.profile.permessi = {SiwPermessi.ACQUISTI_ORDINI_MODIFICA, SiwPermessi.ACQUISTI_ORDINI_VIEW,
+                                        SiwPermessi.ACQUISTI_ORDINI_INSERISCE}
+        self.myuser.save(force_update=True)
+        self.client.login(username=self.fake_user_username, password=self.fake_user_password)
+
     def test_modifica_imponibile_modifica_ripartizioni_e_costo_totale(self):
         # Prendo il primo ordine.
         ordine = AcquistoConOrdine.objects.get(pk=1)
         # Porto l'imponibile a 2000
         ordine.imponibile = 2000
-        
+    
         # Creo i dati per la modifica del form e lancio la modifica.
         data = model_to_dict(ordine)
         response = self.client.post(self.url, data)
-        
+    
         # Recupero l'ordine dal data base.
         ordine = AcquistoConOrdine.objects.get(pk=1)
-        
+    
         # Controllo che l'imponibile sia diventato 2000
         self.assertEqual(ordine.imponibile, 2000)
         # Controllo che il costo totale sia 2440 (i due cdc sono ad IVA indetraibile)
         self.assertEqual(ordine.costo, 2440)
 
-    @skip
-    def test_2(self):
-        """
-        se la ripartizioni non arrivano al 100% devo riaprire la maschera delle ripartizioni.
-        :return:
-        """
-        self.fail("Vai a finire i test")
+    def test_modifica_ordine_rimanda_a_ripartizione_se_non_ripartizione_completa(self):
+        # Prendo il secondo ordine, che non ha ripartizioni.
+        ordine = AcquistoConOrdine.objects.get(pk=2)
+        # Porto l'imponibile a 2000, solo per avere qualche cosa da modificare.
+        ordine.imponibile = 2000
+    
+        # Creo i dati per la modifica del form e lancio la modifica.
+        data = model_to_dict(ordine)
+        url = URL + str(2) + '/'
+        response = self.client.post(url, data)
+    
+        # Controllo che mi abbia rimandato alla maschera di modifica degli ordini.
+        self.assertRedirects(response, reverse('acquisti:inserimento_cdc', kwargs={'pk': 2}),
+                             HTTP_302_FOUND, HTTP_200_OK)
+
