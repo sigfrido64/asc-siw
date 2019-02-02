@@ -63,6 +63,9 @@ def ordine_modifica(request, pk):
             ordine = form.save(commit=False)
             ordine.anno_formativo = get_anno_formativo(request)
             ordine.save()
+            # DOPO aver salvato aggiorno i costi delle ripartizioni ed il costo totale.
+            ordine.aggiorna_ripartizioni()
+            ordine.calcola_costo_totale()
             return redirect('acquisti:ordini')
     else:
         form = AcquistoConOrdineForm(instance=ordine)

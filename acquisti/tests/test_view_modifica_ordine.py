@@ -3,6 +3,7 @@ __author__ = "Pilone Ing. Sigfrido"
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
+from django.forms.models import model_to_dict
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
 from ..views import ordine_modifica
@@ -94,50 +95,23 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'acquisti/inserisce_modifica_ordine.html')
         
-    @skip("Ed uno")
-    def test_new_acquisto_con_dati_validi(self):
-        # Inserisce un ordine.
-        data = {'numero_protocollo': 1,
-                'data_ordine': '2018-11-13',
-                'stato': AcquistoConOrdine.STATO_BOZZA,
-                'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
-                'fornitore': ['1'],
-                'descrizione': 'Prova di ordine che inserisco',
-                'imponibile': 1000,
-                'aliquota_IVA': 22,
-                'percentuale_IVA_indetraibile': 50, }
-        response = self.client.post(URL, data)
-        # Controlla che sia stato inserito un record.
-        self.assertTrue(AcquistoConOrdine.objects.exists())
-        # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = AcquistoConOrdine.objects.get(descrizione='Prova di ordine che inserisco')
-        # Controlla il redirect alla pagina di inserimento dei CDC.
-        self.assertRedirects(response, reverse('acquisti:inserimento_cdc',
-                                               kwargs={'pk': ordine.id}), HTTP_302_FOUND, HTTP_200_OK)
+    def test_modifica_imponibile_modifica_ripartizioni_e_costo_totale(self):
+        # Prendo il primo ordine.
+        ordine = AcquistoConOrdine.objects.get(pk=1)
+        # Porto l'imponibile a 2000
+        ordine.imponibile = 2000
         
-        # Apro la pagina della lista ordini e lo dovrei trovare.
-        url = reverse('acquisti:ordini')
-        response = self.client.get(url)
-        self.assertContains(response, 'Prova di ordine che inserisco')
-
-    @skip("E due")
-    def test_new_acquisto_senza_dati(self):
-        """
-        Invalid post data should not redirect
-        The expected behavior is to show the form again with validation errors
-        """
-        response = self.client.post(URL, {})
-        form = response.context.get('form')
-        self.assertEquals(response.status_code, 200)
-        self.assertTrue(form.errors)
-    
-    @skip("E tre")
-    def test_1(self):
-        """
-        se modifico imponibile deve aggiornare le ripartizioni ed il costo totale se c'è.
-        :return:
-        """
-        self.fail("Vai a finire i test")
+        # Creo i dati per la modifica del form e lancio la modifica.
+        data = model_to_dict(ordine)
+        response = self.client.post(self.url, data)
+        
+        # Recupero l'ordine dal data base.
+        ordine = AcquistoConOrdine.objects.get(pk=1)
+        
+        # Controllo che l'imponibile sia diventato 2000
+        self.assertEqual(ordine.imponibile, 2000)
+        # Controllo che il costo totale sia 2440 (i due cdc sono ad IVA indetraibile)
+        self.assertEqual(ordine.costo, 2440)
 
     @skip
     def test_2(self):
