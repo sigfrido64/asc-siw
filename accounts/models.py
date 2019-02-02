@@ -25,6 +25,7 @@ class SiwPermessi(object):
     ACQUISTI_ORDINI_INSERISCE = 'acquisti_ordini_inserisce'
     ACQUISTI_ORDINI_MODIFICA = 'acquisti_ordini_modifica'
     ACQUISTI_CDC_ERASE = 'acquisti_cdc_erase'
+    ACQUISTI_ORDINI_RICALCOLA_TUTTO = 'acquisti_ordini_ricalcola_tutto'
 
     """
     Anagrafe
@@ -76,16 +77,6 @@ class SiwPermessi(object):
                 const[key] = value
         return const
 
-
-class SiwRuoli(object):
-    """
-    Helper Classe per la definizione dei Ruoli in modo centrale ed univoco.
-    """
-    MDL = {SiwPermessi.STAMPE_MDL}
-    AMM = {SiwPermessi.AMM_CDC_READ, SiwPermessi.MENU_AMM, SiwPermessi.MENU_AMM_CDC}
-    COLL = {SiwPermessi.COLLABORATORI_LISTA_READ, SiwPermessi.COLLABORATORE_MOSTRA,
-            SiwPermessi.COLLABORATORE_INSERISCE, SiwPermessi.COLLABORATORE_MODIFICA}
-    
 
 class Profile(models.Model):
     """

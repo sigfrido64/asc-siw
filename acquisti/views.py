@@ -10,15 +10,17 @@ from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm, RipartizioneForm
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
 def ordini(request):
-    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk']).order_by('data_ordine', 'numero_protocollo')
+    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
+    spese = spese.order_by('stato', 'data_ordine', 'numero_protocollo')
     return render(request, 'acquisti/ordini.html', {'spese': spese})
 
 
-def aggiorna_spese(request):
-    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'], dirty=True)
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
+def ricalcola_tutte_spese(request):
+    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
     for spesa in spese:
         spesa.calcola_costo_totale()
-    return HttpResponse("Fatto !")
+    return redirect('acquisti:ordini')
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
@@ -63,7 +65,15 @@ def ordine_modifica(request, pk):
             ordine = form.save(commit=False)
             ordine.anno_formativo = get_anno_formativo(request)
             ordine.save()
-            return redirect('acquisti:ordini')
+            # DOPO aver salvato aggiorno i costi delle ripartizioni.
+            ordine.aggiorna_ripartizioni()
+            # Se ho tutte le ripartizioni calcolo il costo totale e ritorno alla maschera principale, altrimenti
+            # ritorno all'inserimento delle ripartizioni.
+            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+                ordine.calcola_costo_totale()
+                return redirect('acquisti:ordini')
+            else:
+                return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
         form = AcquistoConOrdineForm(instance=ordine)
     return render(request, 'acquisti/inserisce_modifica_ordine.html', {'ordine': form})

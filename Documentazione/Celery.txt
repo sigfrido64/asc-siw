@@ -8,8 +8,9 @@ Per cui sotto Windows devo usare i seguenti comandi a cui aggiungo '-P eventlet'
 
 Per lanciare i vari worker uso :
 
-# celery -A siw worker -l info -P eventlet -E -n worker1@%h
+# celery -A siw worker -Q siw-dev-db-queue -l info -P eventlet -E -n worker1@%h
 
 N.B.
 1) worker1, .. workerN : Uno diverso per ogni worker altrimenti fa casino nell'assegnazione dei task ai worker
 2) Lanciare i worker dal venv allo stesso livello di manage.py
+3) La coda DEVE avere il nome che ho messo nei settings altrimenti non verrà eseguita.

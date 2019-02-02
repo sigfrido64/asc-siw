@@ -56,19 +56,15 @@ def ajax_set_af(request):
 
 def ajax_insert_cdc_figlio(request, pk_parent):
     cdc_padre = CentroDiCosto.objects.get(id=pk_parent)
-    print("Trovato centro di costo padre !", cdc_padre)
+    new_cdc = CentroDiCosto(parent=cdc_padre, root=cdc_padre.root, is_root=False)
     if request.method == 'POST':
-        print("Sono nel POST")
-        form = CdcForm(request.POST, initial={'parent': cdc_padre})
+        form = CdcForm(request.POST, instance=new_cdc)
         if form.is_valid():
             form.save()
             return JsonResponse({'risultato': 2}, safe=False)
-        else:
-            print("CI sono errori")
     else:
-        print("Form iniziale")
-        form = CdcForm(initial={'parent': pk_parent, 'iva_detraibile': cdc_padre.iva_detraibile,
-                                'valido_dal': cdc_padre.valido_dal, 'valido_al': cdc_padre.valido_al})
+        form = CdcForm(initial={'iva_detraibile': cdc_padre.iva_detraibile, 'valido_dal': cdc_padre.valido_dal,
+                                'valido_al': cdc_padre.valido_al})
     html_body = render_to_string("amm/cdc_inserisce_modifica.html",
                                  context={'parent': cdc_padre, 'cdc': form}, request=request)
     return JsonResponse({'risultato': 1, 'html_header': 'Inserimento Centro di Costo figlio',

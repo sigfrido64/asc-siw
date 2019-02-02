@@ -80,8 +80,18 @@ class CentroDiCosto(SiwGeneralModel):
         return self.nome
 
     # Custon Check fields.
-    # TODO qui è da decidere cosa devo controllare quando devo salvare un centro di costo.
     def clean(self):
+        # Se non è root il campo 'parent' deve essere valorizzato.
+        if not self.is_root and self.parent is None:
+            raise ValidationError("Non è stato indicato un cdc padre !")
+        
+        # La data di inizio validità deve essere minore della data di fine validità.
+        if hasattr(self, 'valido_al') and hasattr(self, 'valido_dal'):
+            if self.valido_al and self.valido_dal:
+                if self.valido_al <= self.valido_dal:
+                    raise ValidationError({'valido_dal': "Non può essere successivo all'inizio validità"},
+                                          {'valido_al': "Non può essere precedente la fine di validità"})
+            
         """
 
         if not self.is_root and not self.parent:

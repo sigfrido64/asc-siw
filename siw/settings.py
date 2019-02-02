@@ -224,6 +224,7 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 #
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 CELERY_APP_NAME = config('CELERY_APP_NAME')
+CELERYSI_DB_QUEUE_NAME = config('CELERYSI_DB_QUEUE_NAME')
 
 #
 # Mi dice se non in modalità di test o meno.

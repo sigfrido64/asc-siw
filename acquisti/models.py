@@ -149,6 +149,11 @@ class AcquistoConOrdine(SiwGeneralModel):
         self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, TIPO_ACQUISTO)
         self.save()
         
+    def aggiorna_ripartizioni(self):
+        ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=self.id)
+        for ripartizione in ripartizioni:
+            ripartizione.save(force_update=True)
+        
         
 """
 class Spesa(SiwGeneralModel):
@@ -299,7 +304,7 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
 
     def clean(self):
         # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if self.percentuale_di_competenza:
+        if hasattr(self, 'percentuale_di_competenza'):
             if int(self.percentuale_di_competenza) > 100:
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
