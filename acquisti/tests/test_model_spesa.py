@@ -64,3 +64,8 @@ class ModelloSpeseTests(TestCase):
         self.carica_ripartizione_detraibile()
         self.spesa.calcola_costo_totale()
         self.assertEqual(self.spesa.costo, 1132)
+        
+    def test_percentuale_di_competenza_maggiore_di_zero(self):
+        ripartizione = RipartizioneSpesaPerCDC(acquisto=self.spesa, cdc=self.cdc2, percentuale_di_competenza=0)
+        with self.assertRaises(ValidationError):
+            ripartizione.clean()

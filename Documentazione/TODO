@@ -1,6 +1,5 @@
 4) In modifica ordine se modifico imponibile deve aggiornare le ripartizioni ed il costo totale se c'è.
 4) In modifica ordine se la ripartizioni non arrivano al 100% devo riaprire la maschera delle ripartizioni.
-5) Test inserimento cdc figlio. Devo controllare che inserisca correttamente il cdc padre ed il cdc root
 
 
 
