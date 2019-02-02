@@ -83,7 +83,7 @@ class CentroDiCosto(SiwGeneralModel):
     def clean(self):
         # Se non è root il campo 'parent' deve essere valorizzato.
         if not self.is_root and self.parent is None:
-            raise ValidationError({'parent': "Non è stato indicato un cdc padre !"})
+            raise ValidationError("Non è stato indicato un cdc padre !")
         
         # La data di inizio validità deve essere minore della data di fine validità.
         if hasattr(self, 'valido_al') and hasattr(self, 'valido_dal'):

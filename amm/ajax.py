@@ -56,12 +56,11 @@ def ajax_set_af(request):
 
 def ajax_insert_cdc_figlio(request, pk_parent):
     cdc_padre = CentroDiCosto.objects.get(id=pk_parent)
+    new_cdc = CentroDiCosto(parent=cdc_padre, root=cdc_padre.root, is_root=False)
     if request.method == 'POST':
-        form = CdcForm(request.POST)
+        form = CdcForm(request.POST, instance=new_cdc)
         if form.is_valid():
-            new_cdc = form.save(commit=False)
-            new_cdc.parent = cdc_padre
-            new_cdc.save()
+            form.save()
             return JsonResponse({'risultato': 2}, safe=False)
     else:
         form = CdcForm(initial={'iva_detraibile': cdc_padre.iva_detraibile, 'valido_dal': cdc_padre.valido_dal,
