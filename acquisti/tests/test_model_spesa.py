@@ -15,6 +15,33 @@ class ModelloSpeseTests(TestCase):
         # Recupero i record che mi servono come riferimenti per quello che vado a creare.
         self.anno_formativo = AnnoFormativo.objects.get(anno_formativo='AF 2018-2019')
         self.fornitore = Fornitore.objects.get(pk=1)
+
+    def test_protocollo_non_richiesto_se_bozza(self):
+        spesa = AcquistoConOrdine(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
+                                  stato=AcquistoConOrdine.STATO_BOZZA, tipo=AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
+                                  fornitore=self.fornitore, descrizione='Ordine di Prova', imponibile=1000,
+                                  aliquota_IVA=22, percentuale_IVA_indetraibile=0)
+        try:
+            spesa.clean()
+        except ValidationError:
+            self.fail("Un ordine in BOZZA non deve richiedere il protocollo.")
+
+    def test_protocollo_richiesto_se_non_bozza(self):
+        spesa = AcquistoConOrdine(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
+                                  stato=AcquistoConOrdine.STATO_DA_AUTORIZZARE, tipo=AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
+                                  fornitore=self.fornitore, descrizione='Ordine di Prova', imponibile=1000,
+                                  aliquota_IVA=22, percentuale_IVA_indetraibile=0)
+        with self.assertRaises(ValidationError):
+            spesa.clean()
+            
+
+class ModelloRipartizioniTests(TestCase):
+    fixtures = ['cdc', 'af', 'azienda', 'fornitore']
+
+    def setUp(self):
+        # Recupero i record che mi servono come riferimenti per quello che vado a creare.
+        self.anno_formativo = AnnoFormativo.objects.get(anno_formativo='AF 2018-2019')
+        self.fornitore = Fornitore.objects.get(pk=1)
         self.cdc1 = CentroDiCosto.objects.get(pk=2)     # Mdl, iva indetraibile
         self.cdc2 = CentroDiCosto.objects.get(pk=10)    # Aziendali, IVA indetraibile
         

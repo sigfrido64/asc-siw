@@ -96,7 +96,7 @@ class AcquistoConOrdine(SiwGeneralModel):
     )
 
     anno_formativo = models.ForeignKey(AnnoFormativo, on_delete=models.PROTECT)
-    numero_protocollo = models.CharField(max_length=10)
+    numero_protocollo = models.CharField(max_length=10, blank=True, unique=True, null=True, default=None)
     data_ordine = models.DateField()
     
     stato = models.IntegerField(choices=STATO_ORDINE_CHOICES, default=STATO_BOZZA)
@@ -130,6 +130,14 @@ class AcquistoConOrdine(SiwGeneralModel):
         
     def __str__(self):
         return self.descrizione
+    
+    def clean(self):
+        # Se stato BOZZA il protocollo è assente.
+        if self.stato == self.STATO_BOZZA:
+            self.numero_protocollo = None
+        if self.numero_protocollo is None and self.stato != self.STATO_BOZZA:
+            raise ValidationError(
+                {'numero_protocollo': "Il numero di protocollo è obbligatorio per stati diversi da BOZZA"})
 
     # Override Save.
     def save(self, *args, **kwargs):

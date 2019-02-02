@@ -3,15 +3,14 @@ __author__ = "Pilone Ing. Sigfrido"
 from django import forms
 from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
 from anagrafe.models import Fornitore
-from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxCheckBox, JqxDateInput
+from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxDateInput
 
 
 class NewSpesaTipo2Form(forms.ModelForm):
     url_stato_spesa = 'acquisti:ajax_lista_stati_ordine'
     url_tipo_spesa = 'acquisti:ajax_lista_tipo_ordini'
     
-    numero_protocollo = forms.CharField(required=True,
-                                        widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    numero_protocollo = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     data_ordine = forms.DateField(required=True,
                                   widget=JqxDateInput(jqxattrs={'height': 30, 'width': '150'}))
 
@@ -55,10 +54,9 @@ class AcquistoConOrdineForm(NewSpesaTipo2Form):
                       'data_adapter_url': url_tipo_ordini},
             attrs={'style': 'float: left; margin-right: 5px;'}))
     
-    fornitore = forms.ModelChoiceField(queryset=Fornitore.objects.all(),
-        required=True, widget=JqxComboInput(
-            jqxattrs={'height': 30, 'width': 300, 'minLength': 3, 'displayMember': 'azienda__ragione_sociale', 'valueMember': 'pk',
-                      'data_adapter_url': url_lista_fornitori},
+    fornitore = forms.ModelChoiceField(queryset=Fornitore.objects.all(), required=True, widget=JqxComboInput(
+            jqxattrs={'height': 30, 'width': 300, 'minLength': 3, 'displayMember': 'azienda__ragione_sociale',
+                      'valueMember': 'pk', 'data_adapter_url': url_lista_fornitori},
             attrs={'style': 'float: left; margin-right: 5px;'}))
     
     descrizione = forms.CharField(required=True,
