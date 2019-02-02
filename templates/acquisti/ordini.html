@@ -24,49 +24,65 @@
 {% endif %}
 <br>
 
-<table style="width:100%" border="1">
-  <thead>
-    <tr>
-      <th>Prot.</th>
-      <th>Data</th>
-      <th>Stato</th>
-      <th>Tipo</th>
-      <th>Fornitore</th>
-      <th>Descrizione</th>
-      <th>Costo</th>
-      <th>CDC</th>
-      <th>Azione</th>
-    </tr>
-  </thead>
-  <tbody>
+  {% regroup events by date as events_by_date %}
+{% for date in events_by_date %}
+    <div class="content">
+    <h1>{{ date.grouper|date:"d F Y" }}</h1>
+    {% for event in date.list %}
+        {% include "partials/event.html" %}
+    {% endfor %}
+    </div>
+{% endfor %}
 
-  {% for spesa in spese %}
-    <tr>
-      <td>{{ spesa.numero_protocollo }}</td>
-      <td>{{ spesa.data_ordine|date:"SHORT_DATE_FORMAT" }}</td>
-      <td>{{ spesa.get_stato_display }}</td>
-      <td>{{ spesa.get_tipo_display }}</td>
-      <td>{{ spesa.fornitore }}</td>
-      <td>{{ spesa.descrizione }}</td>
-      <td>{{ spesa.costo }}</td>
-      <td>
-        <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
-            {{ spesa.cdc_verbose }}
-        </a>
-      </td>
-      <td>
-        {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
-          <a href="{% url 'acquisti:ordine_modifica' spesa.pk %}" id="modifica_ordine">
-            <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+{% regroup spese by stato as spese_by_stato %}
+
+{% for lista_spese in spese_by_stato %}
+  <hr>
+  <table style="width:100%" border="1">
+    <thead>
+      <tr>
+        <th>Prot.</th>
+        <th>Data</th>
+        <th>Stato</th>
+        <th>Tipo</th>
+        <th>Fornitore</th>
+        <th>Descrizione</th>
+        <th>Costo</th>
+        <th>CDC</th>
+        <th>Azione</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {% for spesa in lista_spese.list %}
+      <tr>
+        <td>{{ spesa.numero_protocollo }}</td>
+        <td>{{ spesa.data_ordine|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ spesa.get_stato_display }}</td>
+        <td>{{ spesa.get_tipo_display }}</td>
+        <td>{{ spesa.fornitore }}</td>
+        <td>{{ spesa.descrizione }}</td>
+        <td>{{ spesa.costo }}</td>
+        <td>
+          <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
+              {{ spesa.cdc_verbose }}
           </a>
-        {% else %}
-          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-        {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+        </td>
+        <td>
+          {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
+            <a href="{% url 'acquisti:ordine_modifica' spesa.pk %}" id="modifica_ordine">
+              <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+            </a>
+          {% else %}
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endfor %}
+
 
 {% endblock %}
 
