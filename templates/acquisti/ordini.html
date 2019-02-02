@@ -61,7 +61,11 @@
         <td>{{ spesa.fornitore }}</td>
         <td>{{ spesa.descrizione }}</td>
         <td>{{ spesa.costo }}</td>
-        <td>
+        {% if spesa.cdc_verbose %}
+          <td>
+        {% else %}
+          <td bgcolor="#8b0000">
+        {% endif %}
           <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
               {{ spesa.cdc_verbose }}
           </a>
