@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
-from amm.views import cdc
+from amm.views import cdc_home
 __author__ = "Pilone Ing. Sigfrido"
 
 
@@ -18,7 +18,7 @@ class GeneralTests(TestCase):
 
     def test_list_cdc_url_resolves_cdc_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, cdc)
+        self.assertEquals(view.func, cdc_home)
 
 
 class MyAccountTestCase(TestCase):

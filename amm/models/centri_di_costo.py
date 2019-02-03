@@ -91,9 +91,18 @@ class CentroDiCosto(SiwGeneralModel):
                 if self.valido_al <= self.valido_dal:
                     raise ValidationError({'valido_dal': "Non può essere successivo all'inizio validità"},
                                           {'valido_al': "Non può essere precedente la fine di validità"})
-            
-        """
 
-        if not self.is_root and not self.parent:
-            raise Va
-        """
+
+"""
+class AnaliticoCostiRicavi(models.Model):
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT,
+                               related_name='iniziativa_parent')
+    nome = models.CharField(max_length=30, validators=[MinLengthValidator(3)],
+                            verbose_name="Nome sintetico dell'iniziativa")
+    descrizione = models.CharField(
+        max_length=120, validators=[MinLengthValidator(5)], verbose_name="Breve descrizione dell'iniziativa")
+    costo = models.BigIntegerField(default=0)
+    ricavo = models.BigIntegerField(default=0)
+    budget_costo = models.BigIntegerField(default=0)
+    budget_ricavo = models.BigIntegerField(default=0)
+"""
