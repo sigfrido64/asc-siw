@@ -1,5 +1,2 @@
-
-4) Su versione di produzione, quando andrò ad aggiornare con la versione di sviluppo, devo pulire le migrazioni
-nel db di tutte le app che ho.
-Poi lanciare il migrate con --fake-initial così non la esegue ma allinea il db.
-5) Il resto è storia !
+- Voci di costo e ricavo certe o solo stimate per le proiezioni.
+- Nei CDC devo mettere AF come per tutto ciò che vi è relativo.

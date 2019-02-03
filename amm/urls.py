@@ -17,5 +17,6 @@ urlpatterns = [
     path('ajax/insert-cdc/<str:pk_parent>/', ajax_insert_cdc_figlio, name='ajax_insert_cdc_figlio'),
     path('ajax_load_af/', ajax_load_af, name='ajax_load_af'),
     path('ajax_set_af/', ajax_set_af, name='ajax_set_af'),
-    path('cdc/', views.cdc, name="cdc_home"),
+    path('cdc/', views.cdc_home, name="cdc_home"),
+    path('sig/', views.run_analisi, name="cdc_analisi"),
 ]

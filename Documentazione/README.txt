@@ -24,3 +24,9 @@ def response_debug(response):
 
 
 
+MIGRAZIONI
+
+Se le voglio resettare l'articolo di Simple è il migliore.
+1) Cancello fisicamente tutti i files delle migrazioni.
+2) Nel DB cancello i dati delle migrazioni uno per uno.
+3) Poi lancio il migrate --fake-initial così le applica per finta e siamo tutti contenti !

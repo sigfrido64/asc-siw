@@ -90,7 +90,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         # Inserisce un ordine.
         data = {'numero_protocollo': 1,
                 'data_ordine': '2018-11-13',
-                'stato': AcquistoConOrdine.STATO_BOZZA,
+                'stato': AcquistoConOrdine.STATO_DA_AUTORIZZARE,
                 'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
                 'fornitore': ['1'],
                 'descrizione': 'Prova di ordine che inserisco',
@@ -110,6 +110,21 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         url = reverse('acquisti:ordini')
         response = self.client.get(url)
         self.assertContains(response, 'Prova di ordine che inserisco')
+
+    def test_new_acquisto_senza_protocollo(self):
+        # Inserisce un ordine.
+        data = {'data_ordine': '2018-11-13',
+                'stato': AcquistoConOrdine.STATO_BOZZA,
+                'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
+                'fornitore': ['1'],
+                'descrizione': 'Prova di ordine che inserisco',
+                'imponibile': 1000,
+                'aliquota_IVA': 22,
+                'percentuale_IVA_indetraibile': 50, }
+        response = self.client.post(URL, data)
+        form = response.context.get('form')
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
     def test_new_acquisto_senza_dati(self):
         """
