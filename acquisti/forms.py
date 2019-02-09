@@ -10,7 +10,8 @@ class NewSpesaTipo2Form(forms.ModelForm):
     url_stato_spesa = 'acquisti:ajax_lista_stati_ordine'
     url_tipo_spesa = 'acquisti:ajax_lista_tipo_ordini'
     
-    numero_protocollo = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    numero_protocollo = forms.CharField(required=False,
+                                        widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     data_ordine = forms.DateField(required=True,
                                   widget=JqxDateInput(jqxattrs={'height': 30, 'width': '150'}))
 
