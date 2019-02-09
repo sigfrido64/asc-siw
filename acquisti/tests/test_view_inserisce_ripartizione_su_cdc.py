@@ -70,8 +70,9 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
-    def test_page_structure(self):
-        response = self.client.get(URL)
+    def test_page_structure_ordine_senza_ripartizioni(self):
+        n_url = f"/acquisti/inserimento_cdc/2/"
+        response = self.client.get(n_url)
         # Controllo che il server risponda con ok.
         self.assertEquals(response.status_code, HTTP_200_OK)
         # Controllo che ci sia la parte di descrizione generale dell'ordine.
@@ -79,7 +80,11 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.assertContains(response, 'Ordine di Prova')
         # Controllo che ci sia la parte della tabella delle ripartizioni.
         self.assertContains(response, 'id_lista_cdc_ripartizioni')
-        self.assertContains(response, "Nessun CDC ancora assegnato")
+        
+        # Chiamo la funzione AJAX che riporta la lista delle ripartizioni e la dovrei trovare.
+        url = reverse('acquisti:ajax_lista_ripartizioni_per_ordine', kwargs={'pk': 2})
+        response = self.client.get(url)
+        self.assertContains(response, 'Nessun CDC ancora assegnato')
         
     def test_csrf(self):
         response = self.client.get(URL)
@@ -129,13 +134,14 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         # Controlla che sia stato inserito un record.
         self.assertTrue(RipartizioneSpesaPerCDC.objects.exists())
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=2)
-        self.assertIsInstance(ordine, RipartizioneSpesaPerCDC)
+        ripartizione = RipartizioneSpesaPerCDC.objects.get(acquisto=2)
+        self.assertIsInstance(ripartizione, RipartizioneSpesaPerCDC)
         # Controlla il redirect alla pagina di inserimento dei CDC.
         self.assertRedirects(response, reverse('acquisti:inserimento_cdc',
-                                               kwargs={'pk': ordine.id}), HTTP_302_FOUND, HTTP_200_OK)
-        # Apro la pagina della lista ordini e lo dovrei trovare.
-        url = reverse('acquisti:inserimento_cdc', kwargs={'pk': ordine.id})
+                                               kwargs={'pk': 2}), HTTP_302_FOUND, HTTP_200_OK)
+        
+        # Chiamo la funzione AJAX che riporta la lista delle ripartizioni e la dovrei trovare.
+        url = reverse('acquisti:ajax_lista_ripartizioni_per_ordine', kwargs={'pk': 2})
         response = self.client.get(url)
         self.assertContains(response, 'FAP')
         

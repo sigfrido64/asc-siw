@@ -404,7 +404,7 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
 
     def clean(self):
         # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if hasattr(self, 'percentuale_di_competenza'):
+        if hasattr(self, 'percentuale_di_competenza') and self.percentuale_di_competenza:
             if int(self.percentuale_di_competenza) > 100:
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
