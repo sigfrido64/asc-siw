@@ -5,6 +5,7 @@ from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from siw.sig_utils import get_anno_formativo
 from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, somma_delle_ripartizioni
+from .models import AcquistoSuWeb
 from .forms import NewSpesaTipo2Form, AcquistoConOrdineForm, RipartizioneForm
 
 
@@ -17,9 +18,9 @@ def ordini(request):
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
 def ordini_web(request):
-    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
-    spese = spese.order_by('stato', 'data_ordine', 'numero_protocollo')
-    return render(request, 'acquisti/ordini.html', {'spese': spese})
+    acquiti_web = AcquistoSuWeb.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
+    acquiti_web = acquiti_web.order_by('stato', 'data_ordine', 'numero_protocollo')
+    return render(request, 'acquisti/ordini_web.html', {'spese': acquiti_web})
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
