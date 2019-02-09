@@ -22,6 +22,8 @@ def _base(chiave, tipo):
     """
     if tipo == ACQUISTO_STANDARD:
         return RipartizioneSpesaPerCDC.objects.filter(acquisto=chiave)
+    elif tipo == ACQUISTO_WEB:
+        return RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=chiave)
 
 
 def _aggiorna_ripartizioni_se_presenti(chiave, tipo):
@@ -248,7 +250,7 @@ class AcquistoSuWeb(SiwGeneralModel):
         self.save()
     
     def aggiorna_ripartizioni(self):
-        ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=self.id)
+        ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto=self.id)
         for ripartizione in ripartizioni:
             ripartizione.save(force_update=True)
 
@@ -438,3 +440,54 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
         return True if valore + percentuale > 100 else False
 
+
+class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
+    acquisto_web = models.ForeignKey(AcquistoSuWeb, on_delete=models.PROTECT)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
+    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2)
+    costo_totale = models.DecimalField(max_digits=7, decimal_places=2)
+    
+    class Meta:
+        verbose_name = "Ripartizione Acquisto Web su CDC"
+        verbose_name_plural = "Ripartizione Acquisto Web su CDC"
+    
+    def __str__(self):
+        return 'Quotaparte di ' + self.acquisto_web.descrizione + ' su ' + self.cdc.descrizione
+    
+    def clean(self):
+        # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
+        if hasattr(self, 'percentuale_di_competenza'):
+            if int(self.percentuale_di_competenza) > 100:
+                raise ValidationError(
+                    {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
+            # Il valore delle singola ripartizione non può essere 0 o negativo
+            if int(self.percentuale_di_competenza) <= 0:
+                raise ValidationError(
+                    {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
+        
+        # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
+        # Se non ho un acquisto di riferimento non posso fare il controllo.
+        if hasattr(self, 'acquisto'):
+            if self._verifica_se_percentuali_eccedute(self.acquisto_web, self.percentuale_di_competenza, self.pk):
+                raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
+                                                                    "per questo acquisto eccede il 100%"})
+    
+    # Override Save.
+    # Calcola il costo totale della voce di ordine in funzione della detraibilità del singolo cdc
+    def save(self, *args, **kwargs):
+        # Calcola il costo della ripartizione.
+        base_imponibile = self.acquisto_web.imponibile + self.acquisto_web.iva_comunque_indetraibile
+        if not self.cdc.iva_detraibile:
+            base_imponibile += self.acquisto_web.iva_potenzialmente_detraibile
+        self.costo_totale = base_imponibile * self.percentuale_di_competenza / 100
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def _verifica_se_percentuali_eccedute(acquisto_web, percentuale, pk):
+        percentuali = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto=acquisto_web)
+        if pk:
+            percentuali = percentuali.exclude(pk=pk)
+        percentuali = percentuali.only('percentuale_di_competenza')
+        percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
+        valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
+        return True if valore + percentuale > 100 else False
