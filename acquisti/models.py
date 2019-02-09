@@ -144,7 +144,7 @@ class AcquistoConOrdine(SiwGeneralModel):
 
     # Override Save.
     def save(self, *args, **kwargs):
-        # TODO : Dovrei controllare se il campo impobibile o le IVE (detraibile o no sono cambiate) prima di fare questo
+        # TODO : Dovrei controllare se il campo imponibile o le IVE (detraibile o no sono cambiate) prima di fare questo
         #        conto in aggiornamento.
         # Calcola l'IVA potenzialmente detraibile e quella comunque indetraibile.
         self.iva_comunque_indetraibile = self.imponibile * self.aliquota_IVA * self.percentuale_IVA_indetraibile / 10000
@@ -404,7 +404,7 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
 
     def clean(self):
         # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if hasattr(self, 'percentuale_di_competenza') and self.percentuale_di_competenza:
+        if hasattr(self, 'percentuale_di_competenza'):
             if int(self.percentuale_di_competenza) > 100:
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
@@ -412,6 +412,9 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
             if int(self.percentuale_di_competenza) <= 0:
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
+        else:
+            raise ValidationError(
+                {'percentuale_di_competenza': "La percentuale di competenza deve essere indicata"})
         
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         # Se non ho un acquisto di riferimento non posso fare il controllo.
@@ -462,12 +465,13 @@ class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
             # Il valore delle singola ripartizione non può essere 0 o negativo
             if int(self.percentuale_di_competenza) <= 0:
+                print("percentuale", self.percentuale_di_competenza)
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
         
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         # Se non ho un acquisto di riferimento non posso fare il controllo.
-        if hasattr(self, 'acquisto'):
+        if hasattr(self, 'acquisto_web'):
             if self._verifica_se_percentuali_eccedute(self.acquisto_web, self.percentuale_di_competenza, self.pk):
                 raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
                                                                     "per questo acquisto eccede il 100%"})
@@ -484,7 +488,8 @@ class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
     
     @staticmethod
     def _verifica_se_percentuali_eccedute(acquisto_web, percentuale, pk):
-        percentuali = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto=acquisto_web)
+        print("PAsso da qui !")
+        percentuali = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=acquisto_web)
         if pk:
             percentuali = percentuali.exclude(pk=pk)
         percentuali = percentuali.only('percentuale_di_competenza')
