@@ -6,8 +6,6 @@ from amm.models.mixins import AnnoFormativo
 from amm.models.centri_di_costo import CentroDiCosto
 from acquisti.models import AcquistoSuWeb, RipartizioneAcquistoWebPerCDC
 
-from unittest import skip
-
 
 class ModelloSpeseTests(TestCase):
     fixtures = ['cdc', 'af']
@@ -72,7 +70,7 @@ class ModelloRipartizioniTests(TestCase):
         ripartizione2 = RipartizioneAcquistoWebPerCDC(acquisto_web=self.acquisto_web, cdc=self.cdc2,
                                                       percentuale_di_competenza=160)
         with self.assertRaises(ValidationError):
-            ripartizione2.clean()
+            ripartizione2.clean_fields()
 
     def test_massima_percentuale_della_somma_di_tutte_le_ripartizioni(self):
         # Poi provo con cdc con IVA indetraibile ma metto percentuale troppo alta sommata alla prima.
@@ -80,7 +78,7 @@ class ModelloRipartizioniTests(TestCase):
         ripartizione2 = RipartizioneAcquistoWebPerCDC(acquisto_web=self.acquisto_web, cdc=self.cdc2,
                                                       percentuale_di_competenza=60)
         with self.assertRaises(ValidationError):
-            ripartizione2.clean()
+            ripartizione2.clean_fields()
 
     def test_calcolo_corretto_del_costo_di_ripartizione_detraibile(self):
         self.carica_ripartizione_detraibile()
@@ -96,4 +94,4 @@ class ModelloRipartizioniTests(TestCase):
         ripartizione = RipartizioneAcquistoWebPerCDC(acquisto_web=self.acquisto_web, cdc=self.cdc2,
                                                      percentuale_di_competenza=0)
         with self.assertRaises(ValidationError):
-            ripartizione.clean()
+            ripartizione.clean_fields()

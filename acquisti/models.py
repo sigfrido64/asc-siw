@@ -4,6 +4,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from siw.siwmodels import SiwGeneralModel
+from siw.sig_validators import percentuale_maggiore_zero
 from anagrafe.models import Fornitore
 from amm.models.centri_di_costo import CentroDiCosto
 from amm.models.mixins import AnnoFormativo
@@ -392,7 +393,8 @@ class Spesa(SiwGeneralModel):
 class RipartizioneSpesaPerCDC(SiwGeneralModel):
     acquisto = models.ForeignKey(AcquistoConOrdine, on_delete=models.PROTECT)
     cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
-    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2)
+    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2,
+                                                    validators=[percentuale_maggiore_zero])
     costo_totale = models.DecimalField(max_digits=7, decimal_places=2)
     
     class Meta:
@@ -403,21 +405,6 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         return 'Quotaparte di ' + self.acquisto.descrizione + ' su ' + self.cdc.descrizione
 
     def clean(self):
-        # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if hasattr(self, 'percentuale_di_competenza'):
-            if not self.percentuale_di_competenza:
-                raise ValidationError({'percentuale_di_competenza': "La percentuale di competenza deve essere indicata"})
-            if int(self.percentuale_di_competenza) > 100:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
-            # Il valore delle singola ripartizione non può essere 0 o negativo
-            if int(self.percentuale_di_competenza) <= 0:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
-        else:
-            raise ValidationError(
-                {'percentuale_di_competenza': "La percentuale di competenza deve essere indicata"})
-        
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         # Se non ho un acquisto di riferimento non posso fare il controllo.
         if hasattr(self, 'acquisto'):
@@ -449,7 +436,8 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
 class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
     acquisto_web = models.ForeignKey(AcquistoSuWeb, on_delete=models.PROTECT)
     cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
-    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2)
+    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2,
+                                                    validators=[percentuale_maggiore_zero])
     costo_totale = models.DecimalField(max_digits=7, decimal_places=2)
     
     class Meta:
@@ -460,16 +448,6 @@ class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
         return 'Quotaparte di ' + self.acquisto_web.descrizione + ' su ' + self.cdc.descrizione
     
     def clean(self):
-        # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if hasattr(self, 'percentuale_di_competenza'):
-            if int(self.percentuale_di_competenza) > 100:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
-            # Il valore delle singola ripartizione non può essere 0 o negativo
-            if int(self.percentuale_di_competenza) <= 0:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
-        
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         # Se non ho un acquisto di riferimento non posso fare il controllo.
         if hasattr(self, 'acquisto_web'):

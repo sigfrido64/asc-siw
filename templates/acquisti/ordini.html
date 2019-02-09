@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Lista Spese{% endblock %}
+{% block title %}Lista Ordini a Fornitori{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -13,7 +13,7 @@
 {% endcomment %}
 
 {% block content %}
-<h3>Lista Ordini</h3>
+<h3>Lista Ordini a Fornitori</h3>
 <br>
   {% if user|can:siwperms.ACQUISTI_ORDINI_RICALCOLA_TUTTO %}
     <div align="right">
