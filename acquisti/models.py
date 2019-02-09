@@ -405,6 +405,8 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
     def clean(self):
         # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
         if hasattr(self, 'percentuale_di_competenza'):
+            if not self.percentuale_di_competenza:
+                raise ValidationError({'percentuale_di_competenza': "La percentuale di competenza deve essere indicata"})
             if int(self.percentuale_di_competenza) > 100:
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
@@ -465,7 +467,6 @@ class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
                     {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
             # Il valore delle singola ripartizione non può essere 0 o negativo
             if int(self.percentuale_di_competenza) <= 0:
-                print("percentuale", self.percentuale_di_competenza)
                 raise ValidationError(
                     {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
         
@@ -488,7 +489,6 @@ class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
     
     @staticmethod
     def _verifica_se_percentuali_eccedute(acquisto_web, percentuale, pk):
-        print("PAsso da qui !")
         percentuali = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=acquisto_web)
         if pk:
             percentuali = percentuali.exclude(pk=pk)
