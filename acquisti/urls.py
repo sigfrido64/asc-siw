@@ -21,6 +21,7 @@ urlpatterns = [
          name='ajax_lista_ripartizioni_per_ordine'),
 
     path('ordini/', views.ordini, name='ordini'),
+    path('ordini_web/', views.ordini_web, name='ordini_web'),
     path('inserimento_cdc/<str:pk>/', views.inserimento_cdc, name='inserimento_cdc'),
     path('inserisce_altra_spesa/', views.inserisce_altra_spesa, name='inserisce_altra_spesa'),
     path('inserisce_ordine/', views.ordine_inserisce, name='ordine_inserisce'),

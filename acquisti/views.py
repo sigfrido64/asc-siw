@@ -15,6 +15,13 @@ def ordini(request):
     return render(request, 'acquisti/ordini.html', {'spese': spese})
 
 
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
+def ordini_web(request):
+    spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
+    spese = spese.order_by('stato', 'data_ordine', 'numero_protocollo')
+    return render(request, 'acquisti/ordini.html', {'spese': spese})
+
+
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
 def ricalcola_tutte_spese(request):
     spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
