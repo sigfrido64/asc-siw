@@ -111,6 +111,29 @@ def ordine_modifica(request, pk):
     return render(request, 'acquisti/inserisce_modifica_ordine.html', {'ordine': form})
 
 
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_MODIFICA)
+def ordine_web_modifica(request, pk):
+    ordine_web = get_object_or_404(AcquistoWeb, pk=pk)
+    if request.method == 'POST':
+        form = AcquistoWebForm(request.POST, instance=ordine_web)
+        if form.is_valid():
+            ordine = form.save(commit=False)
+            ordine.anno_formativo = get_anno_formativo(request)
+            ordine.save()
+            # DOPO aver salvato aggiorno i costi delle ripartizioni.
+            ordine.aggiorna_ripartizioni()
+            # Se ho tutte le ripartizioni calcolo il costo totale e ritorno alla maschera principale, altrimenti
+            # ritorno all'inserimento delle ripartizioni.
+            if (somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_WEB)) == 100:
+                ordine.calcola_costo_totale()
+                return redirect('acquisti:ordini_web')
+            else:
+                return redirect('acquisti:inserimento_cdc_web', pk=ordine.id)
+    else:
+        form = AcquistoWebForm(instance=ordine_web)
+    return render(request, 'acquisti/inserisce_modifica_ordine_web.html', {'ordine': form})
+
+
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
 def inserimento_cdc(request, pk):
     ordine = AcquistoConOrdine.objects.get(pk=pk)

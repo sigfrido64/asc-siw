@@ -69,5 +69,5 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def test_verifica_ripartizioni_delle_fixturs(self):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
-        self.assertContains(self.response, 'FAP 2018-2019')
+        self.assertContains(self.response, 'FIMA Conto Sistema 2018-2019')
 

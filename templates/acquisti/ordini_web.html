@@ -68,13 +68,12 @@
         </td>
         <td>
           {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
-            <a href="{% url 'acquisti:ordine_modifica' spesa.pk %}" id="modifica_ordine">
+            <a href="{% url 'acquisti:ordine_web_modifica' spesa.pk %}" id="modifica_ordine">
               <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
             </a>
           {% else %}
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
           {% endif %}
-        RIVEDERE
         </td>
       </tr>
     {% endfor %}
