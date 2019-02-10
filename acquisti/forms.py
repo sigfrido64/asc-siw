@@ -102,9 +102,9 @@ class RipartizioneWebForm(forms.ModelForm):
         forms.CharField(required=True, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     
     class Meta:
-        model = RipartizioneSpesaPerCDC
-        fields = ['acquisto', 'cdc', 'percentuale_di_competenza']
+        model = RipartizioneAcquistoWebPerCDC
+        fields = ['acquisto_web', 'cdc', 'percentuale_di_competenza']
         
         widgets = {
-            'acquisto': forms.HiddenInput(), 'cdc': forms.HiddenInput(),
+            'acquisto_web': forms.HiddenInput(), 'cdc': forms.HiddenInput(),
         }

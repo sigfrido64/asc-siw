@@ -1,0 +1,54 @@
+[
+{
+  "model": "acquisti.acquistoweb",
+  "pk": 1,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-02-10T12:00:05.784",
+    "data_creazione": "2019-02-10T12:00:05.784",
+    "last_user": " ",
+    "anno_formativo": 1,
+    "numero_protocollo": "1",
+    "data_ordine": "2019-02-10",
+    "stato": 10,
+    "descrizione": "Cartucce per Stampante Epson",
+    "imponibile": "100.00",
+    "aliquota_IVA": "22.00",
+    "percentuale_IVA_indetraibile": "0.00",
+    "protocollo_fattura_fornitore": "",
+    "conforme": false,
+    "note": "",
+    "dirty": true,
+    "iva_comunque_indetraibile": "0.00",
+    "iva_potenzialmente_detraibile": "22.00",
+    "cdc_verbose": null,
+    "costo": null
+  }
+},
+{
+  "model": "acquisti.acquistoweb",
+  "pk": 2,
+  "fields": {
+    "in_uso": true,
+    "data_aggiornamento": "2019-02-10T12:00:50.366",
+    "data_creazione": "2019-02-10T12:00:50.366",
+    "last_user": " ",
+    "anno_formativo": 1,
+    "numero_protocollo": "2",
+    "data_ordine": "2019-02-10",
+    "stato": 10,
+    "descrizione": "Carta A4 per Fotocopiatrice",
+    "imponibile": "600.00",
+    "aliquota_IVA": "22.00",
+    "percentuale_IVA_indetraibile": "0.00",
+    "protocollo_fattura_fornitore": "",
+    "conforme": false,
+    "note": "",
+    "dirty": true,
+    "iva_comunque_indetraibile": "0.00",
+    "iva_potenzialmente_detraibile": "132.00",
+    "cdc_verbose": null,
+    "costo": null
+  }
+}
+]

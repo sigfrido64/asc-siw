@@ -63,9 +63,9 @@
         {% else %}
           <td bgcolor="#8b0000">
         {% endif %}
-          <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
+          <a href="{% url 'acquisti:inserimento_cdc_web' spesa.pk %}">
               {{ spesa.cdc_verbose }}
-          </a> RIVEDERE
+          </a>
         </td>
         <td>
           {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}

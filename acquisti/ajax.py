@@ -8,8 +8,7 @@ from siw.sig_utils import from_choices_to_list
 from siw.decorators import ajax_has_permission_decorator
 from accounts.models import SiwPermessi
 from anagrafe.models import Fornitore
-from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
-from .views import inserimento_cdc
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, RipartizioneAcquistoWebPerCDC
 
 
 @login_required()
@@ -53,6 +52,14 @@ def ajax_elimina_ripartizione_su_cdc(request, pk):
 @ajax_has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
 def ajax_lista_ripartizioni_per_ordine(request, pk):
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
+    risposta = render_to_string('acquisti/includes/lista_ripartizioni.html', {'lista_ripartizioni': lista_ripartizioni},
+                                request)
+    return JsonResponse({'html': risposta}, safe=False)
+
+
+@ajax_has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
+def ajax_lista_ripartizioni_per_ordine_web(request, pk):
+    lista_ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=pk)
     risposta = render_to_string('acquisti/includes/lista_ripartizioni.html', {'lista_ripartizioni': lista_ripartizioni},
                                 request)
     return JsonResponse({'html': risposta}, safe=False)

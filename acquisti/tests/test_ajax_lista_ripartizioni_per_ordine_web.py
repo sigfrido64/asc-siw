@@ -5,8 +5,9 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
-from ..ajax import ajax_lista_ripartizioni_per_ordine
+from ..ajax import ajax_lista_ripartizioni_per_ordine_web
 
+from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_ORDINE = 1
@@ -20,8 +21,7 @@ class GeneralTests(TestCase):
 
     def test_lista_ripartizioni_url_resolves_lista_ripartizioni_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, ajax_lista_ripartizioni_per_ordine)
-        self.fail("Da fare")
+        self.assertEquals(view.func, ajax_lista_ripartizioni_per_ordine_web)
 
 
 class MyAccountTestCase(TestCase):
@@ -58,7 +58,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['af', 'cdc', 'azienda', 'fornitore', 'ordine_acquisto', 'ripartizioni']
+    fixtures = ['af', 'cdc', 'acquisto_web', 'ripartizioni_web']
 
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -67,6 +67,8 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
-    def test_server_serve_page_without_errors(self):
+    def test_verifica_ripartizioni_delle_fixturs(self):
         self.response = self.client.get(URL)
         self.assertEquals(self.response.status_code, HTTP_200_OK)
+        self.assertContains(self.response, 'FAP 2018-2019')
+

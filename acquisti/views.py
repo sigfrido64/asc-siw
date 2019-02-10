@@ -5,7 +5,7 @@ from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from siw.sig_utils import get_anno_formativo
 from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, somma_delle_ripartizioni
-from .models import AcquistoWeb, RipartizioneAcquistoWebPerCDC
+from .models import AcquistoWeb, RipartizioneAcquistoWebPerCDC, TipoAcquisto
 from .forms import BaseOrdiniForm, AcquistoConOrdineForm, RipartizioneForm
 from .forms import AcquistoWebForm, RipartizioneWebForm
 
@@ -45,7 +45,7 @@ def inserisce_altra_spesa(request):
         else:
             print(form.errors)
     else:
-        form = NewSpesaTipo2Form(initial={'aliquota_IVA': 22, 'percentuale_IVA_indetraibile': 0})
+        form = BaseOrdiniForm(initial={'aliquota_IVA': 22, 'percentuale_IVA_indetraibile': 0})
     return render(request, 'acquisti/inserisce_altra_spesa.html', {'spesa': form})
 
 
@@ -93,7 +93,7 @@ def ordine_modifica(request, pk):
             ordine.aggiorna_ripartizioni()
             # Se ho tutte le ripartizioni calcolo il costo totale e ritorno alla maschera principale, altrimenti
             # ritorno all'inserimento delle ripartizioni.
-            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+            if (somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_STANDARD)) == 100:
                 ordine.calcola_costo_totale()
                 return redirect('acquisti:ordini')
             else:
@@ -110,13 +110,13 @@ def inserimento_cdc(request, pk):
         form = RipartizioneForm(request.POST, initial={'acquisto': ordine})
         if form.is_valid():
             form.save()
-            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+            if (somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_STANDARD)) == 100:
                 ordine.calcola_costo_totale()
                 return redirect('acquisti:ordini')
             else:
                 return redirect('acquisti:inserimento_cdc', pk=ordine.id)
     else:
-        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, 1)
+        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_STANDARD)
         form = RipartizioneForm(initial={'percentuale_di_competenza': percentuale_massima_ammissibile,
                                          'acquisto': ordine})
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
@@ -128,18 +128,18 @@ def inserimento_cdc(request, pk):
 def inserimento_cdc_web(request, pk):
     ordine = AcquistoWeb.objects.get(pk=pk)
     if request.method == 'POST':
-        form = RipartizioneWebForm(request.POST, initial={'acquisto': ordine})
+        form = RipartizioneWebForm(request.POST, initial={'acquisto_web': ordine})
         if form.is_valid():
             form.save()
-            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+            if (somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_WEB)) == 100:
                 ordine.calcola_costo_totale()
                 return redirect('acquisti:ordini_web')
             else:
                 return redirect('acquisti:inserimento_cdc_web', pk=ordine.id)
     else:
-        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, 1)
+        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, TipoAcquisto.ACQUISTO_WEB)
         form = RipartizioneWebForm(initial={'percentuale_di_competenza': percentuale_massima_ammissibile,
-                                            'acquisto': ordine})
+                                            'acquisto_web': ordine})
     lista_ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=pk)
     return render(request, 'acquisti/inserisce_ripartizione_su_cdc_per_web.html',
                   {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})

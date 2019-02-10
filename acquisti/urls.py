@@ -19,6 +19,8 @@ urlpatterns = [
          name='ajax_elimina_ripartizione_su_cdc'),
     path('ajax/lista_ripartizioni_per_ordine/<str:pk>/', ajax.ajax_lista_ripartizioni_per_ordine,
          name='ajax_lista_ripartizioni_per_ordine'),
+    path('ajax/lista_ripartizioni_per_ordine_web/<str:pk>/', ajax.ajax_lista_ripartizioni_per_ordine_web,
+         name='ajax_lista_ripartizioni_per_ordine_web'),
 
     path('ordini/', views.ordini, name='ordini'),
     path('ordini_web/', views.ordini_web, name='ordini_web'),
