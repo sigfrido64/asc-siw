@@ -5,24 +5,26 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
-from ..views import ordine_web_inserisce
-from ..forms import AcquistoWebForm
-from ..models import AcquistoWeb
+from ..views import inserimento_cdc
+from ..forms import RipartizioneForm
+from ..models import RipartizioneSpesaPerCDC, AcquistoConOrdine
 
+from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/acquisti/inserisce_ordine_web/"
-REVERSE_URL = 'acquisti:ordine_web_inserisce'
+ID_PRESENTE = 1
+URL = f"/acquisti/inserimento_cdc/{ID_PRESENTE}/"
+REVERSE_URL = reverse('acquisti:inserimento_cdc', kwargs={'pk': ID_PRESENTE})
 
 
 class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
-        url = reverse(REVERSE_URL)
-        self.assertEquals(url, URL)
+        self.assertEquals(REVERSE_URL, URL)
 
     def test_inserisce_ordine_url_resolves_inserisce_ordine_view(self):
         view = resolve(URL)
-        self.assertEquals(view.func, ordine_web_inserisce)
+        self.assertEquals(view.func, inserimento_cdc)
+        self.fail("Tutto da fare")
 
 
 class MyAccountTestCase(TestCase):
@@ -60,7 +62,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['af']
+    fixtures = ['af', 'cdc', 'azienda', 'fornitore', 'ordine_acquisto']
     
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -69,9 +71,21 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
 
-    def test_server_serve_page_without_errors(self):
-        response = self.client.get(URL)
+    def test_page_structure_ordine_senza_ripartizioni(self):
+        n_url = f"/acquisti/inserimento_cdc/2/"
+        response = self.client.get(n_url)
+        # Controllo che il server risponda con ok.
         self.assertEquals(response.status_code, HTTP_200_OK)
+        # Controllo che ci sia la parte di descrizione generale dell'ordine.
+        self.assertContains(response, 'id_dettaglio_ordine')
+        self.assertContains(response, 'Ordine di Prova')
+        # Controllo che ci sia la parte della tabella delle ripartizioni.
+        self.assertContains(response, 'id_lista_cdc_ripartizioni')
+        
+        # Chiamo la funzione AJAX che riporta la lista delle ripartizioni e la dovrei trovare.
+        url = reverse('acquisti:ajax_lista_ripartizioni_per_ordine', kwargs={'pk': 2})
+        response = self.client.get(url)
+        self.assertContains(response, 'Nessun CDC ancora assegnato')
         
     def test_csrf(self):
         response = self.client.get(URL)
@@ -80,70 +94,58 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def test_contains_form(self):
         response = self.client.get(URL)
         form = response.context.get('form')
-        self.assertIsInstance(form, AcquistoWebForm)
-
+        self.assertIsInstance(form, RipartizioneForm)
+    
     def test_render_with_correct_templates(self):
         response = self.client.get(URL)
-        self.assertTemplateUsed(response, 'acquisti/inserisce_modifica_ordine_web.html')
-
-    def test_new_acquisto_con_dati_validi(self):
-        # Inserisce un ordine.
-        data = {'numero_protocollo': 1,
-                'data_ordine': '2018-11-13',
-                'stato': AcquistoWeb.STATO_DA_AUTORIZZARE,
-                'descrizione': 'Prova di ordine che inserisco',
-                'imponibile': 1000,
-                'aliquota_IVA': 22,
-                'percentuale_IVA_indetraibile': 50, }
+        self.assertTemplateUsed(response, 'acquisti/inserisce_ripartizione_su_cdc.html')
+    
+    def test_new_ripartizione_100_con_dati_validi(self):
+        # Inserisce una ripartizione. Uso dummy per il campo testuale che non viene usato in quanto setto direttamente
+        # il cdc senza passare del controllo JQWidgets.
+        # Impostando il 100% mi aspetto che vada poi direttamente ad ordini in quanto non posso inserirne altre.
+        data = {'cdc': 4,
+                'cdc_txt': 'dummy',
+                'acquisto': 1,
+                'percentuale_di_competenza': 100, }
         response = self.client.post(URL, data)
         # Controlla che sia stato inserito un record.
-        self.assertTrue(AcquistoWeb.objects.exists())
+        self.assertTrue(RipartizioneSpesaPerCDC.objects.exists())
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = AcquistoWeb.objects.get(descrizione='Prova di ordine che inserisco')
-        # Controlla il redirect alla pagina di inserimento dei CDC.
-        self.assertRedirects(response, reverse('acquisti:inserimento_cdc_web',
-                                               kwargs={'pk': ordine.id}), HTTP_302_FOUND, HTTP_200_OK)
+        ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=1)
+        self.assertIsInstance(ordine, RipartizioneSpesaPerCDC)
+        # Controlla il redirect alla pagina ordini in quanto 100% implica no altri CDC.
+        self.assertRedirects(response, reverse('acquisti:ordini'), HTTP_302_FOUND, HTTP_200_OK)
+        # Apro la pagina della lista ordini e lo dovrei trovare.
+        url = reverse('acquisti:ordini')
+        response = self.client.get(url)
+        self.assertContains(response, 'FAP')
         
-        # Apro la pagina della lista ordini e lo dovrei trovare.
-        url = reverse('acquisti:ordini_web')
-        response = self.client.get(url)
-        self.assertContains(response, 'Prova di ordine che inserisco')
-
-    def test_new_acquisto_in_bozza_senza_protocollo(self):
-        # Inserisce un ordine.
-        data = {'data_ordine': '2018-11-13',
-                'stato': AcquistoWeb.STATO_BOZZA,
-                'descrizione': 'Prova di ordine che inserisco',
-                'imponibile': 1000,
-                'aliquota_IVA': 22,
-                'percentuale_IVA_indetraibile': 50, }
-        response = self.client.post(URL, data)
-
+    def test_new_ripartizione_50_con_dati_validi(self):
+        # Inserisce una ripartizione. Uso dummy per il campo testuale (cdc_txt) che non viene usato in quanto
+        # setto direttamente il cdc senza passare del controllo JQWidgets.
+        # Impostando il 50% mi aspetto che rimanga sulla pagina di inserimento.
+        data = {'cdc': 4,
+                'cdc_txt': 'dummy',
+                'acquisto': 2,
+                'percentuale_di_competenza': 50, }
+        # Faccio riferimento ad un ordine che non ha ancora CDC assegnati.
+        N_URL = f"/acquisti/inserimento_cdc/2/"
+        response = self.client.post(N_URL, data)
         # Controlla che sia stato inserito un record.
-        self.assertTrue(AcquistoWeb.objects.exists())
+        self.assertTrue(RipartizioneSpesaPerCDC.objects.exists())
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = AcquistoWeb.objects.get(descrizione='Prova di ordine che inserisco')
+        ripartizione = RipartizioneSpesaPerCDC.objects.get(acquisto=2)
+        self.assertIsInstance(ripartizione, RipartizioneSpesaPerCDC)
         # Controlla il redirect alla pagina di inserimento dei CDC.
-        self.assertRedirects(response, reverse('acquisti:inserimento_cdc_web',
-                                               kwargs={'pk': ordine.id}), HTTP_302_FOUND, HTTP_200_OK)
-        # Apro la pagina della lista ordini e lo dovrei trovare.
-        url = reverse('acquisti:ordini_web')
+        self.assertRedirects(response, reverse('acquisti:inserimento_cdc',
+                                               kwargs={'pk': 2}), HTTP_302_FOUND, HTTP_200_OK)
+        
+        # Chiamo la funzione AJAX che riporta la lista delle ripartizioni e la dovrei trovare.
+        url = reverse('acquisti:ajax_lista_ripartizioni_per_ordine', kwargs={'pk': 2})
         response = self.client.get(url)
-        self.assertContains(response, 'Prova di ordine che inserisco')
-
-    def test_new_acquisto_non_in_bozza_da_errore_senza_protocollo(self):
-        # Inserisce un ordine.
-        data = {'data_ordine': '2018-11-13',
-                'stato': AcquistoWeb.STATO_DA_AUTORIZZARE,
-                'descrizione': 'Prova di ordine che inserisco',
-                'imponibile': 1000,
-                'aliquota_IVA': 22,
-                'percentuale_IVA_indetraibile': 50, }
-        response = self.client.post(URL, data)
-        form = response.context.get('form')
-        self.assertEquals(response.status_code, 200)
-        self.assertTrue(form.errors)
-
+        self.assertContains(response, 'FAP')
+        
     def test_new_acquisto_senza_dati(self):
         """
         Invalid post data should not redirect

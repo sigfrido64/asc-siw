@@ -5,8 +5,9 @@ from accounts.models import SiwPermessi
 from siw.decorators import has_permission_decorator
 from siw.sig_utils import get_anno_formativo
 from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, somma_delle_ripartizioni
-from .models import AcquistoWeb
+from .models import AcquistoWeb, RipartizioneAcquistoWebPerCDC
 from .forms import BaseOrdiniForm, AcquistoConOrdineForm, RipartizioneForm
+from .forms import AcquistoWebForm, RipartizioneWebForm
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
@@ -67,16 +68,15 @@ def ordine_inserisce(request):
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
 def ordine_web_inserisce(request):
     if request.method == 'POST':
-        form = AcquistoConOrdineForm(request.POST)
+        form = AcquistoWebForm(request.POST)
         if form.is_valid():
             ordine = form.save(commit=False)
             ordine.anno_formativo = get_anno_formativo(request)
             ordine.save()
-            return redirect('acquisti:inserimento_cdc', pk=ordine.id, tipo=web)
+            return redirect('acquisti:inserimento_cdc_web', pk=ordine.id)
     else:
-        form = AcquistoConOrdineForm(initial={'aliquota_IVA': 22, 'percentuale_IVA_indetraibile': 0,
-                                              'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
-                                              'stato': AcquistoConOrdine.STATO_BOZZA})
+        form = AcquistoWebForm(initial={'aliquota_IVA': 22, 'percentuale_IVA_indetraibile': 0,
+                                        'stato': AcquistoWeb.STATO_BOZZA})
     return render(request, 'acquisti/inserisce_modifica_ordine_web.html', {'ordine': form})
 
 
@@ -104,7 +104,7 @@ def ordine_modifica(request, pk):
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
-def inserimento_cdc(request, pk, tipo):
+def inserimento_cdc(request, pk):
     ordine = AcquistoConOrdine.objects.get(pk=pk)
     if request.method == 'POST':
         form = RipartizioneForm(request.POST, initial={'acquisto': ordine})
@@ -121,4 +121,25 @@ def inserimento_cdc(request, pk, tipo):
                                          'acquisto': ordine})
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)
     return render(request, 'acquisti/inserisce_ripartizione_su_cdc.html',
+                  {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})
+
+
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)
+def inserimento_cdc_web(request, pk):
+    ordine = AcquistoWeb.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = RipartizioneWebForm(request.POST, initial={'acquisto': ordine})
+        if form.is_valid():
+            form.save()
+            if (somma_delle_ripartizioni(ordine.id, 1)) == 100:
+                ordine.calcola_costo_totale()
+                return redirect('acquisti:ordini_web')
+            else:
+                return redirect('acquisti:inserimento_cdc_web', pk=ordine.id)
+    else:
+        percentuale_massima_ammissibile = 100 - somma_delle_ripartizioni(ordine.id, 1)
+        form = RipartizioneWebForm(initial={'percentuale_di_competenza': percentuale_massima_ammissibile,
+                                            'acquisto': ordine})
+    lista_ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=pk)
+    return render(request, 'acquisti/inserisce_ripartizione_su_cdc_per_web.html',
                   {'ordine': ordine, 'ripartizione': form, 'lista_ripartizioni': lista_ripartizioni})

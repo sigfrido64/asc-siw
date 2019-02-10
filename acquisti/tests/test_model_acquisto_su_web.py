@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from amm.models.mixins import AnnoFormativo
 from amm.models.centri_di_costo import CentroDiCosto
-from acquisti.models import AcquistoSuWeb, RipartizioneAcquistoWebPerCDC
+from acquisti.models import AcquistoWeb, RipartizioneAcquistoWebPerCDC
 
 
 class ModelloSpeseTests(TestCase):
@@ -15,18 +15,18 @@ class ModelloSpeseTests(TestCase):
         self.anno_formativo = AnnoFormativo.objects.get(anno_formativo='AF 2018-2019')
         
     def test_protocollo_non_richiesto_se_bozza(self):
-        acquisto_web = AcquistoSuWeb(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
-                                     stato=AcquistoSuWeb.STATO_BOZZA, descrizione='Ordine di Prova', imponibile=1000,
-                                     aliquota_IVA=22, percentuale_IVA_indetraibile=0)
+        acquisto_web = AcquistoWeb(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
+                                   stato=AcquistoWeb.STATO_BOZZA, descrizione='Ordine di Prova', imponibile=1000,
+                                   aliquota_IVA=22, percentuale_IVA_indetraibile=0)
         try:
             acquisto_web.clean()
         except ValidationError:
             self.fail("Un ordine in BOZZA non necessita di protocollo.")
     
     def test_protocollo_richiesto_se_non_bozza(self):
-        acquisto_web = AcquistoSuWeb(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
-                                     stato=AcquistoSuWeb.STATO_DA_AUTORIZZARE, descrizione='Ordine di Prova',
-                                     imponibile=1000, aliquota_IVA=22, percentuale_IVA_indetraibile=0)
+        acquisto_web = AcquistoWeb(anno_formativo=self.anno_formativo, data_ordine='1964-11-13',
+                                   stato=AcquistoWeb.STATO_DA_AUTORIZZARE, descrizione='Ordine di Prova',
+                                   imponibile=1000, aliquota_IVA=22, percentuale_IVA_indetraibile=0)
         with self.assertRaises(ValidationError):
             acquisto_web.clean()
             
@@ -41,10 +41,10 @@ class ModelloRipartizioniTests(TestCase):
         self.cdc2 = CentroDiCosto.objects.get(pk=10)    # Aziendali, IVA indetraibile
         
         # Carico un acquisto con ordine a fornitore.
-        self.acquisto_web = AcquistoSuWeb(anno_formativo=self.anno_formativo, numero_protocollo='123',
-                                          data_ordine='1964-11-13', stato=AcquistoSuWeb.STATO_DA_AUTORIZZARE,
-                                          descrizione='Ordine di Prova', imponibile=1000, aliquota_IVA=22,
-                                          percentuale_IVA_indetraibile=20)
+        self.acquisto_web = AcquistoWeb(anno_formativo=self.anno_formativo, numero_protocollo='123',
+                                        data_ordine='1964-11-13', stato=AcquistoWeb.STATO_DA_AUTORIZZARE,
+                                        descrizione='Ordine di Prova', imponibile=1000, aliquota_IVA=22,
+                                        percentuale_IVA_indetraibile=20)
         self.acquisto_web.save()
 
     def carica_ripartizione_indetraibile(self):

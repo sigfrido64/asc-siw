@@ -23,6 +23,7 @@ urlpatterns = [
     path('ordini/', views.ordini, name='ordini'),
     path('ordini_web/', views.ordini_web, name='ordini_web'),
     path('inserimento_cdc/<str:pk>/', views.inserimento_cdc, name='inserimento_cdc'),
+    path('inserimento_cdc_web/<str:pk>/', views.inserimento_cdc_web, name='inserimento_cdc_web'),
     path('inserisce_altra_spesa/', views.inserisce_altra_spesa, name='inserisce_altra_spesa'),
     path('inserisce_ordine/', views.ordine_inserisce, name='ordine_inserisce'),
     path('inserisce_ordine_web/', views.ordine_web_inserisce, name='ordine_web_inserisce'),

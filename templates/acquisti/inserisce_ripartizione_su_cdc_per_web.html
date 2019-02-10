@@ -15,13 +15,11 @@
 {% block content %}
 
 <div id="id_dettaglio_ordine">
-  <h3>Ordine a Fornitore</h3>
+  <h3>Ordine Web</h3>
   <p>
-    Tipo di Ordine : {{ ordine.get_tipo_display }}<br>
     Stato : {{ ordine.get_stato_display }}<br>
     Numero Protocollo : {{ ordine.numero_protocollo }}<br>
     Data Ordine : {{ ordine.data_ordine|date:"SHORT_DATE_FORMAT" }}<br>
-    Fornitore : {{ ordine.fornitore }}<br>
     Descrizione : {{ ordine.descrizione }}<br>
     Imponibile : {{ ordine.imponibile }}<br>
     Aliquota IVA : {{ ordine.aliquota_IVA }} %<br>

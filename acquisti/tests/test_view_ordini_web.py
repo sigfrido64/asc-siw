@@ -85,8 +85,5 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         self.myuser.save(force_update=True)
         self.client.login(username=self.fake_user_username, password=self.fake_user_password)
         self.response = self.client.get(URL)
-        url = reverse('acquisti:ordine_inserisce')
+        url = reverse('acquisti:ordine_web_inserisce')
         self.assertContains(self.response, url)
-
-    def test_find_link_to_insert_when_allowed(self):
-        self.fail("Vai a finire il test per questo caso e per quello opposto.")
