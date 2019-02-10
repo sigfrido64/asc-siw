@@ -7,9 +7,7 @@ from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
 from ..views import inserimento_cdc
 from ..forms import RipartizioneForm
-from ..models import RipartizioneSpesaPerCDC, AcquistoConOrdine
-
-from unittest import skip
+from ..models import RipartizioneSpesaPerCDC
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_PRESENTE = 1
