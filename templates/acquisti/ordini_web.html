@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Lista Ordini a Fornitori{% endblock %}
+{% block title %}Lista Ordini Web{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -13,8 +13,9 @@
 {% endcomment %}
 
 {% block content %}
-<h3>Lista Ordini a Fornitori</h3>
+<h3>Lista Ordini Web</h3>
 <br>
+  IL PULSANTE RICALCOLA E' DA RIVEDERE !!!!
   {% if user|can:siwperms.ACQUISTI_ORDINI_RICALCOLA_TUTTO %}
     <div align="right">
       <a href="{% url 'acquisti:ordini_ricalcola_tutto' %}">
@@ -25,7 +26,7 @@
 <br>
   {% if user|can:siwperms.ACQUISTI_ORDINI_INSERISCE %}
     <div align="right">
-      <a href="{% url 'acquisti:ordine_inserisce' %}">
+      <a href="{% url 'acquisti:ordine_web_inserisce' %}">
         <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo Ordine
       </a>
     </div>
@@ -42,8 +43,6 @@
         <th>Prot.</th>
         <th>Data</th>
         <th>Stato</th>
-        <th>Tipo</th>
-        <th>Fornitore</th>
         <th>Descrizione</th>
         <th>Costo</th>
         <th>CDC</th>
@@ -57,8 +56,6 @@
         <td>{{ spesa.numero_protocollo }}</td>
         <td>{{ spesa.data_ordine|date:"SHORT_DATE_FORMAT" }}</td>
         <td>{{ spesa.get_stato_display }}</td>
-        <td>{{ spesa.get_tipo_display }}</td>
-        <td>{{ spesa.fornitore }}</td>
         <td>{{ spesa.descrizione }}</td>
         <td>{{ spesa.costo }}</td>
         {% if spesa.cdc_verbose %}
@@ -68,7 +65,7 @@
         {% endif %}
           <a href="{% url 'acquisti:inserimento_cdc' spesa.pk %}">
               {{ spesa.cdc_verbose }}
-          </a>
+          </a> RIVEDERE
         </td>
         <td>
           {% if user|can:siwperms.ACQUISTI_ORDINI_MODIFICA %}     {# Vedi nota sopra per spiegazione #}
@@ -78,6 +75,7 @@
           {% else %}
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
           {% endif %}
+        RIVEDERE
         </td>
       </tr>
     {% endfor %}

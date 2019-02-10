@@ -6,11 +6,12 @@ from anagrafe.models import Fornitore
 from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxDateInput
 
 
-class NewSpesaTipo2Form(forms.ModelForm):
+class BaseOrdiniForm(forms.ModelForm):
     url_stato_spesa = 'acquisti:ajax_lista_stati_ordine'
     url_tipo_spesa = 'acquisti:ajax_lista_tipo_ordini'
     
-    numero_protocollo = forms.CharField(widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    numero_protocollo = forms.CharField(required=False,
+                                        widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
     data_ordine = forms.DateField(required=True,
                                   widget=JqxDateInput(jqxattrs={'height': 30, 'width': '150'}))
 
@@ -44,7 +45,7 @@ class NewSpesaTipo2Form(forms.ModelForm):
                   'percentuale_IVA_indetraibile', 'note']
 
 
-class AcquistoConOrdineForm(NewSpesaTipo2Form):
+class AcquistoConOrdineForm(BaseOrdiniForm):
     url_tipo_ordini = 'acquisti:ajax_lista_tipo_ordini'
     url_lista_fornitori = 'acquisti:ajax_lista_fornitori'
     
@@ -66,6 +67,16 @@ class AcquistoConOrdineForm(NewSpesaTipo2Form):
         model = AcquistoConOrdine
         fields = ['numero_protocollo', 'data_ordine', 'stato', 'tipo', 'descrizione', 'fornitore',
                   'imponibile', 'aliquota_IVA', 'percentuale_IVA_indetraibile', 'note']
+
+
+class AcquistoWebForm(BaseOrdiniForm):
+    descrizione = forms.CharField(required=True,
+                                  widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
+    
+    class Meta:
+        model = AcquistoConOrdine
+        fields = ['numero_protocollo', 'data_ordine', 'stato', 'descrizione', 'imponibile', 'aliquota_IVA',
+                  'percentuale_IVA_indetraibile', 'note']
 
 
 class RipartizioneForm(forms.ModelForm):

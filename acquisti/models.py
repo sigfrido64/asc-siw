@@ -4,12 +4,14 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from siw.siwmodels import SiwGeneralModel
+from siw.sig_validators import percentuale_maggiore_zero
 from anagrafe.models import Fornitore
 from amm.models.centri_di_costo import CentroDiCosto
 from amm.models.mixins import AnnoFormativo
 
 # Tipo di spesa.
-TIPO_ACQUISTO = 1
+ACQUISTO_STANDARD = 1
+ACQUISTO_WEB = 2
 
 
 def _base(chiave, tipo):
@@ -19,8 +21,10 @@ def _base(chiave, tipo):
     :param tipo: Tipo di spesa.
     :return: Queryset relativo di chiave di correlazione 'chiave'.
     """
-    if tipo == TIPO_ACQUISTO:
+    if tipo == ACQUISTO_STANDARD:
         return RipartizioneSpesaPerCDC.objects.filter(acquisto=chiave)
+    elif tipo == ACQUISTO_WEB:
+        return RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=chiave)
 
 
 def _aggiorna_ripartizioni_se_presenti(chiave, tipo):
@@ -141,7 +145,7 @@ class AcquistoConOrdine(SiwGeneralModel):
 
     # Override Save.
     def save(self, *args, **kwargs):
-        # TODO : Dovrei controllare se il campo impobibile o le IVE (detraibile o no sono cambiate) prima di fare questo
+        # TODO : Dovrei controllare se il campo imponibile o le IVE (detraibile o no sono cambiate) prima di fare questo
         #        conto in aggiornamento.
         # Calcola l'IVA potenzialmente detraibile e quella comunque indetraibile.
         self.iva_comunque_indetraibile = self.imponibile * self.aliquota_IVA * self.percentuale_IVA_indetraibile / 10000
@@ -151,18 +155,107 @@ class AcquistoConOrdine(SiwGeneralModel):
 
         # Se ci sono già delle ripartizioni le aggiorna con i nuovi valori.
         # TODO : Anche questo lo dovrei fare solo se ho aggiornato qualche cosa che tocca questi campi. Da vedere dopo.
-        _aggiorna_ripartizioni_se_presenti(self.pk, TIPO_ACQUISTO)
+        _aggiorna_ripartizioni_se_presenti(self.pk, ACQUISTO_STANDARD)
         
     def calcola_costo_totale(self):
-        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, TIPO_ACQUISTO)
+        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, ACQUISTO_STANDARD)
         self.save()
         
     def aggiorna_ripartizioni(self):
         ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=self.id)
         for ripartizione in ripartizioni:
             ripartizione.save(force_update=True)
+
+
+class AcquistoWeb(SiwGeneralModel):
+    # Definizione degli stati
+    STATO_BOZZA = 0
+    STATO_DA_AUTORIZZARE = 10
+    STATO_AUTORIZZATO = 20
+    STATO_INVIATO = 30
+    STATO_EVASO = 40
+    STATO_CONFORME = 50
+    STATO_LIQUIDATO = 60
+    STATO_CHIUSO = 1000
+    STATO_ANNULLATO = 900
+    STATO_ORDINE_CHOICES = (
+        (STATO_BOZZA, 'Bozza'),
+        (STATO_DA_AUTORIZZARE, 'Da Autorizzare'),
+        (STATO_AUTORIZZATO, 'Autorizzato'),
+        (STATO_INVIATO, 'Inviato'),
+        (STATO_EVASO, 'Evaso'),
+        (STATO_CONFORME, 'Conforme'),
+        (STATO_LIQUIDATO, 'Liquidato'),
+        (STATO_CHIUSO, 'Chiuso'),
+        (STATO_ANNULLATO, 'ANNULLATO'),
+    )
+    
+    anno_formativo = models.ForeignKey(AnnoFormativo, on_delete=models.PROTECT)
+    numero_protocollo = models.CharField(max_length=10, blank=True, unique=True, null=True, default=None)
+    data_ordine = models.DateField()
+    
+    stato = models.IntegerField(choices=STATO_ORDINE_CHOICES, default=STATO_BOZZA)
+    
+    # Descrizione
+    descrizione = models.TextField()
+    
+    # Dati economici dell'acquisto.
+    imponibile = models.DecimalField(max_digits=7, decimal_places=2)
+    aliquota_IVA = models.DecimalField(max_digits=4, decimal_places=2)
+    percentuale_IVA_indetraibile = models.DecimalField(default=0, max_digits=5, decimal_places=2)
+    
+    # Dati per la gestione successiva all'emissione dell'ordine.
+    protocollo_fattura_fornitore = models.CharField(max_length=10, blank=True)
+    conforme = models.BooleanField(default=False)
+    
+    note = models.TextField(blank=True)
+    
+    # Campi di sistema per garantire che le voci ordini vengano completate.
+    dirty = models.BooleanField(default=True)
+    iva_comunque_indetraibile = models.DecimalField(max_digits=7, decimal_places=2)
+    iva_potenzialmente_detraibile = models.DecimalField(max_digits=7, decimal_places=2)
+    cdc_verbose = models.CharField(null=True, max_length=50)
+    costo = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    
+    class Meta:
+        verbose_name = "Acquisto su Web"
+        verbose_name_plural = "Acquisti su Web"
+    
+    def __str__(self):
+        return self.descrizione
+    
+    def clean(self):
+        # Se stato BOZZA il protocollo è assente.
+        if self.stato == self.STATO_BOZZA:
+            self.numero_protocollo = None
+        if self.numero_protocollo is None and self.stato != self.STATO_BOZZA:
+            raise ValidationError(
+                {'numero_protocollo': "Il numero di protocollo è obbligatorio per stati diversi da BOZZA"})
+    
+    # Override Save.
+    def save(self, *args, **kwargs):
+        # TODO : Dovrei controllare se il campo impobibile o le IVE (detraibile o no sono cambiate) prima di fare questo
+        #        conto in aggiornamento.
+        # Calcola l'IVA potenzialmente detraibile e quella comunque indetraibile.
+        self.iva_comunque_indetraibile = self.imponibile * self.aliquota_IVA * self.percentuale_IVA_indetraibile / 10000
+        self.iva_potenzialmente_detraibile = self.imponibile * self.aliquota_IVA / 100 - self.iva_comunque_indetraibile
+        self.dirty = True
+        super().save(*args, **kwargs)
         
-        
+        # Se ci sono già delle ripartizioni le aggiorna con i nuovi valori.
+        # TODO : Anche questo lo dovrei fare solo se ho aggiornato qualche cosa che tocca questi campi. Da vedere dopo.
+        _aggiorna_ripartizioni_se_presenti(self.pk, ACQUISTO_WEB)
+    
+    def calcola_costo_totale(self):
+        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, ACQUISTO_WEB)
+        self.save()
+    
+    def aggiorna_ripartizioni(self):
+        ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto=self.id)
+        for ripartizione in ripartizioni:
+            ripartizione.save(force_update=True)
+
+
 """
 class Spesa(SiwGeneralModel):
     # Definizione degli stati
@@ -300,7 +393,8 @@ class Spesa(SiwGeneralModel):
 class RipartizioneSpesaPerCDC(SiwGeneralModel):
     acquisto = models.ForeignKey(AcquistoConOrdine, on_delete=models.PROTECT)
     cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
-    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2)
+    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2,
+                                                    validators=[percentuale_maggiore_zero])
     costo_totale = models.DecimalField(max_digits=7, decimal_places=2)
     
     class Meta:
@@ -311,16 +405,6 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         return 'Quotaparte di ' + self.acquisto.descrizione + ' su ' + self.cdc.descrizione
 
     def clean(self):
-        # Il valore della singola ripartizione non può eccedere il 100% o essere minore di 1%
-        if hasattr(self, 'percentuale_di_competenza'):
-            if int(self.percentuale_di_competenza) > 100:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può eccedere il 100%"})
-            # Il valore delle singola ripartizione non può essere 0 o negativo
-            if int(self.percentuale_di_competenza) <= 0:
-                raise ValidationError(
-                    {'percentuale_di_competenza': "La percentuale di competenza non può essere minore di 1%"})
-        
         # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
         # Se non ho un acquisto di riferimento non posso fare il controllo.
         if hasattr(self, 'acquisto'):
@@ -348,3 +432,45 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
         valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
         return True if valore + percentuale > 100 else False
 
+
+class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
+    acquisto_web = models.ForeignKey(AcquistoWeb, on_delete=models.PROTECT)
+    cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
+    percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2,
+                                                    validators=[percentuale_maggiore_zero])
+    costo_totale = models.DecimalField(max_digits=7, decimal_places=2)
+    
+    class Meta:
+        verbose_name = "Ripartizione Acquisto Web su CDC"
+        verbose_name_plural = "Ripartizione Acquisto Web su CDC"
+    
+    def __str__(self):
+        return 'Quotaparte di ' + self.acquisto_web.descrizione + ' su ' + self.cdc.descrizione
+    
+    def clean(self):
+        # La somma di tutte le percentuali di tutte le ripartizioni non può eccedere il 100%.
+        # Se non ho un acquisto di riferimento non posso fare il controllo.
+        if hasattr(self, 'acquisto_web'):
+            if self._verifica_se_percentuali_eccedute(self.acquisto_web, self.percentuale_di_competenza, self.pk):
+                raise ValidationError({'percentuale_di_competenza': "La somma di tutte le percentuali "
+                                                                    "per questo acquisto eccede il 100%"})
+    
+    # Override Save.
+    # Calcola il costo totale della voce di ordine in funzione della detraibilità del singolo cdc
+    def save(self, *args, **kwargs):
+        # Calcola il costo della ripartizione.
+        base_imponibile = self.acquisto_web.imponibile + self.acquisto_web.iva_comunque_indetraibile
+        if not self.cdc.iva_detraibile:
+            base_imponibile += self.acquisto_web.iva_potenzialmente_detraibile
+        self.costo_totale = base_imponibile * self.percentuale_di_competenza / 100
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def _verifica_se_percentuali_eccedute(acquisto_web, percentuale, pk):
+        percentuali = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=acquisto_web)
+        if pk:
+            percentuali = percentuali.exclude(pk=pk)
+        percentuali = percentuali.only('percentuale_di_competenza')
+        percentuali = percentuali.aggregate(Sum('percentuale_di_competenza'))
+        valore = percentuali['percentuale_di_competenza__sum'] if percentuali['percentuale_di_competenza__sum'] else 0
+        return True if valore + percentuale > 100 else False

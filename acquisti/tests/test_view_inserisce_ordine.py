@@ -111,10 +111,34 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.get(url)
         self.assertContains(response, 'Prova di ordine che inserisco')
 
-    def test_new_acquisto_senza_protocollo(self):
+    def test_new_acquisto_in_bozza_senza_protocollo(self):
         # Inserisce un ordine.
         data = {'data_ordine': '2018-11-13',
                 'stato': AcquistoConOrdine.STATO_BOZZA,
+                'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
+                'fornitore': ['1'],
+                'descrizione': 'Prova di ordine che inserisco',
+                'imponibile': 1000,
+                'aliquota_IVA': 22,
+                'percentuale_IVA_indetraibile': 50, }
+        response = self.client.post(URL, data)
+
+        # Controlla che sia stato inserito un record.
+        self.assertTrue(AcquistoConOrdine.objects.exists())
+        # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
+        ordine = AcquistoConOrdine.objects.get(descrizione='Prova di ordine che inserisco')
+        # Controlla il redirect alla pagina di inserimento dei CDC.
+        self.assertRedirects(response, reverse('acquisti:inserimento_cdc',
+                                               kwargs={'pk': ordine.id}), HTTP_302_FOUND, HTTP_200_OK)
+        # Apro la pagina della lista ordini e lo dovrei trovare.
+        url = reverse('acquisti:ordini')
+        response = self.client.get(url)
+        self.assertContains(response, 'Prova di ordine che inserisco')
+
+    def test_new_acquisto_non_in_bozza_da_errore_senza_protocollo(self):
+        # Inserisce un ordine.
+        data = {'data_ordine': '2018-11-13',
+                'stato': AcquistoConOrdine.STATO_DA_AUTORIZZARE,
                 'tipo': AcquistoConOrdine.TIPO_ORDINE_A_FORNITORE,
                 'fornitore': ['1'],
                 'descrizione': 'Prova di ordine che inserisco',

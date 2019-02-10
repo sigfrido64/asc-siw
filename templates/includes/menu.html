@@ -20,7 +20,8 @@
           <li>Acquisti
             <ul>
               {% if user|can:siwperms.MENU_AMM_ACQUISTI_ORDINI %}
-                <li><a href="{% url 'acquisti:ordini' %}">Ordini</a></li>
+                <li><a href="{% url 'acquisti:ordini' %}">Ordini a Fornitori</a></li>
+                <li><a href="{% url 'acquisti:ordini_web' %}">Ordini Web</a></li>
               {% endif %}
             </ul>
           </li>
