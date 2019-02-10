@@ -15,7 +15,7 @@ class MyAccountTestCase(TestCase):
     fixtures = ['af']
     """
     Qui metto le informazioni di base per i test successivi.
-    Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
+    Metto 'username' e 'password' e l'url della pagina che voglio testare come reverse
     """
     def setUp(self):
         # Fake user
@@ -64,7 +64,7 @@ class FormGeneralTests(MyAccountTestCase):
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
 
-    def test_menu_sotto_amministrazione_menu(self):
+    def test_menu_acquisti(self):
         # Quando accedo alla home devo trovare la voce di menù per la mia app.
         # Il test fallisce quando nel menù generale non trovo il link a questa vista.
         # Il link viene messo nel template menu.html che trovi in templates/includes

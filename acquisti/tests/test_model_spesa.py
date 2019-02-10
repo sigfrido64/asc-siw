@@ -8,7 +8,7 @@ from acquisti.models import AcquistoConOrdine, RipartizioneSpesaPerCDC
 from anagrafe.models import Fornitore
 
 
-class ModelloSpeseTests(TestCase):
+class ModelloAcquistoTests(TestCase):
     fixtures = ['cdc', 'af', 'azienda', 'fornitore']
 
     def setUp(self):
@@ -35,7 +35,7 @@ class ModelloSpeseTests(TestCase):
             spesa.clean()
             
 
-class ModelloRipartizioniTests(TestCase):
+class ModelloRipartizioniPerAcquistoTests(TestCase):
     fixtures = ['cdc', 'af', 'azienda', 'fornitore']
 
     def setUp(self):

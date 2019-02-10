@@ -6,13 +6,15 @@ from django.urls import reverse, resolve
 from django.forms.models import model_to_dict
 from accounts.models import SiwPermessi
 from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK, HTTP_302_FOUND
-from ..views import ordine_modifica
-from ..forms import AcquistoConOrdineForm
-from ..models import AcquistoConOrdine
+from ..views import ordine_web_modifica
+from ..forms import AcquistoWebForm
+from ..models import AcquistoWeb
+
+from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
-URL = f"/acquisti/modifica_ordine/"
-REVERSE_URL = 'acquisti:ordine_modifica'
+URL = f"/acquisti/modifica_ordine_web/"
+REVERSE_URL = 'acquisti:ordine_web_modifica'
 
 
 class GeneralTests(TestCase):
@@ -24,9 +26,9 @@ class GeneralTests(TestCase):
     def test_url_and_reverseurl_equality(self):
         self.assertEquals(self.url, self.reverse_url)
 
-    def test_modifica_ordine_url_resolves_modifica_ordine_view(self):
+    def test_modifica_ordine_web_url_resolves_modifica_ordine_web_view(self):
         view = resolve(self.url)
-        self.assertEquals(view.func, ordine_modifica)
+        self.assertEquals(view.func, ordine_web_modifica)
 
 
 class MyAccountTestCase(TestCase):
@@ -67,7 +69,7 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['af', 'cdc', 'azienda', 'fornitore', 'ordine_acquisto', 'ripartizioni']
+    fixtures = ['af', 'cdc', 'acquisto_web', 'ripartizioni_web']
     
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -87,18 +89,18 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     def test_contains_form(self):
         response = self.client.get(self.url)
         form = response.context.get('form')
-        self.assertIsInstance(form, AcquistoConOrdineForm)
+        self.assertIsInstance(form, AcquistoWebForm)
 
     def test_render_with_correct_templates(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, 'acquisti/inserisce_modifica_ordine.html')
+        self.assertTemplateUsed(response, 'acquisti/inserisce_modifica_ordine_web.html')
         
 
 class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
     # Qui metto i test per un utente che si logga e che ha i permessi per accedere.
     # Quindi qui metto tutti i test funzionali veri e propri in quanto i precedenti servono più che altro a
     # garantire che non si acceda senza permessi.
-    fixtures = ['af', 'cdc', 'azienda', 'fornitore', 'ordine_acquisto', 'ripartizioni']
+    fixtures = ['af', 'cdc', 'acquisto_web', 'ripartizioni_web']
     
     def setUp(self):
         # Chiamo il setup della classe madre così evito duplicazioni di codice.
@@ -110,7 +112,7 @@ class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
     def test_modifica_imponibile_modifica_ripartizioni_e_costo_totale(self):
         # Prendo il primo ordine.
-        ordine = AcquistoConOrdine.objects.get(pk=1)
+        ordine = AcquistoWeb.objects.get(pk=1)
         # Porto l'imponibile a 2000
         ordine.imponibile = 2000
     
@@ -119,7 +121,7 @@ class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.post(self.url, data)
     
         # Recupero l'ordine dal data base.
-        ordine = AcquistoConOrdine.objects.get(pk=1)
+        ordine = AcquistoWeb.objects.get(pk=1)
     
         # Controllo che l'imponibile sia diventato 2000
         self.assertEqual(ordine.imponibile, 2000)
@@ -128,7 +130,7 @@ class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
 
     def test_modifica_ordine_rimanda_a_ripartizione_se_non_ripartizione_completa(self):
         # Prendo il secondo ordine, che non ha ripartizioni.
-        ordine = AcquistoConOrdine.objects.get(pk=2)
+        ordine = AcquistoWeb.objects.get(pk=2)
         # Porto l'imponibile a 2000, solo per avere qualche cosa da modificare.
         ordine.imponibile = 2000
     
@@ -138,6 +140,6 @@ class FormSpecificTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         response = self.client.post(url, data)
     
         # Controllo che mi abbia rimandato alla maschera di modifica degli ordini.
-        self.assertRedirects(response, reverse('acquisti:inserimento_cdc', kwargs={'pk': 2}),
+        self.assertRedirects(response, reverse('acquisti:inserimento_cdc_web', kwargs={'pk': 2}),
                              HTTP_302_FOUND, HTTP_200_OK)
 

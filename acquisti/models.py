@@ -9,9 +9,13 @@ from anagrafe.models import Fornitore
 from amm.models.centri_di_costo import CentroDiCosto
 from amm.models.mixins import AnnoFormativo
 
-# Tipo di spesa.
-ACQUISTO_STANDARD = 1
-ACQUISTO_WEB = 2
+
+class TipoAcquisto(object):
+    """
+    Helper Class per la definizione del tipo di acquisto in modo centrale ed univoco.
+    """
+    ACQUISTO_STANDARD = 1
+    ACQUISTO_WEB = 2
 
 
 def _base(chiave, tipo):
@@ -21,9 +25,9 @@ def _base(chiave, tipo):
     :param tipo: Tipo di spesa.
     :return: Queryset relativo di chiave di correlazione 'chiave'.
     """
-    if tipo == ACQUISTO_STANDARD:
+    if tipo == TipoAcquisto.ACQUISTO_STANDARD:
         return RipartizioneSpesaPerCDC.objects.filter(acquisto=chiave)
-    elif tipo == ACQUISTO_WEB:
+    elif tipo == TipoAcquisto.ACQUISTO_WEB:
         return RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=chiave)
 
 
@@ -155,10 +159,10 @@ class AcquistoConOrdine(SiwGeneralModel):
 
         # Se ci sono già delle ripartizioni le aggiorna con i nuovi valori.
         # TODO : Anche questo lo dovrei fare solo se ho aggiornato qualche cosa che tocca questi campi. Da vedere dopo.
-        _aggiorna_ripartizioni_se_presenti(self.pk, ACQUISTO_STANDARD)
+        _aggiorna_ripartizioni_se_presenti(self.pk, TipoAcquisto.ACQUISTO_STANDARD)
         
     def calcola_costo_totale(self):
-        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, ACQUISTO_STANDARD)
+        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, TipoAcquisto.ACQUISTO_STANDARD)
         self.save()
         
     def aggiorna_ripartizioni(self):
@@ -244,14 +248,14 @@ class AcquistoWeb(SiwGeneralModel):
         
         # Se ci sono già delle ripartizioni le aggiorna con i nuovi valori.
         # TODO : Anche questo lo dovrei fare solo se ho aggiornato qualche cosa che tocca questi campi. Da vedere dopo.
-        _aggiorna_ripartizioni_se_presenti(self.pk, ACQUISTO_WEB)
+        _aggiorna_ripartizioni_se_presenti(self.pk, TipoAcquisto.ACQUISTO_WEB)
     
     def calcola_costo_totale(self):
-        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, ACQUISTO_WEB)
+        self.dirty, self.costo, self.cdc_verbose = _calcola_costo_totale(self.pk, TipoAcquisto.ACQUISTO_WEB)
         self.save()
     
     def aggiorna_ripartizioni(self):
-        ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto=self.id)
+        ripartizioni = RipartizioneAcquistoWebPerCDC.objects.filter(acquisto_web=self.id)
         for ripartizione in ripartizioni:
             ripartizione.save(force_update=True)
 

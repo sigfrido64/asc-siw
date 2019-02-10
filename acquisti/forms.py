@@ -1,7 +1,7 @@
 # coding=utf-8
 __author__ = "Pilone Ing. Sigfrido"
 from django import forms
-from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC
+from .models import AcquistoConOrdine, RipartizioneSpesaPerCDC, AcquistoWeb, RipartizioneAcquistoWebPerCDC
 from anagrafe.models import Fornitore
 from siw.jqxwidgets import JqxTextInput, JqxComboInput, JqxTextArea, JqxDateInput
 
@@ -21,12 +21,13 @@ class BaseOrdiniForm(forms.ModelForm):
                       'data_adapter_url': url_stato_spesa},
             attrs={'style': 'float: left; margin-right: 5px;'}))
 
+    """
     tipo = forms.ComboField(
         fields=[forms.CharField(), ], required=True, widget=JqxComboInput(
             jqxattrs={'height': 30, 'width': 300, 'minLength': 6, 'displayMember': 'descrizione', 'valueMember': "id",
                       'data_adapter_url': url_tipo_spesa},
             attrs={'style': 'float: left; margin-right: 5px;'}))
-
+    """
     imponibile = forms.CharField(required=True,
                                  widget=JqxTextInput(jqxattrs={'height': 30, 'width': 200, 'minLength': 6}))
 
@@ -74,7 +75,7 @@ class AcquistoWebForm(BaseOrdiniForm):
                                   widget=JqxTextInput(jqxattrs={'height': 30, 'width': 500, 'minLength': 6}))
     
     class Meta:
-        model = AcquistoConOrdine
+        model = AcquistoWeb
         fields = ['numero_protocollo', 'data_ordine', 'stato', 'descrizione', 'imponibile', 'aliquota_IVA',
                   'percentuale_IVA_indetraibile', 'note']
 
@@ -91,4 +92,19 @@ class RipartizioneForm(forms.ModelForm):
         
         widgets = {
             'acquisto': forms.HiddenInput(), 'cdc': forms.HiddenInput(),
+        }
+
+
+class RipartizioneWebForm(forms.ModelForm):
+    cdc_txt = forms.CharField(required=True, widget=forms.TextInput(attrs={'readonly': 'True'}))
+    
+    percentuale_di_competenza = \
+        forms.CharField(required=True, widget=JqxTextInput(jqxattrs={'height': 30, 'width': 80, 'minLength': 6}))
+    
+    class Meta:
+        model = RipartizioneAcquistoWebPerCDC
+        fields = ['acquisto_web', 'cdc', 'percentuale_di_competenza']
+        
+        widgets = {
+            'acquisto_web': forms.HiddenInput(), 'cdc': forms.HiddenInput(),
         }
