@@ -27,7 +27,7 @@ class GeneralTests(TestCase):
 class MyAccountTestCase(TestCase):
     """
     Qui metto le informazioni di base per i test successivi.
-    Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
+    Metto 'username' e 'password' e l'url della pagina che voglio testare come reverse
     """
     fixtures = ['af']
     
@@ -109,8 +109,8 @@ class FormGeneralTestsForLoggedInUsersWithPermissions(MyAccountTestCase):
         # Controlla che sia stato inserito un record.
         self.assertTrue(RipartizioneSpesaPerCDC.objects.exists())
         # Lo recupera e verifica che sia stato generato il redirect alla pagina di inserimento dei centri di costo.
-        ordine = RipartizioneSpesaPerCDC.objects.get(acquisto=1)
-        self.assertIsInstance(ordine, RipartizioneSpesaPerCDC)
+        ripartizione = RipartizioneSpesaPerCDC.objects.get(acquisto=1)
+        self.assertIsInstance(ripartizione, RipartizioneSpesaPerCDC)
         # Controlla il redirect alla pagina ordini in quanto 100% implica no altri CDC.
         self.assertRedirects(response, reverse('acquisti:ordini'), HTTP_302_FOUND, HTTP_200_OK)
         # Apro la pagina della lista ordini e lo dovrei trovare.

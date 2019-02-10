@@ -25,11 +25,19 @@ def ordini_web(request):
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
-def ricalcola_tutte_spese(request):
+def ricalcola_acquisti_a_fornitori(request):
     spese = AcquistoConOrdine.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
     for spesa in spese:
         spesa.calcola_costo_totale()
     return redirect('acquisti:ordini')
+
+
+@has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_RICALCOLA_TUTTO)
+def ricalcola_acquisti_web(request):
+    spese = AcquistoWeb.objects.filter(anno_formativo=request.session['anno_formativo_pk'])
+    for spesa in spese:
+        spesa.calcola_costo_totale()
+    return redirect('acquisti:ordini_web')
 
 
 @has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_INSERISCE)

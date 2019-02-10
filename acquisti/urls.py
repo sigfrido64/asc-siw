@@ -32,5 +32,6 @@ urlpatterns = [
     path('inserisce_ordine/', views.ordine_inserisce, name='ordine_inserisce'),
     path('inserisce_ordine_web/', views.ordine_web_inserisce, name='ordine_web_inserisce'),
     path('modifica_ordine/<str:pk>/', views.ordine_modifica, name='ordine_modifica'),
-    path('ricalcola_tutto/', views.ricalcola_tutte_spese, name='ordini_ricalcola_tutto'),
+    path('ricalcola_acquisti_a_fornitori/', views.ricalcola_acquisti_a_fornitori, name='ordini_ricalcola'),
+    path('ricalcola_acquisti_web/', views.ricalcola_acquisti_web, name='ordini_web_ricalcola'),
 ]

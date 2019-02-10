@@ -10,6 +10,8 @@ from ..views import ordine_modifica
 from ..forms import AcquistoConOrdineForm
 from ..models import AcquistoConOrdine
 
+from unittest import skip
+
 # Url della vista scritto sia in modo diretto che in modo interno.
 URL = f"/acquisti/modifica_ordine/"
 REVERSE_URL = 'acquisti:ordine_modifica'
@@ -33,7 +35,7 @@ class GeneralTests(TestCase):
 class MyAccountTestCase(TestCase):
     """
     Qui metto le informazioni di base per i test successivi.
-    Metto 'username' e 'passoword' e l'url della pagina che voglio testare come reverse
+    Metto 'username' e 'password' e l'url della pagina che voglio testare come reverse
     """
     fixtures = ['af']
     

@@ -15,11 +15,10 @@
 {% block content %}
 <h3>Lista Ordini Web</h3>
 <br>
-  IL PULSANTE RICALCOLA E' DA RIVEDERE !!!!
   {% if user|can:siwperms.ACQUISTI_ORDINI_RICALCOLA_TUTTO %}
     <div align="right">
-      <a href="{% url 'acquisti:ordini_ricalcola_tutto' %}">
-        <span class="fa fa-calculator" aria-hidden="true" style="color:blue"></span>Ricalcola tutto
+      <a href="{% url 'acquisti:ordini_web_ricalcola' %}">
+        <span class="fa fa-calculator" aria-hidden="true" style="color:blue"></span>Ricalcola
       </a>
     </div>
   {% endif %}
