@@ -7,7 +7,7 @@ from amm.models.centri_di_costo import CentroDiCosto
 from acquisti.models import AcquistoWeb, RipartizioneAcquistoWebPerCDC
 
 
-class ModelloSpeseTests(TestCase):
+class ModelloAcquistoWebTests(TestCase):
     fixtures = ['cdc', 'af']
 
     def setUp(self):
@@ -31,7 +31,7 @@ class ModelloSpeseTests(TestCase):
             acquisto_web.clean()
             
 
-class ModelloRipartizioniTests(TestCase):
+class ModelloRipartizionePerAcquistoWebTests(TestCase):
     fixtures = ['cdc', 'af']
 
     def setUp(self):
