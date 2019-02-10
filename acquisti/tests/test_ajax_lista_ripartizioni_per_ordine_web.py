@@ -7,7 +7,6 @@ from siw.sig_http_status import HTTP_403_FORBIDDEN, HTTP_200_OK
 from accounts.models import SiwPermessi
 from ..ajax import ajax_lista_ripartizioni_per_ordine_web
 
-from unittest import skip
 
 # Url della vista scritto sia in modo diretto che in modo interno.
 ID_ORDINE = 1

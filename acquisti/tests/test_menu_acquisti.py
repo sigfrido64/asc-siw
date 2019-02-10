@@ -64,7 +64,7 @@ class FormGeneralTests(MyAccountTestCase):
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.get(self.url)
 
-    def test_menu_sotto_amministrazione_menu(self):
+    def test_menu_acquisti(self):
         # Quando accedo alla home devo trovare la voce di menù per la mia app.
         # Il test fallisce quando nel menù generale non trovo il link a questa vista.
         # Il link viene messo nel template menu.html che trovi in templates/includes
