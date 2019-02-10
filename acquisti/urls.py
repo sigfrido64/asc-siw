@@ -17,6 +17,8 @@ urlpatterns = [
     path('ajax/lista_fornitori/', ajax.ajax_lista_fornitori, name='ajax_lista_fornitori'),
     path('ajax/elimina_ripartizione_su_cdc/<str:pk>/', ajax.ajax_elimina_ripartizione_su_cdc,
          name='ajax_elimina_ripartizione_su_cdc'),
+    path('ajax/elimina_ripartizione_su_cdc_web/<str:pk>/', ajax.ajax_elimina_ripartizione_su_cdc_web,
+         name='ajax_elimina_ripartizione_su_cdc_web'),
     path('ajax/lista_ripartizioni_per_ordine/<str:pk>/', ajax.ajax_lista_ripartizioni_per_ordine,
          name='ajax_lista_ripartizioni_per_ordine'),
     path('ajax/lista_ripartizioni_per_ordine_web/<str:pk>/', ajax.ajax_lista_ripartizioni_per_ordine_web,

@@ -18,10 +18,10 @@
     "protocollo_fattura_fornitore": "",
     "conforme": false,
     "note": "",
-    "dirty": true,
+    "dirty": false,
     "iva_comunque_indetraibile": "0.00",
     "iva_potenzialmente_detraibile": "22.00",
-    "cdc_verbose": null,
+    "cdc_verbose": "50.00% FAP, 50.00% MDL",
     "costo": null
   }
 },

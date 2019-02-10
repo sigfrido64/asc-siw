@@ -49,6 +49,15 @@ def ajax_elimina_ripartizione_su_cdc(request, pk):
     return JsonResponse({'risultato': 'ok'}, safe=False)
 
 
+@ajax_has_permission_decorator(SiwPermessi.ACQUISTI_CDC_ERASE)
+def ajax_elimina_ripartizione_su_cdc_web(request, pk):
+    ripartizione = get_object_or_404(RipartizioneAcquistoWebPerCDC, id=pk)
+    acquisto = ripartizione.acquisto_web
+    ripartizione.delete()
+    acquisto.calcola_costo_totale()
+    return JsonResponse({'risultato': 'ok'}, safe=False)
+
+
 @ajax_has_permission_decorator(SiwPermessi.ACQUISTI_ORDINI_VIEW)
 def ajax_lista_ripartizioni_per_ordine(request, pk):
     lista_ripartizioni = RipartizioneSpesaPerCDC.objects.filter(acquisto=pk)

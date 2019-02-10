@@ -22,11 +22,9 @@ def bollicine(id_nodo):
     # Lego un record one_to_one ?
     lista_figli = list()
     for nodo in analitico_cdc:
-        f.write(str(nodo) + str(analitico_cdc[nodo]))
         if analitico_cdc[nodo]['parent'] == id_nodo:
             lista_figli.append(nodo)
     if lista_figli:
-        f.write('Lista Figli di ' + str(id_nodo) + ' -> ' + str(lista_figli))
         for figlio in lista_figli:
             bollicine(figlio)
         padre = analitico_cdc[id_nodo]['parent']
