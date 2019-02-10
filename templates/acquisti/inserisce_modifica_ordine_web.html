@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load jqwidgets_tags %}
 
-{% block title %}Inserisce Corso{% endblock %}
+{% block title %}Inserisce Ordine Web{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -16,10 +16,6 @@
 
   <table width="100%" border="1">
       <tr>
-        <td>Tipo di Spesa</td>
-        <td>{% siw_field ordine.tipo %}</td>
-      </tr>
-      <tr>
         <td>Stato</td>
         <td>{% siw_field ordine.stato %}</td>
       </tr>
@@ -30,10 +26,6 @@
       <tr>
           <td>Data Ordine</td>
           <td>{% siw_field ordine.data_ordine %}</td>
-      </tr>
-      <tr>
-          <td>Fornitore</td>
-          <td>{% siw_field ordine.fornitore %}</td>
       </tr>
       <tr>
           <td>Descrizione</td>

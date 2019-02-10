@@ -167,7 +167,7 @@ class AcquistoConOrdine(SiwGeneralModel):
             ripartizione.save(force_update=True)
 
 
-class AcquistoSuWeb(SiwGeneralModel):
+class AcquistoWeb(SiwGeneralModel):
     # Definizione degli stati
     STATO_BOZZA = 0
     STATO_DA_AUTORIZZARE = 10
@@ -434,7 +434,7 @@ class RipartizioneSpesaPerCDC(SiwGeneralModel):
 
 
 class RipartizioneAcquistoWebPerCDC(SiwGeneralModel):
-    acquisto_web = models.ForeignKey(AcquistoSuWeb, on_delete=models.PROTECT)
+    acquisto_web = models.ForeignKey(AcquistoWeb, on_delete=models.PROTECT)
     cdc = models.ForeignKey(CentroDiCosto, on_delete=models.PROTECT)
     percentuale_di_competenza = models.DecimalField(max_digits=5, decimal_places=2,
                                                     validators=[percentuale_maggiore_zero])

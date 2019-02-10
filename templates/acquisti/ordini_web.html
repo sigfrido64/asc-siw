@@ -15,7 +15,7 @@
 {% block content %}
 <h3>Lista Ordini Web</h3>
 <br>
-  I due PULSANTI SONO DA RIVEDERE !!!!
+  IL PULSANTE RICALCOLA E' DA RIVEDERE !!!!
   {% if user|can:siwperms.ACQUISTI_ORDINI_RICALCOLA_TUTTO %}
     <div align="right">
       <a href="{% url 'acquisti:ordini_ricalcola_tutto' %}">
@@ -26,7 +26,7 @@
 <br>
   {% if user|can:siwperms.ACQUISTI_ORDINI_INSERISCE %}
     <div align="right">
-      <a href="{% url 'acquisti:ordine_inserisce' %}">
+      <a href="{% url 'acquisti:ordine_web_inserisce' %}">
         <span class="fa fa-plus-circle" aria-hidden="true" style="color:blue"></span>Inserisci Nuovo Ordine
       </a>
     </div>
