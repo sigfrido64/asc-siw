@@ -9,7 +9,7 @@ coverage==4.5.2
 cryptography==2.1.4
 diff-match-patch==20121119
 dj-database-url==0.5.0
-Django==2.1.5
+Django==2.1.11
 django-cprofile-middleware==1.0.4
 django-debug-toolbar==1.11
 django-debug-toolbar-request-history==0.0.9
