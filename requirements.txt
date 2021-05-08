@@ -18,7 +18,7 @@ django-widget-tweaks==1.4.3
 dnspython==1.15.0
 docxtpl==0.5.17
 et-xmlfile==1.0.1
-eventlet==0.24.1
+eventlet==0.31.0
 fabric==2.4.0
 greenlet==0.4.15
 idna==2.6
